@@ -9,7 +9,6 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NgxPermissionsModule } from 'ngx-permissions';
-import { TooltipModule } from 'ng2-tooltip-directive';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 
@@ -27,7 +26,6 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
     NgbPaginationModule,
     FormsModule,
     NgxPermissionsModule,
-    TooltipModule,
     FlatpickrModule,
     DirectivesModule,
     NgbModule

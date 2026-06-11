@@ -13,7 +13,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { AllMedicoSolicitudComponent } from './all-medico-solicitud/all-medico-solicitud.component';
 import { NewMedicoSolicitudComponent } from './new-medico-solicitud/new-medico-solicitud.component';
 import { MedicosInLineComponent } from './medicos-in-line/medicos-in-line.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 
 @NgModule({

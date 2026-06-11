@@ -10,7 +10,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Form2NewAppointmentComponent } from './form2-new-appointment/form2-new-appointment.component';
 import { Form3NewAppointmentComponent } from './form3-new-appointment/form3-new-appointment.component';
 
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { Form4NewAppointmentComponent } from './form4-new-appointment/form4-new-appointment.component';
 import { Form5NewAppointmentComponent } from './form5-new-appointment/form5-new-appointment.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';

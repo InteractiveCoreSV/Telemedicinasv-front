@@ -9,7 +9,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebardComponent } from './sidebard/sidebard.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { NgxMaskDirective } from 'ngx-mask';
 import { ComponentsModule } from 'src/app/components/components.module';

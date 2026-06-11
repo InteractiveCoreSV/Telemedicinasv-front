@@ -11,7 +11,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { FlatpickrModule } from 'angularx-flatpickr';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { NgxMaskDirective } from 'ngx-mask';
 import { NgxPermissionsModule } from 'ngx-permissions';
 

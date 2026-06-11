@@ -5,7 +5,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { CalendarAppointmentsPageRoutingModule } from './calendar-appointments-page-routing.module';
 import { CalendarAppointmentsPageComponent } from './calendar-appointments-page.component';
-import { TooltipModule } from 'ng2-tooltip-directive';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     CalendarAppointmentsPageRoutingModule,
     FullCalendarModule,
-    TooltipModule,
+    NgbTooltipModule,
     NgxPermissionsModule,
     ComponentsModule,
     FormsModule

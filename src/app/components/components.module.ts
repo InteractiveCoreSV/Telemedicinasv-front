@@ -8,7 +8,7 @@ import { DropzoneComponent } from './dropzone/dropzone.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { AutocompleteGoogleComponent } from './autocomplete-google/autocomplete-google.component';
 import { GooglemapLocationComponent } from './googlemap-location/googlemap-location.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectDepartment2Component } from './selects/select-address-pickup/select-department2/select-department2.component';

@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { PagesModule } from './pages/pages.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { NgDynamicBreadcrumbModule } from 'ng-dynamic-breadcrumb';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
@@ -20,11 +19,10 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 import { JwtModule } from '@auth0/angular-jwt';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { FlatpickrModule } from 'angularx-flatpickr';
-import { NgCacheRouteReuseModule } from 'ng-cache-route-reuse';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import { IConfig, provideEnvironmentNgxMask } from 'ngx-mask'
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 import * as moment from 'moment'
 import { AllMedicoSolicitudComponent } from './pages/dashboard-pages/medicos/all-medico-solicitud/all-medico-solicitud.component';
@@ -57,7 +55,6 @@ const maskConfig: Partial<IConfig> = {
         tokenGetter:()=>{return localStorage.getItem('x-access-token')}
       }
     }),
-    NgDynamicBreadcrumbModule,
     FullCalendarModule,
     NgxSpinnerModule,
     OwlDateTimeModule,

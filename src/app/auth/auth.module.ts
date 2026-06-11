@@ -18,7 +18,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { ComponentsModule } from '../components/components.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterSolicitudMedicoComponent } from './register-solicitud-medico/register-solicitud-medico.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 @NgModule({
   declarations: [
