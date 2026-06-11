@@ -9,7 +9,7 @@ export const environment = {
   // urlApi: 'http://localhost:3001/api',
   // urlApiPure:'http://localhost:3001',
 
-  urlApi: 'https://api-telemedicina.interactivecore.app//api',
+  urlApi: 'https://api-telemedicina.interactivecore.app/api',
   urlApiPure:'https://api-telemedicina.interactivecore.app/',
 
   //   urlApi: 'https://telemedicina-analiza-afec02c1d3df.herokuapp.com/api',
