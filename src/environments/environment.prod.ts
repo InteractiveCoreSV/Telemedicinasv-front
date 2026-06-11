@@ -1,6 +1,5 @@
 export const environment = {
-  production: true,
-  portalUrl:'https://telemedicina.analizalabonline.com',
+  production: true,  
   urlApi: 'https://api-telemedicina.interactivecore.app/api',
   urlApiPure:'https://api-telemedicina.interactivecore.app/',
 
