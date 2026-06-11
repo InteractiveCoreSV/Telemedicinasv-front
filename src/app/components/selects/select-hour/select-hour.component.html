@@ -1,0 +1,3 @@
+<ng-select [appendTo]="appendTo" [(ngModel)]="hourModel" (ngModelChange)="selectHour()">
+    <ng-option *ngFor="let hour of hours" [value]="hour">{{hour.hours}}</ng-option>
+  </ng-select>

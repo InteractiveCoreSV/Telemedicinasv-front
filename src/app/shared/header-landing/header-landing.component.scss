@@ -1,0 +1,114 @@
+.header {
+    height: 75px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+}
+
+.tio-menu-hamburger {
+    font-size: 30px;
+    font-weight: 900;
+    color: #2f4b76;
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0px auto;
+}
+
+.container-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-item {
+    cursor: pointer;
+}
+
+.nav-item a{
+    color: rgba(46, 74, 118, 1) !important;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.container-link {
+    width: auto;
+    margin-right: 15px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width:830px){
+    .container-link {
+        margin-right: 30px;
+    }
+    
+}
+
+.logo {
+    width: 100px; 
+    height: 40px  
+}
+
+@media (min-width:465px){
+    .logo {
+        width: 156px; 
+        height: 52px
+    }
+}
+
+
+.btn-header-primary{
+    border: 3px solid rgba(46, 74, 118, 1);
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.btn-header-secundary {
+    background-color: rgba(46, 74, 118, 1);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.btn-header {
+    width: 140px;
+    height: 40px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(102, 102, 102, 1) !important;
+}
+
+.btn-header:hover {
+    background-color: rgb(234 72 80)!important;
+    color: rgb(254, 254, 254) !important;
+}
+
+
+.active {
+    border-bottom: 7px solid rgb(234, 72, 80) !important;
+}
+
+// @media (max-width: 1199.98px) {
+//     .navbar-vertical-aside-show-xl.navbar-vertical-aside-closed-mode .navbar-vertical-aside {
+//         margin-left: -100%;
+//     }
+// }
+
+.btn-clode-menu {
+    background-color: #fff;
+    color: rgba(46, 74, 118, 1);
+    margin-left: 26px;
+    font-size: 111px;
+    height: 35px;
+    width: 35px;
+    font-size: 30px;
+    font-weight: 900;
+  }

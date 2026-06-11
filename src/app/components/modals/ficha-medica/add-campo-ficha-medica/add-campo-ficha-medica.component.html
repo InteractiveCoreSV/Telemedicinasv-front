@@ -1,0 +1,172 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Campo para ficha médica</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="form">
+        <div class="container mb-4 mt-2 row" >
+            <div class="col-12  mb-3">
+                <label class="form-label" >Nombre del campo</label>
+                <input
+                    formControlName="name"
+                    type="text" 
+                    placeholder="Nombre"
+                    class="form-control "
+                />
+
+                <div *ngIf="formSubmited && getControl('name')?.invalid" class="invalid-feedback d-block">
+                    Requerido para continuar
+                </div>
+            </div>
+
+            <div class="col-12  mb-3">
+                <label class="form-label" >Componente</label>
+                <ng-select class="unidades" formControlName="component" [placeholder]="'Componente'" style="text-align: center;" (ngModelChange)="selectComponent()">
+                    <ng-option  *ngFor="let unidad of ['Entrada de texto','Bloque de texto','Selector opción multiple']" [value]="unidad">
+                        {{unidad}}
+                    </ng-option>
+                </ng-select>
+
+                <div *ngIf="formSubmited && getControl('component')?.invalid" class="invalid-feedback d-block">
+                    Requerido para continuar
+                </div>
+            </div>
+
+            <ng-container *ngIf="form.value.component">
+                <ng-container *ngIf="form.value.component === 'Selector opción multiple';else notSelect">
+                    <div class="col-12  mb-3">
+                        <label class="form-label" for="optionsSelect">Opciones para el selector</label>
+        
+                        <div formArrayName="optionsSelect">
+                          <div *ngFor="let options of optionsSelect.controls; let i = index" class="d-flex mb-1">
+                            <input class="form-control " [formControlName]="i" placeholder="Opción {{i + 1}}" />
+                            <a class="cursor-pointer ml-1" (click)="removeOptionsSelect(i)"><i class="fas fa-trash"></i></a>
+                          </div>
+                        </div>
+                    
+                        <div class="d-flex justify-content-end w-100">
+                            <button class="btn btn-outline-primary" type="button" (click)="addOptionsSelect('')">Agregar opción de selección</button>
+                        </div>
+                    </div>
+
+                    <div class="col-12  mb-3" *ngIf="form.value.component != 'Bloque de texto'">
+        
+                        <div class="form-check">
+                            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="selectMultiple" class="form-check-input cursor-pointer" type="radio" name="flexRadioDefault2" id="flexRadioDefault3" [value]="false">
+                            <label class="form-check-label" for="flexRadioDefault3">
+                                Seleccionar solo una opción
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="selectMultiple" class="form-check-input cursor-pointer" type="radio" name="flexRadioDefault2" id="flexRadioDefault4" [value]="true">
+                            <label class="form-check-label" for="flexRadioDefault4">
+                                Seleccionar una o más Opciones
+                            </label>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #notSelect>
+                    <div class="col-12  mb-3" *ngIf="this.getControl('component')?.value == 'Entrada de texto'">
+                        <label class="form-label" >Tipo de ingreso</label>
+                        <ng-select class="unidades" formControlName="type" [placeholder]="'Tipo de campo'" style="text-align: center;">
+                            <ng-option *ngFor="let unidad of ['Texto','Número (solo números)']" [value]="unidad">
+                                {{unidad}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+        
+                    <div class="col-12  mb-3" *ngIf="form.value.component === 'Entrada de texto'">
+                        <label class="form-label" for="unidades">Unidades de medida</label>
+        
+                        <div formArrayName="unidades">
+                          <div *ngFor="let unidad of unidades.controls; let i = index" class="d-flex mb-1">
+                            <input class="form-control " [formControlName]="i" placeholder="Unidad {{i + 1}}" />
+                            <a class="cursor-pointer ml-1" (click)="removeUnidad(i)"><i class="fas fa-trash"></i></a>
+                          </div>
+                        </div>
+                    
+                        <div class="d-flex justify-content-end w-100">
+                            <button class="btn btn-outline-primary" type="button" (click)="addUnidad('')">Agregar Unidad</button>
+                        </div>
+                    </div>
+                </ng-template>
+                
+            </ng-container>
+
+            <div class="col-12  mb-3">
+                <label class="form-label" >Texto de ayuda dentro del componente</label>
+                <input
+                    formControlName="placeholder"
+                    type="text"
+                    placeholder="Texto de ayuda"
+                    class="form-control "
+                />
+                <div *ngIf="formSubmited && getControl('placeholder')?.invalid" class="invalid-feedback d-block">
+                    Requerido para continuar
+                </div>
+            </div>
+
+            <div class="col-12  mb-3" *ngIf="form.value.component != 'Bloque de texto'">
+                <label class="form-label" >Ancho del componente</label>
+
+                <div class="form-check">
+                    <input [ngModelOptions]="{standalone: true}" [(ngModel)]="allWidth" class="form-check-input cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault1" [value]="true">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Todo el ancho disponible
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input [ngModelOptions]="{standalone: true}" [(ngModel)]="allWidth" class="form-check-input cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault2" [value]="false">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Ancho personalizado
+                    </label>
+                </div>
+
+                <div class="d-flex align-items-end" *ngIf="allWidth === false">
+                    <input
+                        formControlName="width"
+                        type="number"
+                        placeholder="Ancho"
+                        class="form-control "
+                        style="width: 150px;"
+                    />
+                    <span>px</span>
+                </div>
+                <div class="mt-2" *ngIf="getControl('width')?.value">
+                    <input
+                        placeholder="Ejemplo visual"
+                        class="form-control"
+                        disabled
+                        [style.width]="getControl('width')?.value ? getControl('width')?.value + 'px' : '0px'"
+                    />
+                </div>
+            </div>
+
+            <div class="col-12 mb-3">
+                <div class="custom-control custom-switch">
+                    <input formControlName="required"  type="checkbox" class="custom-control-input" id="statusSwitch">
+                    <label class="custom-control-label" for="statusSwitch">Campo requerido para completar ficha</label>
+                </div>
+                <div *ngIf="formSubmited && getControl('required')?.invalid" class="invalid-feedback d-block">
+                    El estado es requerido
+                </div>
+            </div>
+           
+        </div>
+    </form>
+
+    <div class="w-100 text-end">
+        <button type="submit" class="btn  btn-primary btn-150" (click)="saveCampo()">
+            Guardar
+        </button>
+    </div>
+</div>
+
+
+

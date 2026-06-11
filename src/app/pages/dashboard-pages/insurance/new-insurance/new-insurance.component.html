@@ -1,0 +1,78 @@
+<form [formGroup]="insuranceForm" (ngSubmit)="insuranceToEdit?editinsurance():register()" style="position: sticky; top: 86px;">
+    <div class="row justify-content-lg-center">
+      <div class="col-lg-10  mt-3">
+          <div class="card card-lg  p-3" >
+              <div class="row ">
+                <div class="col-12 " style="position:relative;">
+                  <div class="card-body pt-0 row">
+                    
+                    <div class="col-12 col-md-6 mb-3  " [style]="windowsWidth<=720?'margin-top:10px':''">
+                      <label class="form-label">Nombre de la aseguradora <span class="text-danger">*</span></label>
+                      <input   [class]="formSubmited && insuranceForm.get('name')?.invalid?'is-invalid':''" formControlName="name"  class="form-control" type="text" placeholder="Nombre de la aseguradora">
+                      <div *ngIf="formSubmited && insuranceForm.get('name')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3  " [style]="windowsWidth<=720?'margin-top:10px':''">
+                      <label class="form-label">NIT de la aseguradora <span class="text-danger">*</span></label>
+                      <div style="width: 100%;">
+                        <input   [class]="formSubmited && insuranceForm.get('nit')?.invalid?'is-invalid':''" formControlName="nit"  class="form-control" type="text" placeholder="NIT de la aseguradora">
+                        <div *ngIf="formSubmited && insuranceForm.get('nit')?.invalid" class="invalid-feedback">Este campo es requerido</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-3 " [style]="windowsWidth<=720?'margin-top:10px':''">
+                      <label class="form-label">Nombre de la persona de contacto <span class="text-danger">*</span></label>
+                      <div style="width: 100%;">
+                        <input   [class]="formSubmited && insuranceForm.get('contactName')?.invalid?'is-invalid':''" formControlName="contactName"  class="form-control" type="text" placeholder="Nombre de la persona de contacto">
+                        <div *ngIf="formSubmited && insuranceForm.get('contactName')?.invalid" class="invalid-feedback">Este campo es requerido</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3 " [style]="windowsWidth<=720?'margin-top:10px':''">
+                      <label class="form-label">Teléfono del contacto<span class="text-danger">*</span></label>
+                      <div style="width: 100%;">
+                        <input   [class]="formSubmited && insuranceForm.get('contactPhone')?.invalid?'is-invalid':''" formControlName="contactPhone"  class="form-control" type="tel" placeholder="Teléfono del contacto">
+                        <div *ngIf="formSubmited && insuranceForm.get('contactPhone')?.invalid" class="invalid-feedback">Este campo es requerido</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3" [style]="windowsWidth<=720?'margin-top:10px':''">
+                      <label class="form-label">Teléfono de la aseguradora" <span class="text-danger">*</span></label>
+                      <div style="width: 100%;">
+                        <input   [class]="formSubmited && insuranceForm.get('phone')?.invalid?'is-invalid':''" formControlName="phone"  class="form-control" type="tel" placeholder="Teléfono de la aseguradora">
+                        <div *ngIf="formSubmited && insuranceForm.get('phone')?.invalid" class="invalid-feedback">Este campo es requerido</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-3" [style]="windowsWidth<=720?'margin-top:10px':''">
+                      <label class="form-label">Correo electrónico" <span class="text-danger">*</span></label>
+                      <div style="width: 100%;">
+                        <input   [class]="formSubmited && insuranceForm.get('email')?.invalid?'is-invalid':''" formControlName="email"  class="form-control" type="email" placeholder="Correo electrónico">
+                        <div *ngIf="formSubmited && insuranceForm.get('email')?.invalid" class="invalid-feedback">{{getErrorEmailMessage()}}</div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3ml-md-3" *ngIf="!insuranceToEdit">
+                      <div style="width: 100%;">
+                          <div class="form-check form-switch">
+                            <input formControlName="status" type="checkbox" class="form-check-input" id="statusCountry" checked>
+                            <label class="form-check-label" for="statusCountry">Estado: {{insuranceForm.get('status')?.value?'Activa':'Desactivada'}}</label>
+                          </div>
+                          <small class="form-text text-muted">Deshabilite si la aseguradora no está disponible.</small>
+                          <div *ngIf="formSubmited && insuranceForm.get('status')?.invalid" class="invalid-feedback">
+                            {{getErrorMessageStatus()}}
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            <div class="card-footer w-100 text-center">
+              <button type="submit" class="btn btn-primary btn-200"><i class="ci-upload font-size-lg"></i> {{insuranceToEdit?'Editar':'Registrar'}} aseguradora</button>
+            </div>
+          </div>
+      </div>
+    </div>
+  </form>
+  

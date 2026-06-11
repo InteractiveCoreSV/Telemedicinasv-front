@@ -1,0 +1,15 @@
+<ng-select
+style="min-width: 200px;text-align: center;"
+[placeholder]="label"
+[loading]="loading"
+[notFoundText]="'No results'"
+[(ngModel)]="employeeSelected"
+(ngModelChange)="selectedEmployee()"
+[appendTo]="appendTo"
+>
+<ng-option  *ngFor="let user of employees" [value]="user._id">
+    <div class="text-center">
+        {{user.names}} {{user.last_names}} <span *ngIf="user.deleted" class="badge medico-delete" >Medico Eliminado</span>
+    </div>
+</ng-option>
+</ng-select>

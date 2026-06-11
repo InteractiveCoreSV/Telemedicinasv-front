@@ -1,0 +1,449 @@
+﻿<div class="modal-header border-bottom pb-3">
+  <h4 class="modal-title">Crear nuevo médico</h4>
+  <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card card-lg">
+        <!-- <div class="card-header">
+          <h3 class="card-header-title">{{solicitudMedico?'Editar medico':'Crear medico'}}</h3>
+        </div> -->
+        <form [formGroup]="createMedicoForm"  (ngSubmit)="createMedico()">
+          <div class="card-body pt-2 pt-md-5 pb-2 pb-lg-5 px-2 px-md-5 px-lg-10">
+
+              <div>
+                <h3 class="title text-center mb-4 w-100">Rellena los campos faltantes para registrar al médico</h3>
+              </div>
+
+              <label class="label-section mb-2">Información General</label>
+
+              <div class="row">
+              <!-- START ROW -->
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <input readonly formControlName="names" [class]="formSubmited && createMedicoForm.get('names')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre del médico">
+                  <div *ngIf="formSubmited && createMedicoForm.get('names')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+                </div>
+              </div>
+              <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <input readonly formControlName="last_names" [class]="formSubmited && createMedicoForm.get('last_names')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Apellidos del médico">
+                    <div *ngIf="formSubmited && createMedicoForm.get('last_names')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+                  </div>
+                </div>
+                 <!-- START ROW -->
+                 <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                     <input formControlName="email" [class]="formSubmited && createMedicoForm.get('email')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Correo electrónico">
+                    <div *ngIf="formSubmited && createMedicoForm.get('email')?.invalid" class="invalid-feedback">{{getErrorMessageEmail()}}</div>
+                  </div>
+                </div>
+  
+                <div class="col-12 col-sm-6">
+                  <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+                    <div ngbDropdown class="d-inline-block custom-dropdawn" container="body" >
+                        <button
+                        disabled
+                        type="button"
+                        class="btn p-2"
+                        style="
+                            background-color: #f6f6f6; 
+                            height: 100%;
+                            border:1px solid #E4E4E4 !important;
+                            border-right: none !important;
+                        "
+                        (click)="isOpenDropdown = !isOpenDropdown"
+                        id="changeTypeDocument"
+                        ngbDropdownToggle
+                        [class]="
+                            formSubmited && getControl('typeDocument')?.invalid
+                            ? 'is-invalid'
+                            : ''
+                        "
+                        >
+                        {{ getControl("typeDocument")?.value }}
+                        <i
+                            class="fas ml-2"
+                            [ngClass]="{
+                            'fa-chevron-up': isOpenDropdown,
+                            'fa-chevron-down': !isOpenDropdown
+                            }"
+                        ></i>
+                        </button>
+                        <div ngbDropdownMenu>
+                        <ng-container *ngFor="let item of typesDocuments">
+                            <button
+                            disabled=""
+                            ngbDropdownItem
+                            [ngClass]="{
+                                selected: item === getControl('typeDocument')?.value
+                            }"
+                            (click)="
+                                updateTypeDocument(item)
+                            "
+                            >
+                            {{ item }}
+                            </button>
+                        </ng-container>
+                        </div>
+                    </div>
+                    <input
+                        readonly
+                        *ngIf="getControl('typeDocument')?.value === 'DUI'" 
+                        formControlName="identityNumber"
+                        [class]=" createMedicoForm.get('identityNumber')?.invalid && formSubmited ? 'is-invalid' : ''"
+                        mask="00000000-0" 
+                        type="text"
+                        name="identityNumber"
+                        aria-label="RNP"
+                        placeholder="Número de identidad"
+                        class="form-control form-input-auth"
+                      />
+
+                      <input 
+                        readonly
+                        *ngIf="getControl('typeDocument')?.value === 'Pasaporte'"
+                        formControlName="passport"
+                        [class]="
+                        createMedicoForm.get('passport')?.invalid && formSubmited
+                            ? 'is-invalid'
+                            : ''
+                        "
+                        type="text"
+                        name="passport"
+                        [placeholder]="'Pasaporte'"
+                        class="form-control" 
+                      />
+
+                      <input 
+                        readonly
+                        *ngIf="getControl('typeDocument')?.value === 'ID internacional'"
+                        formControlName="idInternacional"
+                        [class]="
+                        createMedicoForm.get('idInternacional')?.invalid && formSubmited
+                            ? 'is-invalid'
+                            : ''
+                        "
+                        type="text"
+                        name="idInternacional"
+                        [placeholder]="'ID Internacional'"
+                        class="form-control" 
+                      />
+                   </div>
+                  <span
+                    *ngIf="createMedicoForm.get('identityNumber')?.invalid && formSubmited"
+                    class="invalid-feedback d-block"
+                    >{{ getErroridentityNumberMessage() }}</span
+                  >
+                  <span
+                    *ngIf="createMedicoForm.get('passport')?.invalid && formSubmited"
+                    class="invalid-feedback d-block"
+                    >El pasaporte es requerido</span
+                  >
+                  <span
+                    *ngIf="createMedicoForm.get('idInternacional')?.invalid && formSubmited"
+                    class="invalid-feedback d-block"
+                    >El ID internacional es requerido</span
+                  >
+               </div>
+                <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-8 col-md-6">
+                  <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+                    <div ngbDropdown class="d-inline-block" container="body">
+                      <button
+                      disabled
+                        type="button"
+                        class="btn pr-0"
+                        style="
+                          background-color: #f6f6f6; 
+                          height: 100%;
+                          border:1px solid #E4E4E4 !important;
+                          border-right: none !important;
+                        "
+                        (click)="isOpenDropdown = !isOpenDropdown"
+                        id="changeCountryCodePhone"
+                        ngbDropdownToggle
+                        [class]="
+                          formSubmited && getControl('countryCode')?.invalid
+                            ? 'is-invalid'
+                            : ''
+                        "
+                      >
+                        {{ getControl("COICode")?.value }}
+                        <i
+                          class="fas ml-2"
+                          [ngClass]="{
+                            'fa-chevron-up': isOpenDropdown,
+                            'fa-chevron-down': !isOpenDropdown
+                          }"
+                        ></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <ng-container *ngFor="let item of countries">
+                          <button
+                          disabled
+                            ngbDropdownItem
+                            [ngClass]="{
+                              selected: item.name === getControl('country')?.value
+                            }"
+                            (click)="
+                              getControl('countryCode')?.setValue(item.countryCode);
+                              getControl('country')?.setValue(item.name);
+                              getControl('COICode')?.setValue(item.COICode);
+                              getControl('mask')?.setValue(item.mask)
+                            "
+                          >
+                            {{ item.name }}
+                          </button>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <input
+                    readonly
+                      type="text"
+                      id="phone"
+                      placeholder="9587-6543"
+                      class="form-control input-phone pl-1"
+                      formControlName="phone"
+                      [class]="
+                        formSubmited && getControl('phone')?.invalid
+                          ? 'is-invalid d-block'
+                          : ''
+                      "
+                      [allowNegativeNumbers]="false"
+                      [mask]="getControl('mask')?.value"
+                      [prefix]="getControl('countryCode')?.value + ' '"
+                      style=" padding-left: 1rem !important;"
+                    />
+                    <span
+                      *ngIf="createMedicoForm.get('phone')?.invalid && formSubmited"
+                      class="invalid-feedback d-block"
+                      >{{ getErrorMessagePhone() }}
+                    </span>
+                  </div>
+               </div>
+               <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-8 col-md-6">
+                  <div class="form-group">
+                    <app-select-subsidiary 
+                      [subsidiarySelected]="subsidiary"
+                      (subsidiarySelectedEv)="setSubsidiary($event)"
+                    ></app-select-subsidiary>
+                    <div *ngIf="formSubmited && createMedicoForm.get('subsidiary')?.invalid" class="invalid-feedback d-block">La sucursal es requerida</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <input readonly formControlName="numberColegio" [class]="formSubmited && createMedicoForm.get('numberColegio')?.invalid?'is-invalid':''" type="text" mask="00-00000" class="form-control" placeholder="Número de colegiación">
+                    <div *ngIf="formSubmited && createMedicoForm.get('numberColegio')?.invalid" class="invalid-feedback">El número de colegio es requerido</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <input formControlName="numberRegistro" [class]="formSubmited && createMedicoForm.get('numberRegistro')?.invalid?'is-invalid':''" type="number" class="form-control" placeholder="Número inscripción de medico">
+                    <div *ngIf="formSubmited && createMedicoForm.get('numberRegistro')?.invalid" class="invalid-feedback">El número de registro de inscripcion es requerido (11 dígitos)</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <div class="input-group input-group-merge input-group-borderless input-group-flush input-group-light">
+
+                      <input 
+                        formControlName="arancerPerHour" 
+                        [class]="formSubmited && createMedicoForm.get('arancerPerHour')?.invalid?'is-invalid':''" 
+                        type="number" 
+                        (input)="formatArancerPerHourOnInput($event)"
+                        class="form-control" 
+                        placeholder="Arancel por hora/fracción"
+                      >
+
+                      <div class="input-group-prepend input-group-text" style="padding: .54688rem .5rem !important; background-color: #f5f5f5;"  id="inputGroupMergeSearchlAddOn">
+                        L
+                      <!-- <img src="assets/icons/icon-search.png" alt=""> -->
+                      </div>
+                    </div>
+                    <div *ngIf="formSubmited && createMedicoForm.get('arancerPerHour')?.invalid" class="invalid-feedback">El arancel es requerido</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+
+              <!-- START ROW -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <app-select-especialidad 
+                      [especialidadSelected]="especialidad"
+                      (changeEspecialidad)="setEspecialidad($event)"
+                    ></app-select-especialidad>
+                    <div *ngIf="formSubmited && createMedicoForm.get('especialidad')?.invalid" class="invalid-feedback d-block">La especialidad es requerida</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+                 
+                <div class="col-12 mb-3">
+                  <div class="custom-control custom-switch">
+                    <input readonly formControlName="clinicaMedica" type="checkbox" class="custom-control-input" id="statusSwitch">
+                    <label class="custom-control-label" for="statusSwitch">Clínica médica o Hospital</label>
+                  </div>
+                </div>
+
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6" *ngIf="createMedicoForm.value.clinicaMedica === true">
+                  <div class="form-group">
+                    <input  formControlName="clinicaName" [class]="formSubmited && createMedicoForm.get('clinicaName')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre de la clinica">
+                    <div *ngIf="formSubmited && createMedicoForm.get('clinicaName')?.invalid" class="invalid-feedback">El nombre es requerido</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6" *ngIf="createMedicoForm.value.clinicaMedica === true">
+                  <div class="form-group">
+                    <input formControlName="clinicaAddress" [class]="formSubmited && createMedicoForm.get('clinicaAddress')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Dirección ">
+                    <div *ngIf="formSubmited && createMedicoForm.get('clinicaAddress')?.invalid" class="invalid-feedback">La dirección es requerida</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-8 col-md-6" *ngIf="createMedicoForm.value.clinicaMedica === true">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input formControlName="clinicaPhone" autocomplete="tel" [class]="formSubmited && createMedicoForm.get('clinicaPhone')?.invalid?'is-invalid':''" type="tel" class="form-control" placeholder="Número de teléfono">
+                    </div>
+                    <div *ngIf="formSubmited && createMedicoForm.get('clinicaPhone')?.invalid" class="invalid-feedback d-block">El número de teléfono es requerido</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+
+                <!-- START ROW -->
+                <div class="col-12 col-sm-8">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input formControlName="password" [class]="formSubmited && createMedicoForm.get('password')?.invalid?'is-invalid':''" [type]="showPassword?'text':'password'" class="form-control" [placeholder]="solicitudMedico?'Nueva contraseña':'Contraseña'" autocomplete="new-password">
+                      <button (click)="showPassword = !showPassword" class="btn btn-white border btn-icon" style="height: 48px !important;" type="button">
+                        <i [class]="showPassword?'fas fa-eye':'fas fa-eye-slash'"></i>
+                      </button>
+                    </div>
+                    <app-password-strength
+                        [passwordToCheck]="createMedicoForm.get('password')?.value"
+                        (passwordStrength)="onPasswordStrengthChanged($event)"
+                    ></app-password-strength>
+                    <!-- <label class="form-control-label">(¡IMPORTANTE!, guarda esta contraseña)</label> -->
+
+                    <div *ngIf="formSubmited && createMedicoForm.get('password')?.invalid" class="invalid-feedback d-block">{{getErrorMessagePassword()}}</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+
+                <label class="label-section mb-2 col-12">Contacto de emergencia</label>
+
+                <!-- START ROW -->  
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <input formControlName="nameEmergency" [class]="formSubmited && createMedicoForm.get('nameEmergency')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre de contacto de emergencia">
+                    <div *ngIf="formSubmited && createMedicoForm.get('nameEmergency')?.invalid" class="invalid-feedback">Este campo es requerido</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+  
+                <div class="col-12 col-sm-8 col-md-6">
+                  <div class="input-group d-flex justify-content-center justify-content-md-start">
+  
+                    <div ngbDropdown class="d-inline-block" container="body">
+                      <button
+                        type="button"
+                        class="btn pr-0"
+                        style="
+                          background-color: #f6f6f6; 
+                          height: 100%;
+                          border:1px solid #E4E4E4 !important;
+                          border-right: none !important;
+                        "
+                        (click)="isOpenDropdown = !isOpenDropdown"
+                        id="changecountryCodeEmergency"
+                        ngbDropdownToggle
+                        [class]="
+                          formSubmited && getControl('countryCodeEmergency')?.invalid
+                            ? 'is-invalid'
+                            : ''
+                        "
+                      >
+                        {{ getControl("COICodeEmergency")?.value }}
+                        <i
+                          class="fas ml-2"
+                          [ngClass]="{
+                            'fa-chevron-up': isOpenDropdown,
+                            'fa-chevron-down': !isOpenDropdown
+                          }"
+                        ></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <ng-container *ngFor="let item of countries">
+                          <button
+                            ngbDropdownItem
+                            [ngClass]="{
+                              selected: item.name === getControl('countryEmergency')?.value
+                            }"
+                            (click)="
+                              getControl('countryCodeEmergency')?.setValue(item.countryCode);
+                              getControl('countryEmergency')?.setValue(item.name);
+                              getControl('COICodeEmergency')?.setValue(item.COICode);
+                              getControl('maskEmergency')?.setValue(item.mask)
+                            "
+                          >
+                            {{ item.name }}
+                          </button>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <input
+                      type="text"
+                      id="phoneEmergency"
+                      placeholder="9587-6543"
+                      class="form-control input-phone pl-1"
+                      formControlName="phoneEmergency"
+                      [class]="
+                        formSubmited && getControl('phoneEmergency')?.invalid
+                          ? 'is-invalid d-block'
+                          : ''
+                      "
+                      [allowNegativeNumbers]="false"
+                      [mask]="getControl('maskEmergency')?.value"
+                      [prefix]="getControl('countryCodeEmergency')?.value + ' '"
+                      style=" padding-left: 1rem !important;"
+                    />
+                    <span
+                      *ngIf="createMedicoForm.get('phoneEmergency')?.invalid && formSubmited"
+                      class="invalid-feedback d-block"
+                      >Este campo es requerido
+                    </span>
+                  </div>
+                </div>
+  
+              </div>
+
+          </div>
+
+               
+          <div class="card-footer w-100 text-end" style="border: none;">
+            <button type="submit" class="btn btn-primary btn-200" style="height: 56px !important;">Agregar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

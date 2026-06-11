@@ -1,0 +1,527 @@
+﻿
+<div *ngIf="fichaMedica && fichaMedica.length > 0 && !loading ; else loading_templ">
+    <form [formGroup]="form" >
+        <div >
+          <div class="col-12 d-flex justify-content-between align-items-center mb-5 mt-5">
+            <div>
+                <span class="text-header-pdf">Ficha Médica</span>
+            </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <!-- <div class="d-flex flex-column mr-1">
+                    <span class="text-header-pdf">Analiza</span>
+                    <span class="text-header-pdf-2">Telemedicina</span>
+                </div> -->
+                <div>
+                    <img style="width: 160px;" src="assets/logos/telemedicina.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mb-2">
+          <button 
+            class="btn  btn-primary  mr-2"  style="width: auto;   "
+            (click)="openViewSummaryFichasMedicas(
+              appointment.user._id,
+              {
+                _id: appointment.idUnderAge,
+                name: appointment.nameUnderAge, 
+                birthdate: appointment.birthdateUnderAge
+              }  
+            )"
+          >
+            Resumen de Fichas Médicas
+          </button>
+          <button 
+            class="btn btn-primary btn-150 mr-2" 
+            (click)="viewDetailAppointment( appointment)"
+          >
+            Ver Cita
+          </button>
+          <button 
+            class="btn btn-primary btn-150" 
+            (click)="openViewExpediente(
+              appointment.user._id,
+              {
+                _id: appointment.idUnderAge,
+                name: appointment.nameUnderAge, 
+                birthdate: appointment.birthdateUnderAge
+              }  
+            )"
+          >
+            Ver Expediente
+          </button>
+        </div>
+
+        <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+            <h3 class="my-2 text-center">Datos generales</h3>
+            <!-- INFO DEL PACIENTE -->
+            <div class="row">
+                <div class="mb-2 col-12" >
+                    <label class="form-label label-auth mb-0" for="date">Fecha de la cita</label>
+                    <p class="m-0 p-0">{{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour.hours}}</p>
+                </div>
+
+                <div class="mb-2 col-12 col-md-9" *ngIf="appointment.underAge">
+                  <label class="form-label label-auth mb-0" for="date">Nombre del paciente (Menor de edad)</label>
+                  <p class="m-0 p-0">{{appointment.nameUnderAge}}</p>
+                </div>
+
+                <div class="mb-2 col-12 col-md-3" *ngIf="appointment.underAge">
+                  <label class="form-label label-auth mb-0" for="date">Fecha de nacimiento</label>
+                  <p class="m-0 p-0">{{appointment.birthdateUnderAge | date:'MMMM d, y'|titlecase}}</p>
+                </div>
+                
+                 <div class="mb-2 col-6 col-md-2" *ngIf="appointment.underAge">
+                    <label class="form-label label-auth mb-0" for="date">Edad</label>
+                    <input
+                        [(ngModel)]="age"
+                        [ngModelOptions]="{standalone: true}"
+                        type="number"
+                        name="age"
+                        placeholder="Edad"
+                        class="form-control mr-1"
+                    />
+                    <span *ngIf="!age && formSubmited" class="invalid-feedback d-block">Requerido</span
+                  >
+                </div>
+                <div class="mb-2 col-12 col-sm-6 col-md-2" *ngIf="this.appointment.underAge">
+                    <label class="form-label label-auth mb-0" for="date">Sexo</label>
+                    <div class="d-flex">
+                      <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                        <input 
+                          class="custom-control-input" 
+                          type="radio" 
+                          value="Masculino"  
+                          id="Masculino" 
+                          name="sexo"
+                          [(ngModel)]="sexo"  
+                          [ngModelOptions]="{standalone: true}">
+                        <label class="custom-control-label" for="Masculino">
+                          Masculino
+                        </label>
+                      </div>
+
+                      <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                        <input 
+                          class="custom-control-input" 
+                          type="radio" 
+                          value="Femenino"  
+                          id="Femenino" 
+                          name="sexo"
+                          [(ngModel)]="sexo"  
+                          [ngModelOptions]="{standalone: true}">
+                        <label class="custom-control-label" for="Femenino">
+                          Femenino
+                        </label>
+                      </div>
+                    </div>
+
+                    <span *ngIf="!sexo && formSubmited" class="invalid-feedback d-block">Requerido</span
+                  >
+                </div>
+                
+                <div class="mb-2 col-12 col-sm-10" >
+                    <label class="form-label label-auth mb-0" for="name">{{appointment.underAge ? 'Adulto responsable' : 'Nombre del paciente'}} </label>
+                    <p class="m-0 p-0">{{appointment.user.names}} {{appointment.user.last_names}}</p>
+                </div>
+
+                <div class="mb-2  col-6 col-sm-2" *ngIf="!appointment.underAge">
+                    <label class="form-label label-auth mb-0" for="age">Edad</label>
+                    <input
+                        [(ngModel)]="age"
+                        [ngModelOptions]="{standalone: true}"
+                        type="number"
+                        name="age"
+                        placeholder="Edad"
+                        class="form-control mr-1 p-1 "
+                        style="text-align: center;"
+                    />
+                    <span *ngIf="!age && formSubmited" class="invalid-feedback d-block">Requerido</span
+                  >
+                </div>
+
+                <div class="mb-2 col-12 col-sm-6" >
+                    <label class="form-label label-auth mb-0" for="date">Teléfono</label>
+                    <p class="m-0 p-0">
+                      <span class="mr-1">{{appointment.user.countryCode}}</span> <input type="text" [mask]="appointment.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phone"  [ngModelOptions]="{standalone: true}">
+
+                    </p>
+                </div>
+
+                <div class="mb-2 col-12 col-sm-6" >
+                    <label class="form-label label-auth mb-0" for="date">{{appointment.user.typeDocument}}</label>
+                    <p class="m-0 p-0">
+                        <input 
+                          *ngIf="appointment.user.typeDocument === 'DUI'"
+                            type="text" 
+                            mask="00000000-0" 
+                            class="viewInputFormatMask" 
+                            disabled
+                            [(ngModel)]="appointment.user.identityNumber"  
+                            [ngModelOptions]="{standalone: true}"
+                        >
+                        <input 
+                          *ngIf="appointment.user.typeDocument === 'Pasaporte'"
+                            type="text" 
+                            class="viewInputFormatMask" 
+                            disabled
+                            [(ngModel)]="appointment.user.passport"  
+                            [ngModelOptions]="{standalone: true}"
+                        >
+                        <input 
+                          *ngIf="appointment.user.typeDocument === 'ID internacional'"
+                            type="text" 
+                            class="viewInputFormatMask" 
+                            disabled
+                            [(ngModel)]="appointment.user.idInternacional"  
+                            [ngModelOptions]="{standalone: true}"
+                        >
+                    </p>
+                </div>
+
+                <div class="mb-2 col-12 col-md-10" >
+                    <label class="form-label label-auth mb-0" for="date">Dirección (Domicilio)</label>
+                    <input
+                        [(ngModel)]="address"
+                        [ngModelOptions]="{standalone: true}"
+                        type="text"
+                        name="address"
+                        placeholder="Dirección actual del paciente"
+                        class="form-control mr-1"
+                    />
+                    <span *ngIf="!address && formSubmited" class="invalid-feedback d-block">Requerido</span>
+                </div>
+
+               
+
+                <div class="mb-2 col-12 col-sm-6" >
+                    <label class="form-label label-auth mb-0" for="date">Servicio agendados</label>
+                    <ul>
+                      <li *ngFor="let service of appointment.service">{{service.name}}</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;" *ngIf="appointment && appointment.commentAppointment || appointment.documentAppointment">
+            <h3 class="my-2 text-center">Adicional paciente</h3>
+
+            <div class="row">
+                <div class="mb-2 col-12" *ngIf="appointment.commentAppointment">
+                    <label class="form-label label-auth mb-0" for="date">Comentario para la cita</label>
+                    <p class="m-0 p-0">{{appointment.commentAppointment}}</p>
+                </div>
+
+                <div class="mb-2 col-12" *ngIf="appointment.documentAppointment">
+                    <label class="form-label label-auth mb-0" for="date">Documento</label>
+                    <div>
+                        <a class="cursor-pointer" (click)="openModalViewDocument(appointment.documentAppointment.location, appointment.documentAppointment.key)">{{appointment.documentAppointment.key}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex w-100 justify-content-center align-items-center mb-4" *ngIf="!this.appointment.underAge">
+          <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2" >
+              <div>
+                  <!-- <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'">  -->
+                  <span class="ratioMeetingTool_title">Paciente Hombre</span>
+              </div>
+              <div>
+                  <input [(ngModel)]="forSelectWoman" (ngModelChange)="selectIsWoman()" [ngModelOptions]="{standalone: true}" type="radio" class="form-check-input" name="online" id="presencial" [value]="false" >
+                  <label for="presencial"></label>
+              </div>
+          </div>
+
+          <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2" >
+              <div>
+                  <!-- <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'">  -->
+                  <span class="ratioMeetingTool_title">Paciente Mujer</span>
+              </div>
+              <div>
+                  <input [(ngModel)]="forSelectWoman" (ngModelChange)="selectIsWoman()" [ngModelOptions]="{standalone: true}"  type="radio" class="form-check-input" name="online" id="virtual" [value]="true" >
+                  <label for="virtual"></label>
+              </div>
+          </div>
+      </div>
+
+        <!-- SECCIONES SOLO PARA MUJERES -->
+        <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;" *ngIf="isWoman">
+          <h3 class="my-2 text-center">{{fichaMedicaSectionWoman.name}}</h3>
+          
+          <div class="row flex-wrap px-2">
+              <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedicaSectionWoman.campos; let i = index">
+                  <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
+                  <div class="d-flex align-items-end" *ngIf="campo.component === 'Entrada de texto'">
+                      <input
+                          [formControlName]="campo.name"
+                          [type]="campo.type === 'Número (solo números)' ? 'number': 'text'"
+                          [name]="campo.name"
+                          [placeholder]="campo.placeholder"
+                          class="form-control mr-1"
+                          [style.max-width]="campo.width+'px'"
+                      />
+                      <ng-container *ngIf="campo.unidades.length > 1;else onlyUnidad">
+                          <ng-select [formControlName]="campo.name + 'Unidades'" class="unidades" [placeholder]="'Unidades'" style="width: 100px;">
+                              <ng-option *ngFor="let unidad of campo.unidades" [value]="unidad">
+                                  {{unidad}}
+                              </ng-option>
+                          </ng-select>
+                      </ng-container>
+
+                      <ng-template #onlyUnidad>
+                          <span>{{campo.unidades[0]}}</span>
+                      </ng-template>
+              </div>
+
+              <div *ngIf="campo.component === 'Selector opción multiple'">
+                      <ng-select                        
+                      [multiple]="campo.selectMultiple ? campo.selectMultiple : false"
+                      class="unidades" 
+                      [formControlName]="campo.name" 
+                      [placeholder]="campo.placeholder" 
+                      style="min-width: 200px;" 
+                      [style.max-width]="campo.width ? campo.width+'px' : '100%'"
+                      >
+                        <ng-option *ngFor="let option of campo.optionsSelect" [value]="option">
+                            {{option}}
+                        </ng-option>
+                      </ng-select>
+                  </div>
+
+                  <textarea [formControlName]="campo.name" *ngIf="campo.component === 'Bloque de texto'" [placeholder]="campo.placeholder" class="form-control" rows="5"></textarea>
+                
+                  <span *ngIf="form.get(campo.name)?.hasError('required') && formSubmited" class="invalid-feedback d-block">Requerido</span>
+
+                  <ng-container *ngIf="campo.unidades.length > 1">
+                      <span *ngIf="form.get(campo.name+ 'Unidades')?.hasError('required') && formSubmited" class="invalid-feedback d-block">Unidad requerida</span>
+                  </ng-container>
+              
+              </div>
+          </div>
+
+      </div>
+
+        <!-- SECIONES DE FICHA MEDICA -->
+        <div *ngFor="let fichaMedica of fichaMedica"  class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+            <h3 class="my-2 text-center">{{fichaMedica.name}}</h3>
+            
+            <div class="row flex-wrap px-2">
+                <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.campos; let i = index">
+                    <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
+                    <div class="d-flex align-items-end" *ngIf="campo.component === 'Entrada de texto'">
+                        <input
+                            [formControlName]="campo.name"
+                            [type]="campo.type === 'Número (solo números)' ? 'number': 'text'"
+                            [name]="campo.name"
+                            [placeholder]="campo.placeholder"
+                            class="form-control mr-1"
+                            [style.max-width]="campo.width+'px'"
+                        />
+                        <ng-container *ngIf="campo.unidades.length > 1;else onlyUnidad">
+                            <ng-select [formControlName]="campo.name + 'Unidades'" class="unidades" [placeholder]="'Unidades'" style="width: 100px;">
+                                <ng-option *ngFor="let unidad of campo.unidades" [value]="unidad">
+                                    {{unidad}}
+                                </ng-option>
+                            </ng-select>
+                        </ng-container>
+
+                        <ng-template #onlyUnidad>
+                            <span>{{campo.unidades[0]}}</span>
+                        </ng-template>
+                </div>
+
+                <div *ngIf="campo.component === 'Selector opción multiple'">
+                        <ng-select                        
+                        [multiple]="campo.selectMultiple ? campo.selectMultiple : false"
+                        class="unidades" 
+                        [formControlName]="campo.name" 
+                        [placeholder]="campo.placeholder" 
+                        style="min-width: 200px;" 
+                        [style.max-width]="campo.width ? campo.width+'px' : '100%'"
+                        >
+                          <ng-option *ngFor="let option of campo.optionsSelect" [value]="option">
+                              {{option}}
+                          </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <textarea [formControlName]="campo.name" *ngIf="campo.component === 'Bloque de texto'" [placeholder]="campo.placeholder" class="form-control" rows="5"></textarea>
+
+                    <span *ngIf="form.get(campo.name)?.hasError('required') && formSubmited" class="invalid-feedback d-block">Requerido</span>
+
+                    <ng-container *ngIf="campo.unidades.length > 1">
+                        <span *ngIf="form.get(campo.name+ 'Unidades')?.hasError('required') && formSubmited" class="invalid-feedback d-block">Unidad requerida</span>
+                    </ng-container>
+                
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+
+        <div class="row mb-3">  
+            <div class="col-12 ">
+                <h4 class="mt-4">Estudios</h4>
+
+                <ul class="list-group">
+                    <!-- Item -->
+                    <li class="list-group-item" *ngFor="let estudio of estudios; let i = index">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <img 
+                            class="avatar avatar-xs avatar-4x3" 
+                            src="assets/images/type-document/pdf.svg" 
+                            alt="Imagen representativa de archivo"
+                          >
+                        </div>
+                
+                        <div class="col">
+                          <h5 class="mb-0">
+                            <a class="text-dark">{{estudio.nameDoc}}</a>
+                          </h5>
+                        </div>
+                        <!-- End Col -->
+                
+                        <div class="col-auto" *ngIf="!generatePdf">
+                          <!-- Dropdown -->
+                          <div class="btn-group dropdownk" ngbDropdown #myDrop="ngbDropdown">
+                            <button class="btn dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                                <span class="d-none d-sm-inline-block me-1">Opciones</span>
+                              <i class="bi-chevron-down"></i>
+                            </button>
+                
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu style="min-width: 13rem;">
+                              <span class="dropdown-header">Opciones</span>
+            
+                              <a class="dropdown-item" (click)="newestudio(estudio)">
+                                <i class="bi-share dropdown-item-icon"></i> Editar
+                              </a>
+            
+                              <a class="dropdown-item" (click)="descargarEstudioPDF(estudio)">
+                                <i class="bi-share dropdown-item-icon"></i> Descargar
+                              </a>
+                
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" (click)="deleteestudio(estudio.id)">
+                                <i class="bi-trash dropdown-item-icon"></i> Eliminar
+                              </a>
+                            </div>
+                          </div>
+                          <!-- End Dropdown -->
+                        </div>
+                      </div>
+                      <!-- End Row -->
+                    </li>
+                    <!-- End Item -->
+                </ul>
+
+                <div class="d-flex justify-content-end mt-1" *ngIf="!generatePdf">
+                    <button type="button" class="btn btn-outline-primary btn-150" (click)="newestudio()">Generar Estudio</button>
+                </div>
+            </div>
+    
+            <div class="col-12 ">
+                <h4>Tratamientos</h4>
+                <ul class="list-group">
+                    <!-- Item -->
+                    <li class="list-group-item" *ngFor="let tratamiento of tratamientos; let i = index">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <img 
+                            class="avatar avatar-xs avatar-4x3" 
+                            src="assets/images/type-document/pdf.svg" 
+                            alt="Imagen representativa de archivo"
+                          >
+                        </div>
+                
+                        <div class="col">
+                          <h5 class="mb-0">
+                            <a class="text-dark">{{tratamiento.nameDoc}}</a>
+                          </h5>
+                        </div>
+                        <!-- End Col -->
+                
+                        <div class="col-auto" *ngIf="!generatePdf">
+                          <!-- Dropdown -->
+                          <div class="btn-group dropdownk" ngbDropdown #myDrop="ngbDropdown">
+                            <button class="btn dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                                <span class="d-none d-sm-inline-block me-1">Opciones</span>
+                              <i class="bi-chevron-down"></i>
+                            </button>
+                
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu style="min-width: 13rem;">
+                              <span class="dropdown-header">Opciones</span>
+            
+                              <a class="dropdown-item" (click)="newTratamiento(tratamiento)">
+                                <i class="bi-share dropdown-item-icon"></i> Editar
+                              </a>
+            
+                              <a class="dropdown-item" (click)="descargarTratamientoPDF(tratamiento)">
+                                <i class="bi-share dropdown-item-icon"></i> Descargar
+                              </a>
+                
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" (click)="deleteTratamiento(tratamiento.id)">
+                                <i class="bi-trash dropdown-item-icon"></i> Eliminar
+                              </a>
+                            </div>
+                          </div>
+                          <!-- End Dropdown -->
+                        </div>
+                      </div>
+                      <!-- End Row -->
+                    </li>
+                    <!-- End Item -->
+                </ul>
+
+                <div class="d-flex justify-content-end mt-1" *ngIf="!generatePdf">
+                    <button type="button" class="btn btn-outline-primary btn-150 " (click)="newTratamiento()">Generar Tratamiento</button>
+                </div>
+            </div>
+
+            <div class="col-6 d-flex justify-content-center flex-column mt-8">
+              <div class="d-flex justify-content-center">
+                <img style="max-height: 140px;" [src]="sello" alt="">
+              </div>
+              <label class="text-center mt-1">Sello</label>
+            </div>
+
+            <div class="col-6 d-flex justify-content-center flex-column mt-8">
+              <div class="d-flex justify-content-center">
+                <img style="max-height: 140px;" [src]="firma" alt="">
+              </div>
+              <label class="text-center mt-1">Firma</label>
+            </div>
+
+            <div class="col-12 mt-2 mb-8 d-flex justify-content-center flex-column">
+                <h4 class="text-center">{{medico.names}} {{medico.last_names}}</h4>
+                <label class="text-center">Médico</label>
+            </div>
+
+            <div class="col-12 d-flex justify-content-between mt-8 mb-8">
+              <div>
+                  <img style="width: 140px;" src="assets/logos/telemedicina.png" alt="">
+              </div>
+
+              <div>
+                  <span class="text-footer">Analiza Telemedicina El Salvador</span>
+              </div>
+          </div>
+        </div>
+
+    </form>
+
+    <div class="col-12 d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary btn-150" (click)="onSubmit()">Guardar</button>
+  </div>
+
+</div>
+
+<ng-template #loading_templ>
+    <div class="d-flex justify-content-center">
+        <app-loading-table></app-loading-table>
+    </div>
+</ng-template>

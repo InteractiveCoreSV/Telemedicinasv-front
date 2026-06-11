@@ -1,0 +1,186 @@
+<div class="modal-header border-bottom pb-3" style="height: 50px !important; min-height: 50px !important; background-color: #fff !important;">
+  <h4 class="modal-title" >Resumen de fichas medicas</h4>
+
+  <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+
+<div class="modal-body" style="padding: 0px !important;">
+
+  <div class="mb-2 mx-2 mt-2">
+    <span class="title">Información Paciente:</span>
+    <div class="container-user-info mt-1" *ngIf="infoPatient && infoPatient.user">
+      <ng-container *ngIf="!infoPatient.nameUnderAge">
+        <span class="info-user mr-2"><strong>Paciente:</strong></span> {{infoPatient.user.names}} {{infoPatient.user.last_names}}
+        <span class="info-user mr-2"><strong>Edad</strong></span> {{age}}
+
+      </ng-container>
+
+      <ng-container *ngIf="infoPatient.nameUnderAge">
+        <span class="title">Menor de edad</span>
+
+        <span class="info-user mr-2"><strong>Paciente:</strong></span> {{infoPatient.nameUnderAge}}
+        <span class="info-user mr-2"><strong>Edad</strong></span> {{age}}      
+      </ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="infoPatient.nameUnderAge" class="mx-2 mb-2">
+    <span class="title">Adulto reponsable:</span>
+    <div class="container-user-info mt-1" *ngIf="infoPatient && infoPatient.user">
+      <span class="info-user mr-2"><strong>Nombre:</strong></span> {{infoPatient.user.names}} {{infoPatient.user.last_names}}
+   </div>
+  </div>
+
+  <!-- <div class="card-table"> -->
+    
+    <div class="table-responsive datatable-custom mt-3">
+        <table id="datatableusers"
+        class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+        data-hs-datatables-options='{
+               "columnDefs": [{
+                  "targets": [0, 7],
+                  "orderable": false
+                }],
+               "order": [],
+               "info": {
+                 "totalQty": "#datatableWithPaginationInfoTotalQty"
+               },
+               "search": "#datatableSearch",
+               "entries": "#datatableEntries",
+               "pageLength": 15,
+               "isResponsive": false,
+               "isShowPaging": false,
+               "pagination": "datatablePagination"
+             }'>
+          <thead class="thead-light">
+            <tr>
+              <th></th>
+              <ng-container *ngIf="isWomam">
+                <th [attr.colspan]="seccionWoman.campos.length" class="text-center"
+                    [ngStyle]="{ 'background-color': colors[(colors.length - 1) % colors.length] }">
+                  {{ seccionWoman.name }}
+                </th>
+              </ng-container>
+
+              <ng-container *ngFor="let section of fichaMedicaSections; let i = index; trackBy: trackBySection">
+                <th [attr.colspan]="section.campos.length" class="text-center"
+                    [ngStyle]="{ 'background-color': colors[i % colors.length] }">
+                  {{ section.name }}
+                </th>
+              </ng-container>
+              <th></th>
+
+            </tr>
+
+            <tr>
+              <th class="date" rowspan="2">Fecha</th>
+
+              <ng-container *ngIf="isWomam">
+                <th *ngFor="let campo of seccionWoman.campos">
+                  {{ campo.name }}
+                </th>
+              </ng-container>
+
+              <ng-container *ngFor="let section of fichaMedicaSections; trackBy: trackBySection">
+                <th *ngFor="let campo of section.campos; trackBy: trackByCampo">
+                  {{ campo.name }}
+                </th>
+              </ng-container>
+
+              <th rowspan="2">Tratamiento</th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <ng-container *ngIf="!loading;else loading_templ">
+              <ng-container *ngIf="(summaryFichaMedica).length>0;else not_results">
+                <tr *ngFor="let summary of summaryFichaMedica; trackBy: trackBySummary">
+                  <!-- Fecha -->
+                  <td>{{ summary.createdAt | date:'MMMM d, y' | titlecase }}</td>
+
+                    <ng-container *ngIf="isWomam">
+                      <ng-container *ngFor="let campo of seccionWoman.campos; trackBy: trackByCampo">
+
+                        <td 
+                          class="text-truncate"
+                          style="max-width: 180px; cursor: pointer;"
+                          [attr.title]="getCampoWomanValue(summary, campo.name)"
+                          data-bs-toggle="tooltip"
+                        >
+                          {{ getCampoWomanValue(summary, campo.name) | slice:0:40 }}
+                          {{ getCampoWomanValue(summary, campo.name)?.length > 40 ? '...' : '' }}
+                        </td>
+
+                      </ng-container>
+                    </ng-container>
+                  
+                  <ng-container *ngFor="let section of fichaMedicaSections; trackBy: trackBySection">
+                    <ng-container *ngFor="let campo of section.campos; trackBy: trackByCampo">
+
+                      <td 
+                        class="text-truncate"
+                        style="max-width: 180px; cursor: pointer;"
+                        [attr.title]="getCampoValue(summary, section.name, campo.name)"
+                        data-bs-toggle="tooltip"
+                      >
+                        {{ getCampoValue(summary, section.name, campo.name) | slice:0:40 }}
+                        {{ getCampoValue(summary, section.name, campo.name)?.length > 40 ? '...' : '' }}
+                      </td>
+
+                    </ng-container>
+
+                  </ng-container>
+
+                  <!-- Tratamientos -->
+                  <td>
+                    <div class="d-flex flex-column">
+                      <a *ngFor="let tra of summary.tratamientos; trackBy: trackByTratamiento" (click)="descargar(tra.nameDoc,summary._id,tra.id,'Tratamiento',tra?.pdf?.location )" style="cursor: pointer;">
+                        {{ tra.nameDoc | slice:0:40 }}{{ tra.nameDoc?.length > 40 ? '...' : '' }}
+                      </a>  
+                    </div>
+                  </td>
+
+                </tr>
+
+              </ng-container>
+            </ng-container>
+            <ng-template #loading_templ>
+              <tr>
+                <td colspan="8">
+                  <app-loading-table></app-loading-table>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template #not_results>
+              <tr>
+                <td colspan="8">
+                  <app-not-results-table></app-not-results-table>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between px-3 table-footer">
+          <div class="d-flex align-items-center">
+            <span class="table-footer-text">
+              Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + summaryFichaMedica.length : summaryFichaMedica.length}} - 
+              de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+          </div>
+  
+          <nav aria-label="Page navigation">
+            <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+              (pageChange)="(page=$event || 1);(getSummaryFichaMedica())" [collectionSize]="paginationDetails.totalDocs || 0"
+              [pageSize]="paginationDetails.limit || 0">
+            </ngb-pagination>
+          </nav>
+        </div>
+    </div>
+      
+  <!-- </div> -->
+</div>

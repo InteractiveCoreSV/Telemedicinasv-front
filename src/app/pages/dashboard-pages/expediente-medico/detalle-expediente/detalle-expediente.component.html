@@ -1,0 +1,392 @@
+
+<!-- Profile Header -->
+<ng-container *ngIf="!loading">
+  
+    <div class="text-center mt-10 pt-8 mb-3 position-relative">
+      <!-- <button class="btn-historial-crm" *ngxPermissionsOnly="['admin','medico']" (click)="openModalViewHistoryCRM()">Base de datos</button> -->
+
+      <!-- Avatar -->
+      <label
+        class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar"
+        for="avatarUploader"
+        style="border: 1px solid #2E4A76 !important;"
+      >
+        <img
+        *ngIf="paciente.imageProfile"
+          appBrokenImagen
+          id="avatarImg"
+          class="avatar-img"
+          [src]="paciente.imageProfile"
+          alt="Image Description"
+        />  
+        
+        <span
+          *ngIf="!paciente.imageProfile"
+          class="avatar-initials"
+        >
+          {{ paciente.names | slice:0:1}}
+          {{ paciente.last_names | slice:0:1}}
+        </span>
+      
+      </label>
+      <!-- End Avatar -->
+  
+      <h1 class="page-header-title mb-0"> {{ paciente.names }} {{ paciente.last_names }}</h1>
+  
+      <ul class="list-inline ">
+        <li class="list-inline-item">
+          <i class="tio-online nav-icon"></i>
+          <span>{{paciente.email}}</span>
+        </li>
+      </ul>
+  
+    </div>
+  </ng-container>
+
+  
+  <div class="w-100 d-flex align-items-center justify-content-center justify-content-md-between flex-column flex-md-row mb-2">
+      <div class="hs-unfold mb-2 mb-md-0">
+        <a
+        class="btn btn-secondary" 
+        unfold
+        href="javascript:;"
+        data-hs-unfold-options='{
+        "target": "#datatableFilterSubcategoriesSidebar",
+        "type": "css-animation",
+        "animationIn": "fadeInRight",
+        "animationOut": "fadeOutRight",
+        "hasOverlay": true,
+        "smartPositionOff": true,
+        "closeOnScroll":false,
+        "hideOnScroll":false,
+        "closeOnClickOutside": false
+        }'
+
+      >
+        Menores de edad
+      </a>
+      </div>
+
+      <button class="btn btn-primary btn-200 " (click)="openModalNewDocumentExpediente()">Agregar Documento</button>
+  </div>
+
+  <ng-container *ngIf="menorSelect">
+    <div class="container-user-info mt-1 mb-2 position-relative">
+      <span class="info-user mr-2"><strong>Nombre:</strong></span> {{menorSelect.name}}
+      <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{menorSelect.birthdate | date:'MMMM d, y'|titlecase}}
+             
+      <a  class="btn btn-icon btn-xs btn-ghost-dark ml-2 close-menor" (click)="resetExpediente()">
+        <i class="tio-clear tio-lg"></i>
+      </a>
+    </div>
+  </ng-container> 
+
+  <!-- CATEGORIAS -->
+  <ng-container *ngIf="!category">
+    <h2 class="h4 mb-3">Categorias</h2>
+    <!-- Folders -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
+      <div class="col mb-3 mb-lg-5" *ngFor="let folder of folders">
+        <div class="card card-sm card-hover-shadow h-100" style="border: .0625rem solid #2E4A76;">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <i class="far fa-folder fs-2 text-body me-2 mx-2"></i>
+              <h5 class="text-truncate ms-2 mb-0">{{folder.nameEs}}</h5>
+            </div>
+          </div>
+          <a class="stretched-link" style="cursor: pointer;" (click)="category = folder; getForExpediente()"></a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- PARA CUANDO SE SELECIONA UNA CATEGORIA -->
+  <ng-container *ngIf="category">
+    <button class="btn btn-primary mb-2 btn-150" (click)="category = null; documentsExpediente = []; fichasMedicas = []; page= 1">Categorias</button>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-1">
+      <div class="col mb-3 mb-lg-5">
+        <div class="card card-sm card-hover-shadow h-100" style="border: .0625rem solid #2E4A76;">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <i class="far fa-folder-open fs-2 text-body me-2 mx-2"></i>
+              <h5 class="text-truncate ms-2 mb-0">{{category.nameEs}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Col -->
+    </div>
+    
+    <div class="d-flex justify-content-start align-items-center gap-1">
+    
+      <div class="input-group input-group-merge input-group-borderless input-group-flush input-group-light pr-3 mb-5" style="max-width: 500px !important;">
+        <input 
+          style="padding-right: 2.75rem !important; padding-left: 0.75rem !important;" 
+          type="text"
+          class="form-control center" 
+          id="inputGroupMergeSearch" 
+          placeholder="Buscar por nombre del documento"  
+          aria-describedby="inputGroupMergeSearchlAddOn"
+          [(ngModel)]="nameDocumment"
+          (input)="getForSearch()"
+        >
+        <div class="input-group-append input-group-text"  id="inputGroupMergeSearchlAddOn">
+          <img src="assets/icons/icon-search.png" alt="">
+        </div>
+      </div>
+      <!-- <button class="btn btn-primary btn-150">Buscar</button> -->
+    </div>
+
+    <ng-container *ngIf="!loadingExpedientes && category.name != 'ficha_medica'">
+      <!-- List Group -->
+      <ng-container *ngIf="documentsExpediente.length>0;else not_results">
+  
+        <ul class="list-group">
+          <!-- Item -->
+          <li class="list-group-item" *ngFor="let document of documentsExpediente">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <img 
+                  class="avatar avatar-xs avatar-4x3" 
+                  [src]="
+                    document.typeDocument === 'pdf' ? 'assets/images/type-document/pdf.svg' : 
+                    document.typeDocument === 'word' ? 'assets/images/type-document/word.svg' : 
+                    'assets/images/type-document/img.svg'
+                  " 
+                  alt="Imagen representativa de archivo"
+                >
+              </div>
+      
+              <div class="col">
+                <h5 class="mb-0">
+                  <a class="text-dark">{{document.name}}</a>
+                </h5>
+                <ul class="list-inline list-separator small text-body">
+                  <li class="list-inline-item">Modificado: {{document.updatedAt | date:'MMMM dd yyyy' : 'es' }}</li>
+                  <li class="list-inline-item">Creado por: {{document.userCreate && document.userCreate.roles?.[0]?.name == 'patient' ? 'Paciente' : 'Clínica médica o Hospital | '+(document.userCreate ? document.userCreate.names+' '+document.userCreate.last_names : '')}} </li>
+                </ul>
+              </div>
+              <!-- End Col -->
+      
+              <div class="col-auto">
+                <!-- Dropdown -->
+                <div class="btn-group dropdownk" ngbDropdown #myDrop="ngbDropdown">
+                  <button class="btn dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                      <span class=" me-1">Mas</span>
+                    <i class="bi-chevron-down"></i>
+                  </button>
+      
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu style="min-width: 13rem;">
+                    <span class="dropdown-header">Opciones</span>
+      
+                    <a class="dropdown-item" (click)="openModalViewDocumentExpediente(document)">
+                      <i class="bi-share dropdown-item-icon"></i> Ver documento
+                    </a>
+  
+                    <ng-container *ngxPermissionsOnly="['patient']">
+                      <a class="dropdown-item" (click)="openModalNewDocumentExpediente(document)" *ngIf="document.userCreate && document.userCreate._id === userInfo?._id">
+                        <i class="bi-share dropdown-item-icon"></i> Editar documento
+                      </a>
+                    </ng-container>
+
+                    <!-- <ng-container *ngxPermissionsExcept="['patient']">
+                      <a class="dropdown-item" (click)="openModalNewDocumentExpediente(document)" >
+                        <i class="bi-share dropdown-item-icon"></i> Editar documento
+                      </a>
+                    </ng-container> -->
+
+                    <ng-container *ngxPermissionsOnly="['admin']">
+                        <ng-container *ngIf="document.createByFichaMedica && document.category === 'Tratamiento'">
+                          <a class="dropdown-item" (click)="editTratamientoMedico(document)" >
+                            <i class="bi-share dropdown-item-icon"></i> Cambiar Médico
+                          </a>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngxPermissionsOnly="['admin','sac']">
+                        <a *ngIf="!document.createByFichaMedica" class="dropdown-item" (click)="openModalNewDocumentExpediente(document)" >
+                          <i class="bi-share dropdown-item-icon"></i> Editar documento
+                        </a>
+                    </ng-container>
+  
+  
+                    <a class="dropdown-item" (click)="descargar(document.name, document.typeDocument, document._id, document.category,document.createByFichaMedica,document?.document?.location)">
+                      <i class="bi-share dropdown-item-icon"></i> Descargar
+                    </a>
+      
+                    <div *ngxPermissionsOnly="'admin'">
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" (click)="deleteDocumentExpediente(document._id)">
+                        <i class="bi-trash dropdown-item-icon"></i> Eliminar
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Dropdown -->
+              </div>
+            </div>
+            <!-- End Row -->
+          </li>
+          <!-- End Item -->
+        </ul>
+
+
+      </ng-container>
+        <!-- End List Group -->
+       
+    </ng-container>
+
+
+    <!-- PARA FICHAS MEDICAS -->
+    <ng-container *ngIf="!loadingFichasMedicas && category.name === 'ficha_medica'">
+      <!-- List Group -->
+      <ng-container *ngIf="fichasMedicas.length>0;else not_results">
+        <div class="d-flex justify-content-end mb-2">
+          <button 
+            class="btn  btn-primary  mr-2"  style="width: auto;   "
+            (click)="openViewSummaryFichasMedicas()"
+          >
+            Resumen de Fichas Médicas
+          </button>
+        </div>
+
+        <ul class="list-group">
+          <!-- Item -->
+          <li class="list-group-item" *ngFor="let document of fichasMedicas">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <img 
+                  class="avatar avatar-xs avatar-4x3" 
+                  [src]="'assets/images/type-document/pdf.svg'" 
+                  alt="Imagen representativa de archivo"
+                >
+              </div>
+      
+              <div class="col">
+                <h5 class="mb-0">
+                  <a class="text-dark">{{document.name ? document.name : document.createdAt | date:'MMMM dd yyyy' : 'es'}}</a>
+                </h5>
+                <ul class="list-inline list-separator small text-body">
+                  <li class="list-inline-item">Modificado: {{document.updatedAt | date:'MMMM dd yyyy' : 'es' }}</li>
+                  <li class="list-inline-item">Creado por: Clínica médica o Hospital | {{document.medico ? document.medico.names+' '+document.medico.last_names : ''}} </li>
+                </ul>
+              </div>
+              <!-- End Col -->
+      
+              <div class="col-auto">
+                <!-- Dropdown -->
+                <div class="btn-group dropdownk" ngbDropdown #myDrop="ngbDropdown">
+                  <button class="btn dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                      <span class=" me-1">Mas</span>
+                    <i class="bi-chevron-down"></i>
+                  </button>
+      
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu style="min-width: 13rem;">
+                    <span class="dropdown-header">Opciones</span>
+      
+                    <a class="dropdown-item" (click)="openViewFichaMedicaComponent(document)">
+                      <i class="bi-share dropdown-item-icon"></i> Ver ficha médica
+                    </a>
+
+                    <a  class="dropdown-item" (click)="descargarFichaMedica(document)">
+                      <i class="bi-share dropdown-item-icon"></i> Descargar
+                    </a>
+      
+                    <div *ngxPermissionsOnly="'admin'">
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" *ngxPermissionsExcept="['patient']" (click)="deleteFichaMedica(document._id)">
+                        <i class="bi-trash dropdown-item-icon"></i> Eliminar
+                      </a>
+                    </div>
+
+                  </div>
+                </div>
+                <!-- End Dropdown -->
+              </div>
+            </div>
+            <!-- End Row -->
+          </li>
+          <!-- End Item -->
+        </ul>
+
+
+      </ng-container>       
+    </ng-container>
+
+    <ng-template #not_results>
+      <div class="w-100   text-center pt-5">
+          <app-not-results-table></app-not-results-table>
+      </div>
+    </ng-template>
+
+    <div class="d-flex justify-content-center">
+      <nav aria-label="Page navigation">
+        <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" 
+          class="d-flex mt-3"
+          (pageChange)="(page=$event || 1); category.name === 'ficha_medica' ? getFichasMedicas() : getDocumentExpedientesUser()"
+          [collectionSize]="paginationDetails.totalDocs || 0"
+          [pageSize]="paginationDetails.limit || 0"
+          [maxSize]="10" 
+          [rotate]="true" 
+          [ellipses]="true" 
+          [boundaryLinks]="true"> 
+        </ngb-pagination>
+      </nav>
+    </div>
+  </ng-container>
+  
+  <!-- LOADINGS -->
+  <!-- <ng-container *ngIf="loading">
+      <div class="w-100   text-center pt-5">
+        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+        </div>
+      </div>
+  </ng-container> -->
+
+  <ng-container *ngIf="loadingExpedientes || loadingFichasMedicas">
+    <div class="w-100   text-center pt-5">
+      <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+      </div>
+    </div>
+</ng-container>
+
+
+<!-- //SELECTOR DE MENORES DE EDAD -->
+
+
+  <div id="datatableFilterSubcategoriesSidebar" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow" >
+    <div class="card card-lg sidebar-card sidebar-footer-fixed" >
+      <div class="card-header">
+        <h4 class="card-header-title" >Menores de edad</h4>
+  
+        <!-- Toggle Button -->
+        <a unfold class="btn btn-icon btn-xs btn-ghost-dark ml-2">
+          <i class="tio-clear tio-lg"></i>
+        </a>
+        <!-- End Toggle Button -->
+      </div>
+  
+      <!-- Body -->
+      <div class="card-body sidebar-body sidebar-scrollbar">
+        <ng-container *ngIf="menoresDeEdad && menoresDeEdad.length>0; else notMenores">
+
+          <div class="container-user-info mt-1 mb-2 cursor-pointer" *ngFor="let menor of menoresDeEdad" unfold (click)="getForMenorEdad(menor)">
+            <span class="info-user mr-2"><strong>Nombre:</strong></span> {{menor.name}}
+           <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{menor.birthdate | date:'MMMM d, y'|titlecase}}
+          </div>
+        </ng-container> 
+
+        <ng-template #notMenores>
+          <p class="my-2">Aún no se tienen menores de edad registrados</p>
+        </ng-template>
+      </div>
+       
+  
+      <!-- Footer -->
+      <!-- <div class="card-footer sidebar-footer" >
+        <button class="btn btn-primary w-100">Add file to file  cabinet</button>
+      </div> -->
+      <!-- End Footer -->
+    </div>
+  </div>

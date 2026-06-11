@@ -1,0 +1,148 @@
+﻿
+<form [formGroup]="form1">
+  <div class="row" >
+
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin','sac','medico']">
+      <div class="row h-100 align-items-start">
+        <div class="col-12 col-lg-9" >
+          <div class="">
+            
+            <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Buscar y seleccionar al usuario <span *ngIf="form1.get('underAge')?.value">(mayor de edad responsable del menor)</span></label>
+
+            <app-searchs-users (userSelected)="setUser($event)"></app-searchs-users>
+
+            <div *ngIf="form1.get('user')?.value" class="container-user-info" style="position: relative;">
+              <h4 class="mb-0 info-user-title" > <span style="margin-right: 5px;" [innerHTML]="form1.value.user.names"> </span> <span [innerHTML]="form1.value.user.last_names"></span></h4>
+              <div class="d-flex flex-column">
+                <span class="info-user"><strong>Correo del usuario:</strong> <span [innerHTML]="form1.value.user.email"></span></span>
+                <span class="info-user d-flex"><strong>Numero de telefono:</strong> 
+                  <p class="m-0 p-0">
+                    <span class="mr-1">{{form1.value.user.countryCode}}</span> <input type="text" [mask]="form1.value.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.phone"  [ngModelOptions]="{standalone: true}">
+                  </p>
+                </span>
+                <div class="d-flex">
+                  <span class="info-user mr-2">
+                    <strong>Documento de identidad ({{form1.value.user.typeDocument}}):</strong>
+                  </span> 
+                  <input *ngIf="form1.value.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.identityNumber"  [ngModelOptions]="{standalone: true}">
+                  <input *ngIf="form1.value.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.passport"  [ngModelOptions]="{standalone: true}">
+                  <input *ngIf="form1.value.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.idInternacional"  [ngModelOptions]="{standalone: true}">        
+                </div>
+              </div>
+              
+              <button (click)="deleteUser()" style="position: absolute;top: 0;right: 0; color: rgba(46, 74, 118, 0.59);" class="btn btn-icon">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+
+            <div *ngIf="formSubmited && getControl('user')?.invalid" class="invalid-feedback d-block mt-2">
+              La selección del paciente es requerido
+            </div>
+          </div>
+        </div>
+          
+        <div class="col-12 col-lg-3 mt-3">
+          <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0 mb-3">Nuevo usuario</label>
+          <button class="btn btn-primary" (click)="createNewUser()">Crear nuevo usuario</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CITA MENOR EDAD -->
+    <div class="col-12 mb-3 mb-2 " *ngIf="paciente">
+      <div class="custom-control custom-switch">
+        <input formControlName="underAge" type="checkbox" class="custom-control-input" id="underAgeSwitch" (click)="changeUnderAge()">
+        <label 
+          class="custom-control-label" 
+          for="underAgeSwitch"
+          style="color: rgba(189, 189, 189, 1) !important; font-size: 12px;"
+        >
+          Cita para menor de edad
+        </label>
+      </div>
+    </div>
+
+    <div class="col-12 " *ngIf="form1.get('underAge')?.value">
+      <h5>Menores de edad registrados</h5>
+
+      <ng-container *ngIf="!loading">
+        <ng-container *ngIf="menoresDeEdad.length>0; else notMenores">
+          <div class="row m-0">
+            <div 
+            class=" container-user-info mt-1 mb-2 cursor-pointer col-12 col-md-5 mx-0 mx-2" 
+            *ngFor="let menor of menoresDeEdad" 
+            (click)="selectMenorEdad(menor)"
+            [ngClass]="{ 'select': menor._id  === getControl('idUnderAge')?.value}"  
+            >
+              <span class="info-user mr-2"><strong>Nombre:</strong></span> {{menor.name}}
+             <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{menor.birthdate | date:'MMMM d, y'|titlecase}}
+            </div>
+          </div>
+        </ng-container> 
+  
+        <ng-template #notMenores>
+          <p class="my-2">Aún no se tienen menores de edad registrados</p>
+        </ng-template>
+
+          <div class="d-flex justify-content-end mb-2 mt-2">
+            <button class="btn btn-primary btn-sm" type="button" style="width: 177px;" (click)="openNewMenoDeEdad()">Agregar menor de edad </button>
+          </div>
+      </ng-container>
+
+      <ng-container *ngIf="loading">
+        <div class="w-100   text-center pt-5">
+          <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+          </div>
+        </div>
+      </ng-container>
+    
+    </div>
+
+    <!-- CITA REFERIDA -->
+    <div class="col-12 mb-3 mb-2 " *ngxPermissionsOnly="['admin','sac']">
+      <div class="custom-control custom-switch">
+        <input formControlName="referencedAppointment" type="checkbox" class="custom-control-input" id="referencedAppointmentSwitch" >
+        <label 
+          class="custom-control-label" 
+          for="referencedAppointmentSwitch"
+          style="color: rgba(189, 189, 189, 1) !important; font-size: 12px;"
+        >
+          Cita referida
+        </label>
+      </div>
+    </div>
+
+    <div class="col-12 " *ngIf="form1.get('referencedAppointment')?.value">
+      <h5>Cita referida</h5>
+
+        <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-3">Seleccione la sucursal que refiere la cita</label>
+        <app-select-subsidiary (subsidiarySelectedEv)="setSubsidiaryReferenced($event)" [consultorioMedico]="false"></app-select-subsidiary>
+    
+    </div>
+
+    <div class="col-12 h-100 mt-3">
+      <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-3">Selecciona nivel de Urgencia</label>
+      <div class="d-flex flex-column flex-sm-row w-100  align-items-center">
+          <div class="card border-0 position-relative mb-2 card-radio card-radio-custom ratioMeetingTool mx-2" *ngFor="let urgency of urgencies">
+              <div class="d-flex align-items-center">
+                  <span class="level-urgency mr-3" [style.background-color]="urgency.color"> </span>
+                  <span class="ratioMeetingTool_title">{{urgency.name}}</span>
+              </div>
+              <div>
+                  <input formControlName="urgency" type="radio" class="form-check-input" name="urgency" [id]="'urgency'+urgency._id" [value]="urgency" >
+                  <label [for]="'urgency'+urgency._id"></label>
+              </div>
+          </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<div class="row mt-3">
+  <div class="col-12 d-flex justify-content-end">
+    <ng-content select="[backButton]"></ng-content>
+    <button [disabled]="form1.invalid" (click)="nextForm()" class="btn btn-primary btn-150">Siguiente</button>
+  </div>
+</div>
+

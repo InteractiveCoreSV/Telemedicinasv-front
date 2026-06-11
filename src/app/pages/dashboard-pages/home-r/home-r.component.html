@@ -1,0 +1,175 @@
+<div class="w-100 mt-6  d-flex flex-column justify-content-center">
+    <h2 class="title mb-3">Tu salud a un clic de distancia.</h2>
+    <p class="subtitle">El mejor laboratorio centroamericano.</p>
+
+    <div class="d-flex mt-5 justify-content-center align-items-center flex-column flex-sm-row">
+        <a class="btn btn-primary mr-0 mr-sm-3 mb-2 mb-sm-0" (click)="openModalNewAppoinment()" *ngxPermissionsExcept="'medico'">
+            <img src="assets/icons/icon-add.png" class="mr-2" alt="">
+            Crear cita
+        </a>
+        <a class="btn btn-primary" routerLink="/dashboard/">
+            <img src="assets/icons/icon-calendar-home.png" class="mr-2" alt="">
+            Ver calendario
+        </a>
+    </div>
+
+    <div class="row mt-5 g-1" *ngxPermissionsExcept="'medico'">
+        <div class=" col-12 d-flex flex-column justify-content-center  py-2" >
+                <h2 class="title ">Nuestros medicos.</h2>
+                <small class="text-center">Toca uno para ver su perfil</small>
+        </div>
+
+        <div class=" col-12 d-flex flex-column flex-sm-row justify-content-end  py-2" >
+            <button class="btn btn-primary btn-favoritos mr-2 mb-2 mb-sm-0" (click)="filter.favoritos = !filter.favoritos; getmedicos()">{{filter.favoritos ? 'Todos los médicos' : 'Mis Favoritos'}} <i class="fas fa-heart ml-1"></i></button>
+          <app-select-especialidad [customClass]="'container-select-status'" (changeEspecialidad)="filter.especialidad = $event; getmedicos()"></app-select-especialidad>
+        </div>
+
+        <ng-container *ngIf="!loading">
+          <ng-container *ngIf="medicos.length>0;else notResult">
+            <div
+                class="col-12 col-sm-6  col-lg-4 cursor-pointer"
+                *ngFor="let doctor of medicos"
+                (click)="openModalDetailMedico(doctor)"
+            >
+                <div class="card shadow-sm h-100 d-flex flex-column justify-content-between position-relative p-2">
+                    <div class="constent-heart p-2" *ngIf="user?._id && doctor && doctor._id">
+                        <i
+                            (click)="addToFavorite(doctor._id); $event.stopPropagation()"
+                                [ngClass]="{
+                                'fas': isFavorite(doctor._id),
+                                'far': !isFavorite(doctor._id),
+                                'fa-heart': true
+                                }"
+
+
+                        ></i>
+                    </div>
+                    <div class="row m-0  justify-content-center " style="border-radius: 5px;">
+
+                        <!-- Avatar -->
+                        <div class="col-auto p-2">
+                            <img
+                                [src]="doctor.imageProfile || 'assets/logos/telemedicina-mini-back.png'"
+                                width="80"
+                                height="80"
+                                alt="Doctor"
+                            />
+                        </div>
+
+                        <!-- Info -->
+                        <div class="col py-3">
+                            <div class="card-body p-0">
+
+                                <h5 class="card-title mb-1">
+                                {{ doctor.names }} {{ doctor.last_names }}
+                                </h5>
+
+                                <p
+                                *ngIf="doctor.educacion && doctor.educacion.length"
+                                class="text-muted mb-1 content-card-medico "
+                                >
+                                <strong>Egresado:</strong> {{ doctor.educacion[0].institucion }}
+                                </p>
+
+                                <p class="mb-1 content-card-medico">
+                                <strong>
+                                    {{ doctor.yearStartedPracticing | calcYearsOfPracticePipe }}
+                                </strong>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 row px-2">
+        
+                            <div class="col-12 pl-0">
+                                <div class="d-flex justify-content-center align-items-center gap-1 mt-1">
+                                    <span class="text-warning fs-7">
+                                        <i class="fas fa-star"></i>
+                                    </span>
+                                    <span class="text-muted content-card-medico">
+                                        {{ (doctor.medicoScore ? doctor.medicoScore : 100) | medicoScorePipe }} {{ doctor.ratings ? ' | ' + doctor.ratings +' calificaciones' : '' }} 
+                                    </span>
+                                </div>
+
+                                <p
+                                    *ngIf="doctor.subsidiary"
+                                    class="text-muted mb-1 content-card-medico"
+                                >
+                                    <i class="fas fa-map-marker-alt"></i>
+
+                                    {{ doctor.subsidiary.address.address | slice:0:70 }}
+                                    <span>
+                                        {{doctor.subsidiary.address.address.length > 70 ? '...' : '.'}}
+                                        <a
+                                        href="javascript:void(0)"
+                                        class="ms-1 text-primary fw-semibold"
+                                        (click)="openAddressModal(doctor.subsidiary.name,doctor.subsidiary.address.address); $event.stopPropagation()"
+                                        >
+                                        Ver más
+                                        </a>
+                                    </span>
+                                </p>
+
+                            </div>
+
+                            <div class="col-12 pl-0" *ngIf="doctor.especialidad || (doctor.subespecialidades && doctor.subespecialidades.length)">
+                                <h5 class="content-card-medico">Preparación academica</h5>
+                                <ul class="pl-3">
+                                    <li class="content-card-medico" *ngIf="doctor.especialidad">{{doctor.especialidad.name}} (Especialidad)</li>
+                                    <li class="content-card-medico" *ngIf="doctor.subespecialidades && doctor.subespecialidades.length > 0">{{doctor.subespecialidades[0].name}} (Subespecialidad)</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+
+                    <div class="w-100 d-flex justify-content-end mb-2 pr-2">
+                        <a
+                            class="btn btn-primary btn-sm" style="width: 130px !important; height: 35px !important;"
+                            (click)="openModalNewAppoinment(doctor); $event.stopPropagation()" 
+                        >
+                            Agenda tu cita
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class=" col-12 mt-2 d-flex justify-content-between px-3 table-footer">
+                <div class="d-flex align-items-center">
+                    <span class="table-footer-text">
+                        Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + medicos.length : medicos.length}} - 
+                        de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}
+                    </span>
+                </div>
+
+                <nav aria-label="Page navigation">
+                    <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+                        (pageChange)="(page=$event || 1);(getmedicos())" [collectionSize]="paginationDetails.totalDocs || 0"
+                        [pageSize]="paginationDetails.limit || 0">
+                    </ngb-pagination>
+                </nav>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #notResult>
+            <div class="col-12 p-3">
+                <p class="my-2 text-center">No hay médicos que mostrar</p>
+            </div>
+        </ng-template>
+
+        
+        <ng-container *ngIf="loading">
+          <div class="col-12 d-flex justify-content-center align-items-center">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            </div>
+          </div>
+        </ng-container>
+
+    </div>
+
+
+</div>

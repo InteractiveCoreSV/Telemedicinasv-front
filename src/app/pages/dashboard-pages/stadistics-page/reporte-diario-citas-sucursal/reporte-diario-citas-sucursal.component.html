@@ -1,0 +1,134 @@
+
+    <div class="card graficas w-100" style="overflow: auto; box-shadow: #2E4A76 0px 3px 8px; ;">
+    <div class="d-flex justify-content-end my-2">
+        <button type="button" class="btn btn-sm btn-ghost-primary mr-2 "(click)="exportToExcel()">
+          Descargar Excel <i class="fas fa-file-download"></i>
+        </button>
+      </div>
+      
+    <div style="justify-content: center;" class="card-header">
+        <h5 class="card-header-title fw-custom custom-title-statistics">Reporte citas diarias por sucursal</h5>
+    </div>
+      
+    <!-- Body -->
+    <div class="card-body grafica_lineal">
+       <div class="row mb-2 mb-lg-0">
+
+        <div class="col-lg-5 mb-2 mb-lg-0">
+          <div class="input-group input-group-merge input-group-borderless input-group-flush input-group-light " style="max-width: 430px !important;" *ngxPermissionsExcept="['patient']">
+            <input 
+              style="padding-right: 2.75rem !important; padding-left: 0.75rem !important;" 
+              type="text" 
+              class="form-control center" 
+              id="inputGroupMergeSearch" 
+              placeholder="Buscar Nombre de la sucursal"  
+              aria-describedby="inputGroupMergeSearchlAddOn"
+              [(ngModel)]="filters.search"
+              (input)="getForSearch()"
+            >
+            <div class="input-group-append input-group-text" style="right: 0px !important;"  id="inputGroupMergeSearchlAddOn">
+              <img src="assets/icons/icon-search.png" alt="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-auto  mb-2 mb-sm-0 mx-0 pr-sm-2 px-lg-2">
+          <div class="d-flex ">
+            <button
+              [rangesSelect]="'day'"
+              [daterangepicker]="'predefined'"
+              [rangeDate]="filters.rangeDates"
+              #datePicker
+              class="btn btn-current-date dropdown-toggle filterDate d-flex justify-content-center "
+              style="width: 100% !important; min-width: 200px !important; background-color: #f5f5f5 !important;"
+            >
+              <i class="tio-date-range"></i>
+              <span #predefinedPreview class="ml-1"></span>
+            </button>
+            <button
+              class="btn btn-ghost-secondary  p-2"
+              *ngIf="btnCancelSearchByDates"
+              (click)="searchWithoutDates()"
+            >
+              <i class="tio-clear icon-botton"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-auto ">
+          <app-select-category-services (changecategoriesServices)="filters.typeAppoinment = $event; getData()"></app-select-category-services>
+        </div>
+
+      </div>
+
+      <div class="table-responsive datatable-custom mt-2">
+        <table id="datatableusers"
+          class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+          data-hs-datatables-options='{
+                    "order": [],
+  "search": "#datatableSearch",
+  "entries": "#datatableEntries",
+  "pageLength": 15,
+  "isResponsive": false,
+  "isShowPaging": false,
+  "pagination": "datatablePagination"
+                }'>
+            <thead class="thead-light">
+              <tr>
+                <th scope="col" (click)="sortTable('_id.subsidiaryName')">Sucursal <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointments')">Total de citas <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointmentsRefuse')">Citas canceladas <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointmentsCompleted')">Citas atendidas <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointmentsPending')">Citas Pendientes <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalSalesCompleted')">Total citas atendidas <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalSalesRefuse')">Total citas canceladas <i class="fas fa-sort cursor-pointer"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="!loading;else loading_templ">
+                <ng-container *ngIf="(results).length>0;else not_resultss">
+                  <tr *ngFor="let result of results;let i =index">
+                    <td >{{result._id.subsidiaryName}}</td>
+                    <td class="text-center">{{result.totalAppointments}}</td>
+                    <td class="text-center">{{result.totalAppointmentsRefuse}}</td>
+                    <td class="text-center">{{result.totalAppointmentsCompleted}}</td>
+                    <td class="text-center">{{result.totalAppointmentsPending}}</td>
+                    <td class="text-center">${{result.totalSalesCompleted}}</td>
+                    <td class="text-center">${{result.totalSalesRefuse}}</td>
+
+                  </tr>
+
+                </ng-container>
+              </ng-container>
+              <ng-template #loading_templ>
+                <tr>
+                  <td colspan="8">
+                    <app-loading-table></app-loading-table>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template #not_resultss>
+                <tr>
+                  <td colspan="8">
+                    <app-not-results-table></app-not-results-table>
+                  </td>
+                </tr>
+              </ng-template>
+            </tbody>
+            <tfoot *ngIf="totals && results.length > 0">
+              <tr style="font-weight: 700; background-color: #f5f5f5;">
+                <td>TOTAL</td>
+                <td class="text-center">{{totals.totalAppointments}}</td>
+                <td class="text-center">{{totals.totalAppointmentsRefuse}}</td>
+                <td class="text-center">{{totals.totalAppointmentsCompleted}}</td>
+                <td class="text-center">{{totals.totalAppointmentsPending}}</td>
+                <td class="text-center">${{totals.totalSalesCompleted | number:'1.2-2'}}</td>
+                <td class="text-center">${{totals.totalSalesRefuse | number:'1.2-2'}}</td>
+              </tr>
+            </tfoot>
+          </table>
+      </div>
+    </div>
+</div>
+

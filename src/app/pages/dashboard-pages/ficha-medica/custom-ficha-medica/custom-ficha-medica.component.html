@@ -1,0 +1,158 @@
+<div >
+    <h1 class="text-center">Ficha Médica</h1>
+
+    <ng-container *ngIf="!loading ; else loading_templ">
+        <h4>{{nameFinchaMedica}}</h4>
+
+        <!-- SOLO PARA MUJERES -->
+        <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;" *ngIf="formFichaMedicaSectionWoman">
+            <label class="form-label label-auth" >Sección solo para mujeres</label>
+
+
+            <div class="d-flex justify-content-end w-100 mt-1">
+                <button class="btn btn-primary btn-150" (click)="newCampoModal(formFichaMedicaSectionWoman.id,true)">Agregar campo</button>
+            </div>
+    
+            <!-- <div class="card-header" *ngIf="fichaMedica.onlyWoman">
+                <h2 class="my-2 text-center">En Mujeres</h2>
+            </div> -->
+    
+            <div class="d-flex justify-content-end">
+                <a class="cursor-pointer ml-1" (click)="newSection(true,formFichaMedicaSectionWoman)"><i class="far fa-edit"></i></a>
+            </div>
+            <h3 class="my-2 text-center mb-2">{{formFichaMedicaSectionWoman.name}}</h3>
+            
+            
+            <div class="row flex-wrap px-2">
+                <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of formFichaMedicaSectionWoman.campos; let i = index">
+                    <div class="d-flex justify-content-end">
+                        <a class="cursor-pointer ml-1" (click)="newCampoModal(formFichaMedicaSectionWoman.id,true,campo,i)"><i class="far fa-edit"></i></a>
+                        <a *ngIf="!campo.notEdit ||( campo.notEdit && campo.notEdit != 'true')"  class="cursor-pointer ml-1" (click)="removeCampoSectionWoman(i)"><i class="fas fa-trash"></i></a>
+                    </div>
+                    <label class="form-label label-auth" [for]="campo.name">{{campo.name}}</label>
+    
+                    <div class="d-flex align-items-end" *ngIf="campo.component === 'Entrada de texto'">
+                        <input
+                            [type]="campo.type === 'Número (solo números)' ? 'number': 'text'"
+                            [name]="campo.name"
+                            [placeholder]="campo.placeholder"
+                            class="form-control mr-1"
+                            [style.width]="campo.width+'px'"
+                        />
+                        <ng-container *ngIf="campo.unidades.length > 1;else onlyUnidad">
+                            <ng-select  class="unidades" [placeholder]="'Unidades'" style="width: 100px;">
+                                <ng-option *ngFor="let unidad of campo.unidades" [value]="unidad">
+                                    {{unidad}}
+                                </ng-option>
+                            </ng-select>
+                        </ng-container>
+    
+                        <ng-template #onlyUnidad>
+                            <span>{{campo.unidades[0]}}</span>
+                        </ng-template>
+                   </div>
+    
+                   <div *ngIf="campo.component === 'Selector opción multiple'">
+                    <ng-select  
+                        [multiple]="campo.selectMultiple ? campo.selectMultiple : false"
+                        class="unidades" 
+                        [placeholder]="campo.placeholder" 
+                        [style.width]="campo.width ? campo.width+'px' : '100%'">
+                    
+                        <ng-option *ngFor="let option of campo.optionsSelect" [value]="option">
+                            {{ option }}
+                        </ng-option>
+                    </ng-select>
+                   </div>
+    
+                    <textarea *ngIf="campo.component === 'Bloque de texto'" [placeholder]="campo.placeholder" class="form-control" rows="5"></textarea>
+                </div>
+            </div>
+    
+        </div>
+
+        <!-- PARA TODOS -->
+        <div *ngFor="let fichaMedica of formFichaMedica; let indexSection = index" class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+            <div class="d-flex justify-content-end w-100 mt-1">
+                <button class="btn btn-primary btn-150" (click)="newCampoModal(fichaMedica.id)">Agregar campo</button>
+            </div>
+    
+            <!-- <div class="card-header" *ngIf="fichaMedica.onlyWoman">
+                <h2 class="my-2 text-center">En Mujeres</h2>
+            </div> -->
+    
+            <div class="d-flex justify-content-end">
+                <a class="cursor-pointer ml-1" (click)="newSection(false,fichaMedica,indexSection)"><i class="far fa-edit"></i></a>
+                <a class="cursor-pointer ml-1" (click)="removeSection(indexSection)"><i class="fas fa-trash"></i></a>
+            </div>
+            <h3 class="my-2 text-center mb-2">{{fichaMedica.name}}</h3>
+    
+            
+            <div class="row flex-wrap px-2">
+                <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.campos; let i = index">
+                    <div class="d-flex justify-content-end">
+                        <a class="cursor-pointer ml-1" (click)="newCampoModal(fichaMedica.id,false,campo,i)"><i class="far fa-edit"></i></a>
+                        <a class="cursor-pointer ml-1" (click)="removeCampo(indexSection,i)"><i class="fas fa-trash"></i></a>
+                    </div>
+                    <label class="form-label label-auth" [for]="campo.name">{{campo.name}}</label>
+    
+                    <div class="d-flex align-items-end" *ngIf="campo.component === 'Entrada de texto'">
+                        <input
+                            [type]="campo.type === 'Número (solo números)' ? 'number': 'text'"
+                            [name]="campo.name"
+                            [placeholder]="campo.placeholder"
+                            class="form-control mr-1"
+                            [style.width]="campo.width+'px'"
+                        />
+                        <ng-container *ngIf="campo.unidades.length > 1;else onlyUnidad">
+                            <ng-select class="unidades" [placeholder]="'Unidades'" style="width: 100px;">
+                                <ng-option *ngFor="let unidad of campo.unidades" [value]="unidad">
+                                    {{unidad}}
+                                </ng-option>
+                            </ng-select>
+                        </ng-container>
+    
+                        <ng-template #onlyUnidad>
+                            <span>{{campo.unidades[0]}}</span>
+                        </ng-template>
+                   </div>
+    
+                   <div *ngIf="campo.component === 'Selector opción multiple'">
+
+                        <ng-select  
+                        [multiple]="campo.selectMultiple ? campo.selectMultiple : false"
+                        class="unidades" 
+                        [placeholder]="campo.placeholder" 
+                        [style.width]="campo.width ? campo.width+'px' : '100%'">
+                    
+                        <ng-option *ngFor="let option of campo.optionsSelect" [value]="option">
+                            {{ option }}
+                        </ng-option>
+                    </ng-select>
+    
+                   </div>
+    
+                    <textarea *ngIf="campo.component === 'Bloque de texto'" [placeholder]="campo.placeholder" class="form-control" rows="5"></textarea>
+                </div>
+            </div>
+    
+        </div>
+        
+        <div class="d-flex justify-content-end w-100 mt-2">
+            <button class="btn btn-primary btn-200" (click)="newSection(false)">Agregar sección</button>
+        </div>
+        
+      
+    
+        <div class="d-flex justify-content-center w-100 mt-2" >
+            <button class="btn btn-primary btn-200" (click)="saveFichaMedicaSections()">Guardar</button>
+        </div>
+    
+    </ng-container>
+
+    <ng-template #loading_templ>
+        <div class="d-flex justify-content-center">
+            <app-loading-table></app-loading-table>
+        </div>
+    </ng-template>
+</div>

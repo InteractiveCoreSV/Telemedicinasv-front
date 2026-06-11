@@ -1,0 +1,664 @@
+<!-- Navbar Vertical -->
+<aside NavbarVerticalNavigation id="sideBar" style="transition: 0.6s;z-index: 1002;"
+class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered sidebar-custom">
+
+<div class="navbar-vertical-container">
+    <div class="navbar-vertical-footer-offset">
+      <div class="navbar-brand-wrapper justify-content-center mt-2" style="overflow: hidden !important;">
+        <!-- Logo -->
+        <a class="navbar-brand mr-0" routerLink="/dashboard" aria-label="Front">
+          <img
+            style="max-width: 8.5rem; min-width: 8.5rem"
+            class="navbar-brand-logo"
+            [src]="
+              light
+                ? '/assets/logos/telemedicina.png'
+                : '/assets/logos/telemedicina-white.png'
+            "
+            alt="Telemedicina Analiza El Salvador"
+          />
+          <img
+            class="navbar-brand-logo-mini"
+            src="/assets/logos/telemedicina-white.png"
+            alt="Telemedicina Analiza El Salvador"
+          />
+        </a>
+
+        <!-- End Logo -->
+
+        <!-- Navbar Vertical Toggle -->
+        <button
+          id="buttonNavVertical"
+          type="button"
+          class="js-navbar-vertical-aside-toggle-invoker navbar-vertical-aside-toggle btn btn-icon btn-clode-menu"
+        >
+          <i class="tio-clear tio-lg"></i>
+        </button>
+        <!-- End Navbar Vertical Toggle -->
+      </div>
+
+      <!-- Content -->
+      <div class="navbar-vertical-content">
+
+        <div class="profile-info-container">
+          <div class="avatar avatar-circle ">
+            <img
+              class="avatar-img"
+              appBrokenImagen
+              *ngIf="userInfo?.imageProfile"
+              [src]="userInfo?.imageProfile"
+              [alt]="userInfo?.names + ' ' + userInfo?.last_names"
+            />
+            <span
+              *ngIf="!userInfo?.imageProfile"
+              class="avatar-initials"
+            >
+              {{ userInfo?.names | slice:0:1}}
+              {{ userInfo?.last_names | slice:0:1}}
+            </span>
+          </div>
+
+          <div class="profile-info">
+            <h4 class="mb-0 profile-info-title">{{userInfo?.names}} {{userInfo?.last_names}}</h4>
+            <span class="profile-info-subtitle ">{{userInfo?.email}}</span>
+
+          </div>
+
+        </div>
+
+        <ul class="navbar-nav navbar-nav-lg nav-tabs">
+
+
+          <li class="nav-item text-center px-4 mt-3 mb-3" *ngxPermissionsExcept="['sac']">
+            <a
+              class="btn btn-sidebar w-100 navbar-brand-logo" style="max-width: 100%; min-width: 100%; border-left: 2px solid #fff !important;" [class]="light ? 'btn-outline-light' : ''"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/home"
+              title="Desk"
+              data-placement="left"
+            >
+              Escritorio
+            </a>
+            <a
+              class="btn btn-outline-secondary navbar-brand-logo-mini" [class]="light ? 'btn-outline-light' : ''" style="padding: 7px 0px 7px 1px;"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/home"
+              title="Desk"
+              data-placement="left"
+            >
+              <i class="fas fa-home"></i>
+            </a>
+          </li>
+
+          
+          <li class="nav-item text-center px-4 mt-3 mb-3" *ngxPermissionsOnly="['sac']">
+            <a
+              class="btn btn-sidebar w-100 navbar-brand-logo" style="max-width: 100%; min-width: 100%; border-left: 2px solid #fff !important;" [class]="light ? 'btn-outline-light' : ''"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/home"
+              title="Desk"
+              data-placement="left"
+            >
+              Inicio
+            </a>
+            <a
+              class="btn btn-outline-secondary navbar-brand-logo-mini" [class]="light ? 'btn-outline-light' : ''" style="padding: 7px 0px 7px 1px;"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/home"
+              title="Desk"
+              data-placement="left"
+            >
+              <i class="fas fa-home"></i>
+            </a>
+          </li>
+
+          <!-- <li class="nav-item text-center px-4 mt-3 mb-3" *ngxPermissionsOnly="['sac','admin']">
+            <a
+              class="btn btn-sidebar w-100 navbar-brand-logo" style="max-width: 100%; min-width: 100%; border-left: 2px solid #fff !important;" [class]="light ? 'btn-outline-light' : ''"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/medicos/medicos-status"
+              title="Desk"
+              data-placement="left"
+            >
+              Médicos en linea
+            </a>
+            <a
+              class="btn btn-outline-secondary navbar-brand-logo-mini" [class]="light ? 'btn-outline-light' : ''" style="padding: 7px 0px 7px 1px;"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/medicos/medicos-status"
+              title="Médicos"
+              data-placement="left"
+            >
+              <i class="fas fa-home"></i>
+            </a>
+          </li> -->
+
+          <!-- CITAS -->
+          <li class="nav-item text-center px-4 mt-3 mb-3" *ngxPermissionsOnly="['patient']">
+            <a
+              class="btn btn-sidebar w-100 navbar-brand-logo" style="max-width: 100%; min-width: 100%; border-left: 2px solid #fff !important;" [class]="light ? 'btn-outline-light' : ''"
+              (click)="openModalNewAppoinment()"
+              title="Crear Cita"
+              data-placement="left"
+            >
+              Crear Cita
+            </a>
+          </li>
+
+          <li class="navbar-vertical-aside-has-menu " *ngxPermissionsExcept="['patient']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/appointement')?'active':''"
+              href="javascript:;"
+              title="Citas"
+              style="cursor: pointer;"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-calendar-sidebar.png" alt="calendar-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Citas</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" *ngxPermissionsExcept="'medico'">
+                <a
+                  class="nav-link cursor-pointer"
+                  (click)="openModalNewAppoinment()"
+                  title="Crear cita"
+                >
+                  <span class="text-truncate">Crear Cita</span>
+                </a>
+              </li>
+             
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/citas/todas-las-citas"
+                  title="Historial"
+                >
+                  <span class="text-truncate">Todas las Citas</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="navbar-vertical-aside-has-menu mt-4" *ngxPermissionsOnly="['patient']">
+            <a
+              class=" height nav-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/citas/todas-las-citas"
+              title="Mis Citas"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-calendar-sidebar.png" alt="calendar-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Mis Citas</span
+              >
+            </a>
+          </li>
+          <!--END CITAS -->
+
+          <!-- SERVICIOS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/servicios')?'active':''"
+              href="javascript:;"
+              title="Servicios"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-services.png" alt="servicios-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Servicios</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/servicios"
+                  title="Todos los servicios"
+                >
+                  <span class="text-truncate">Todos los servicios</span>
+                  
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/servicios/categorias"
+                  title="Categoría"
+                >
+                  <span class="text-truncate">Categoría</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/servicios/sub-categorias"
+                  title="Sub Categoría"
+                >
+                  <span class="text-truncate">Sub Categoría</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--END Servicios -->
+
+          <!-- MEDICOS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/medicos')?'active':''"
+              href="javascript:;"
+              title="Médicos"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-medicos.png" alt="medicos-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Médicos</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/especialidades"
+                  title="Especialidades"
+                >
+                  <span class="text-truncate">Especialidades</span>
+                </a>
+              </li>
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/medicos"
+                  title="Todos los médicos"
+                >
+                  <span class="text-truncate">Todos los médicos</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/medicos/nuevo-medico"
+                  title="Nuevo médico"
+                >
+                  <span class="text-truncate">Nuevo médico</span>
+                </a>
+              </li>
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/medicos/solicitudes-medico"
+                  title="Todas las solicitudes de médico"
+                >
+                  <span class="text-truncate">Todas las solicitudes de médico</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/medicos/nueva-solicitud-medico"
+                  title="Nueva solicitud de médico"
+                >
+                  <span class="text-truncate">Nueva solicitud de médico</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--END MEDICOS -->
+
+          <!-- FICHAS MEDICAS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class=" height nav-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/ficha-medica"
+              title="Fichas medicas"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-ficha_medica.png" alt="fichas-medicas-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Fichas medicas</span
+              >
+            </a>
+          </li>
+
+       
+
+          <!-- ExPEDIENTE -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin','sac']">
+            <a
+              class=" height nav-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/expedientes/pacientes"
+              title="Mi Expediente"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-ficha_medica.png" alt="fichas-medicas-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Expedientes</span
+              >
+            </a>
+          </li>
+
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['patient']">
+            <a
+              class=" height nav-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [routerLink]="['/dashboard/expedientes/detalle-expediente', userInfo?._id]"
+              title="Mi Expediente"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-ficha_medica.png" alt="fichas-medicas-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Mi Expediente</span
+              >
+            </a>
+          </li>
+          <!--END ExPEDIENTE -->
+
+                <!-- ENCUESTAS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/encuestas')?'active':''"
+              href="javascript:;"
+              title="Encuestas"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-survey.png" alt="medicos-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Encuestas</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/encuestas"
+                  title="Resultados"
+                >
+                  <span class="text-truncate">Resultados</span>
+                  
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/encuestas/formulario-encuesta" 
+                  title="Formulario"
+                >
+                  <span class="text-truncate">Formulario</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+  
+          <!-- ASEGURADORAS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/aseguradoras')?'active':''"
+              href="javascript:;"
+              title="Aseguradoras"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-aseguradoras.png" alt="medicos-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Aseguradoras</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/aseguradoras"
+                  title="Todas las aseguradoras"
+                >
+                  <span class="text-truncate">Todas las aseguradoras</span>
+                  
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/aseguradoras/nueva-aseguradora"
+                  title="Nueva aseguradora"
+                >
+                  <span class="text-truncate">Nueva aseguradora</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--END ASEGURADORAS -->
+
+          <!-- SUCURSALES -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/sucursales')?'active':''"
+              href="javascript:;"
+              title="Sucursales"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-sucursales.png" alt="medicos-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Sucursales</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/sucursales"
+                  title="Todas las sucursales"
+                >
+                  <span class="text-truncate">Todas las sucursales</span>
+                  
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/sucursales/nueva-sucursal"
+                  title="Nueva sucursal"
+                >
+                  <span class="text-truncate">Nueva sucursal</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--END SUCURSALES -->
+
+          <!-- VIDEO CONFERENCIAS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/video-conferencias')?'active':''"
+              href="javascript:;"
+              title="Video Conferencias"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-video_conferencias.png" alt="medicos-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Video Conferencias</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/video-conferencias"
+                  title="Todas las herramienta"
+                >
+                  <span class="text-truncate">Todas las herramientas</span>
+                  
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/video-conferencias/nueva-herramienta"
+                  title="Nueva herramienta"
+                >
+                  <span class="text-truncate">Nueva herramienta</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--END VIDEO CONFERENCIAS -->
+
+
+
+          <!-- TRANSACCIONES -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class=" height nav-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/transacciones"
+              title="Transacciones"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-transacciones.png" alt="transacciones-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Transacciones</span
+              >
+            </a>
+          </li>
+          <!--END TRANSACCIONES -->
+
+          <!-- USUARIOS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin','sac']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/usuarios')?'active':''"
+              href="javascript:;"
+              title="Usuarios"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-users.png" alt="usuarios-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Usuarios</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item" >
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/usuarios/ver-usuarios"
+                  title="Todos los usuarios"
+                >
+                  <span class="text-truncate">Todos los usuarios</span>
+                  
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/usuarios/crear-usuario"
+                  title="Nuevo usuario"
+                >
+                  <span class="text-truncate">Nuevo usuario</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--END USUARIOS -->
+
+          <!-- ESTADISTICAS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin','sac']">
+            <a
+              class=" height nav-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLink="/dashboard/estadisticas"
+              title="Estadísticas"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-estadistica.png" alt="estadistica-icon">
+              </div>   
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Estadísticas</span
+              >
+            </a>
+          </li>
+          <!--END ESTADISTICAS -->
+        </ul>
+      </div>
+      <!-- End Content -->
+
+      <!-- Footer -->
+      <div class="navbar-vertical-footer" >
+
+        <ul class="navbar-vertical-footer-list mb-3">
+
+          <li class="navbar-vertical-footer-list-item text-center mb-2">
+              <a
+              routerLink="/dashboard/perfil/mi-cuenta"
+              class="footer-mi-account"
+            >
+             Mi Cuenta
+            </a>
+          </li>
+          <li class="navbar-vertical-footer-list-item text-center">
+            <a
+              class="btn btn-footer cursor-pointer" (click)="signout()">
+              Cerrar sesión
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</aside>
+<!-- End Navbar Vertical -->

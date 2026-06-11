@@ -1,0 +1,78 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Agregar Pregunta</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="form">
+        <div class=" w-100 row justify-content-center" >
+
+            <div class="col-12  mb-3">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label" >Pregunta</label>
+                </div>
+                <input
+                    formControlName="question"
+                    type="text" 
+                    placeholder="Escribe la pregunta"
+                    class="form-control "
+                />
+            </div>
+
+            <div class="col-12  mb-3">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label" >Descripción corta de pregunta (opcinal)</label>
+                </div>
+                <input
+                    formControlName="description"
+                    type="text" 
+                    placeholder="Descripción corta de pregunta (opcinal)"
+                    class="form-control "
+                />
+            </div>
+
+            <div class="col-12  mb-3">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label" >Pregunta referente a médico</label>
+                </div>
+                    <div class="d-flex w-100 justify-content-center align-items-center">
+                    <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2" >
+                        <div>
+                            <!-- <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'">  -->
+                            <span class="ratioMeetingTool_title">No</span>
+                        </div>
+                        <div>
+                            <input formControlName="referentMedico" type="radio" class="form-check-input" name="referentMedico" id="no" [value]="false" >
+                            <label for="no"></label>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2" >
+                        <div>
+                            <!-- <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'">  -->
+                            <span class="ratioMeetingTool_title">Sí</span>
+                        </div>
+                        <div>
+                            <input formControlName="referentMedico" type="radio" class="form-check-input" name="referentMedico" id="si" [value]="true" >
+                            <label for="si"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="w-100 text-end">
+        <button type="submit" class="btn  btn-primary btn-150" (click)="saveCampo()">
+            Aceptar
+        </button>
+    </div>
+</div>
+
+
+

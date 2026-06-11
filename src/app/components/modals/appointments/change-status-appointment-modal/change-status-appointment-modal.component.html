@@ -1,0 +1,131 @@
+<div class="modal-header border-bottom pb-3">
+  <h4 class="modal-title">Cambiar estado de la cita</h4>
+  <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="d-flex" style="flex-direction: column; justify-content: center;">
+    <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom pb-4" *ngxPermissionsOnly="['admin','sac']">
+      <input
+        [(ngModel)]="optionSelected"
+        value="Reserved"
+        class="form-check-input cursor-pointer"
+        type="radio"
+        id="ReservedRadio"
+        name="radio2" style="height:1rem !important; width:1rem;"
+      />
+      <label class="ms-2 form-check-label cursor-pointer" for="ReservedRadio"
+        >
+        Reservada <i class="fas fa-check-circle"></i></label
+      >
+    </div>
+
+    <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom py-4" *ngxPermissionsOnly="['admin','sac']">
+      <input
+        [(ngModel)]="optionSelected"
+        value="Confirmed"
+        class="form-check-input cursor-pointer"
+        type="radio"
+        id="ConfirmedRadio"
+        name="radio2" style="height:1rem !important; width:1rem;"
+      />
+      <label class="ms-2 form-check-label cursor-pointer" for="ConfirmedRadio"
+        >
+        Confirmada <i class="fas fa-check-circle"></i></label
+      >
+    </div>
+
+    <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom py-4" *ngxPermissionsOnly="['admin','sac','medico']">
+      <input
+        [(ngModel)]="optionSelected"
+        value="Completed"
+        class="form-check-input cursor-pointer"
+        type="radio"
+        id="CompletedRadio"
+        name="radio2" style="height:1rem !important; width:1rem;"
+      />
+      <label class="ms-2 form-check-label cursor-pointer" for="CompletedRadio"
+        >
+        Completada <i class="fas fa-check-circle"></i></label
+      >
+    </div>
+
+    <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom py-4 text-danger" *ngxPermissionsOnly="['admin','sac']">
+      <input
+        [(ngModel)]="optionSelected"
+        value="Refuse"
+        class="form-check-input cursor-pointer"
+        type="radio"
+        id="RefuseRadio"
+        name="radio2" style="height:1rem !important; width:1rem;"
+      />
+      <label class="ms-2 form-check-label cursor-pointer" for="RefuseRadio"
+        >
+        Cancelada <i class="fas fa-check-circle"></i></label
+      >
+    </div>
+  </div>
+
+  <div *ngxPermissionsOnly="['admin','sac']">
+      <div *ngIf="this.optionSelected == 'Refuse'">
+        <div class="row">
+          <ng-container>
+            <div class="col-6 p-2" >
+              <div class="card border-0 position-relative card-radio card-radio-custom">
+                <div>
+                  <input [(ngModel)]="typeCancel" type="radio" name="interno" id="interno" value="interno" >
+                  <label for="interno"></label>
+                </div>
+                <div>
+                  <span>
+                    Interno
+                  </span>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-6 p-2" >
+              <div class="card border-0 position-relative card-radio card-radio-custom">
+                <div>
+                  <input [(ngModel)]="typeCancel" type="radio" name="client" id="client" value="client" >
+                  <label for="client"></label>
+                </div>
+                <div>
+                  <span>
+                    Cliente
+                  </span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      
+        <div *ngIf="typeCancel === 'interno'" class="mb-3 d-flex ">
+          <div style="width: 100%;">
+            <label class="form-label">Motivo de la cancelación <span class="text-danger">*</span></label>
+
+            <ng-select 
+              style="min-width: 200px;text-align: center;"
+              [(ngModel)]="motivoCancel" 
+              [placeholder]="'Seleccione el motivo de la cancelación'"
+              >
+                <ng-option *ngFor="let motivo of motivos" [value]="motivo">
+                  {{motivo}}
+                </ng-option>
+            </ng-select>
+
+            <textarea *ngIf="motivoCancel === 'Otros motivos'" [class]="formSubmited && !commentCancel && motivoCancel === 'Otros motivos' ? 'is-invalid' :'' " [(ngModel)]="commentCancel" class="form-control mt-2" type="text" placeholder="Ingrese un comentario" rows="4"></textarea>
+            <div *ngIf="formSubmited && !commentCancel && typeCancel === 'interno'" class="invalid-feedback">
+              El motivo de la cancelación es necesario
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<!--  -->
+<div class="modal-footer w-100 row justify-content-center">
+  <button class="col-5 btn btn-secondary btn-sm" type="button" (click)="ngbActiveModal.close()">Cancelar</button>
+  <button class="col-5 btn btn-primary btn-shadow btn-sm" type="button" (click)="changeStatus()">Confirmar</button>
+</div>

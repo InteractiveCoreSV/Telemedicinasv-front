@@ -1,0 +1,86 @@
+<header id="header" class="header  navbar-expand-lg navbar-fixed navbar-height navbar-flush navbar-container navbar-bordered">
+  <div class="navbar-nav-wrap">
+    <div class="navbar-brand-wrapper">
+      <!-- Logo -->
+      <a class="navbar-brand" routerLink="/dashboard" aria-label="Front">
+        <img class="navbar-brand-logo" style="width: 2.5rem !important; min-width: 2.7rem !important;" src="/assets/logos/telemedicina-mini.png" alt="Telemedicina Analiza El Salvador">
+        <!-- <img class="navbar-brand-logo-mini" src="/assets/logos/telemedicina-mini.png" alt="Logo"> -->
+      </a>
+      <!-- End Logo -->
+    </div>
+
+    <div class="navbar-nav-wrap-content-left d-block d-xl-none">
+      <button  type="button" class="js-navbar-vertical-aside-toggle-invoker close mr-3">
+        <!-- <i class="tio-menu-hamburger navbar-vertical-aside-toggle-short-align" data-toggle="tooltip" data-placement="right" title="Collapse"></i> -->
+        <!-- <i class="tio-menu-hamburger navbar-vertical-aside-toggle-full-align" data-template='<div class="tooltip d-none d-sm-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-toggle="tooltip" data-placement="right" title="Expand"></i> -->
+        <img src="/assets/icons/icon-menu.png" alt="menu" class="navbar-vertical-aside-toggle-short-align" data-toggle="tooltip" data-placement="right" title="Collapse">
+        <img src="/assets/icons/icon-menu.png" alt="menu" class="navbar-vertical-aside-toggle-full-align" data-template='<div class="tooltip d-none d-sm-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-toggle="tooltip" data-placement="right" title="Expand">
+      </button>
+    </div>
+
+
+    <!-- Secondary Content -->
+    <div class="navbar-nav-wrap-content-right">
+      <!-- Navbar -->
+      <ul class="navbar-nav align-items-center flex-row">
+        <li class="nav-item d-none d-lg-inline-block" >
+          <a
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLink="/dashboard/citas/todas-las-citas"
+            class="btn text-white btn-header w-100 navbar-brand-logo d-flex align-items-center" 
+            style="width: auto !important; max-width: 161px !important;"
+            >
+              <img style="margin-right: 10px; width: 19px; height: 13px;" src="assets/icons/icon-menu.png" alt="">
+              <span>Todas las citas</span>
+            </a
+          >
+        </li>
+        <li class="nav-item d-none d-sm-inline-block" >
+          <a
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLink="/dashboard/"
+            class="btn text-white btn-header w-100 navbar-brand-logo"
+            >
+              <img style="margin-right: 10px" src="assets/icons/icon-calendar.png" alt="">
+              <span>Calendario</span>
+            </a
+          >
+        </li>
+        <li class="nav-item create-appointment" >
+          <a
+          *ngxPermissionsExcept="'medico'"
+          (click)="openModalNewAppoinment()"
+            class="btn text-white btn-header w-100 navbar-brand-logo"
+            >
+              <img style="margin-right: 10px" src="assets/icons/icon-calendar.png" alt="">
+              <span>Crear Cita</span>
+            </a
+          >
+        </li>
+        <li class="nav-item d-none d-md-inline-block">
+          <a
+            (click)="reloadPage()"
+            class="btn text-white btn-header w-100 navbar-brand-logo"
+            >
+              <img style="margin-right: 10px" src="assets/icons/icon-update.png" alt="">
+              <span>Actualizar</span>
+            </a
+          >
+        </li>
+        
+        <li class="nav-item d-md-none"></li>
+
+
+        <li class="nav-item">
+          <!-- Account -->
+          <app-account></app-account>
+          <!-- End Account -->
+        </li>
+      </ul>
+      <!-- End Navbar -->
+    </div>
+    <!-- End Secondary Content -->
+  </div>
+</header>

@@ -1,0 +1,26 @@
+.far {
+    color: #2E4A76 !important;
+}
+
+.close-menor {
+    position: absolute;
+    right: 13px;
+}
+
+.btn-historial-crm {
+    position: absolute;
+    top: -63px;
+    right: 0;
+    background-color: #74808b;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    z-index: 10;
+}
+
+.btn-historial-crm:hover {
+    background-color: #61666b;
+}

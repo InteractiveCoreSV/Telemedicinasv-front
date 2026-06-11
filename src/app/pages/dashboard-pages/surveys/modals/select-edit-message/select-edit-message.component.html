@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h5 class="modal-title w-100 text-center" id="addQuestionLabel">Mensajes de la encuesta</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close({survey})">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class=" w-100 d-flex justify-content-center flex-column flex-sm-row" >
+
+        <button class="btn btn-primary  mr-3" (click)="customMessagePrincipalModal()">
+            Mensaje de inicio
+        </button>
+
+        <button class="btn btn-primary" (click)="customMessageAgradecimientoModal()">
+            Mensaje de agradecimiento
+        </button>
+    </div>
+
+    <div class="w-100 text-end mt-6">
+        <button type="submit" class="btn  btn-secondary btn-150" (click)="ngbActiveModal.close({survey})">
+            Aceptar
+        </button>
+    </div>
+</div>
+
+
+

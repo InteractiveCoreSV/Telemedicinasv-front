@@ -1,0 +1,138 @@
+﻿<div class="modal-header border-bottom pb-3" style="height: 50px !important; min-height: 50px !important; background-color: #fff !important;">
+  <h4 class="modal-title" *ngIf="!forCanceled">Citas para el {{currentDate | date:'EEEE, MMMM d, y' | titlecase}}</h4>
+  <h4 class="modal-title" *ngIf="forCanceled">Citas canceladas 24H antes</h4>
+
+  <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body" style="padding: 0px !important;">
+
+  <!-- <div class="card-table"> -->
+    <div class="table-responsive datatable-custom">
+        <table id="datatableusers"
+        class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+        data-hs-datatables-options='{
+               "columnDefs": [{
+                  "targets": [0, 7],
+                  "orderable": false
+                }],
+               "order": [],
+               "info": {
+                 "totalQty": "#datatableWithPaginationInfoTotalQty"
+               },
+               "search": "#datatableSearch",
+               "entries": "#datatableEntries",
+               "pageLength": 15,
+               "isResponsive": false,
+               "isShowPaging": false,
+               "pagination": "datatablePagination"
+             }'>
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Fecha</th>
+              <th scope="col" >Paciente</th>
+              <th scope="col">Sucursal</th>
+              <th scope="col">Servicio</th>
+              <th scope="col" >Médico</th>
+              <th scope="col" >Estado</th>
+              <th scope="col" >Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="!loading;else loading_templ">
+              <ng-container *ngIf="(appointments).length>0;else not_results">
+                <tr *ngFor="let appointment of appointments;let i =index">
+                  <td >#{{appointment.appointmentNumber}}</td>
+
+                  <td>
+                    <div  class="d-flex flex-column">
+                      <span>{{appointment.dateAppointment | date:'MMMM d, y' | titlecase}}, {{appointment.hour ? appointment.hour.hours : 'Hora no encontrada'}}</span>
+                      <span *ngIf="appointment.reprogramada" class="badge" style="background-color:#00bcd4;width: 140px;">Cita Reprogramada</span>
+                      <span *ngIf="appointment.remitida" class="badge" style="background-color:#5f5f5f;width: 140px;">Cita Remitida</span>
+                      <span *ngIf="appointment.referencedAppointment" class="badge" style="background-color:#748a8df7;width: 140px;">Cita Referida</span>
+
+                    </div>
+                  </td>
+
+                  <td >
+                    <div class="d-flex flex-column">
+                      <div>
+                        {{appointment.user ? appointment.user.names : 'Usuario no encontrado'}} {{appointment.user ? appointment.user.last_names : ''}}
+                      </div>
+
+                      <div class="d-flex flex-column"  *ngIf="appointment.nameUnderAge">
+                        <span style="color: #000;">Menor de edad:</span>
+                         <span> {{appointment.nameUnderAge}}</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>{{appointment.subsidiary ? appointment.subsidiary.name : 'Sucursal no encontrada'}}</td>
+
+                  <td >
+                    <ul>
+                      <li *ngFor="let service of appointment?.service">{{service.name}} {{service.price | dollar }}</li>
+                    </ul>
+                  </td>
+
+                  <td>{{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}} {{appointment.medico ? appointment.medico.last_names : ''}}</td>
+
+                  <td class="cursor-pointer" *ngxPermissionsOnly="['admin','sac','medico']" (click)="changeStatusModal(appointment)">
+                    <div [innerHTML]="appointment.status | parseStatusName"></div>
+                </td>
+
+                <td class="cursor-pointer" *ngxPermissionsOnly="['patient']"  (click)="payRequest(appointment)">
+                  <div class="d-flex flex-column">
+                    <div [innerHTML]="appointment.status | parseStatusName"></div>
+                  </div>
+                </td>
+                  <td >
+                    <div class="btn-group dropdown">
+                      <button type="button" class="btn btn-outline-primary " (click)="viewDetailAppointment(appointment)">
+                        Ver Detalle
+                      </button>
+                    </div>
+                  </td>
+              </tr>
+
+              </ng-container>
+            </ng-container>
+            <ng-template #loading_templ>
+              <tr>
+                <td colspan="8">
+                  <app-loading-table></app-loading-table>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template #not_results>
+              <tr>
+                <td colspan="8">
+                  <app-not-results-table></app-not-results-table>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between px-3 table-footer">
+          <div class="d-flex align-items-center">
+            <span class="table-footer-text">
+              Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + appointments.length : appointments.length}} - 
+              de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+          </div>
+  
+          <nav aria-label="Page navigation">
+            <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+              (pageChange)="(page=$event || 1);(selectToGet())" [collectionSize]="paginationDetails.totalDocs || 0"
+              [pageSize]="paginationDetails.limit || 0">
+            </ngb-pagination>
+          </nav>
+        </div>
+    </div>
+      
+  <!-- </div> -->
+</div>

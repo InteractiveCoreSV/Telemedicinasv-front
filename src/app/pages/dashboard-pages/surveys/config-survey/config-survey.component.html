@@ -1,0 +1,111 @@
+<div class="mx-auto" style="max-width: 900px;">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex">
+            <a class="mr-4" (click)="previewSurveyModal()">
+                <img src="assets/icons/survey/icon-view.png" alt="" class="mr-1">
+                <span class="preview-survey ">Ver encuesta</span>
+            </a>
+            <a (click)="selectCustomMessagesModal()">
+                <img src="assets/icons/survey/icon-edit.png" alt="" class="mr-1">
+                <span class="edit-message">Editar Mensajes</span>
+            </a>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <a class="mr-4" (click)="openChangeBannerModal()">
+                <img src="assets/icons/survey/icon-edit-banner.png" alt="">
+                <span class="edit-banner">Editar banner</span>
+            </a>
+            <button class="btn btn-primary btn-add-question mr-4 w-auto" (click)="newQuestionModal()">Agregar Pregunta</button>
+            <button class="btn btn-primary btn-add-question w-auto" (click)="saveSurvey()">Guardar</button>
+
+        </div>
+    </div>
+
+    <ng-container *ngIf="!loading ; else loading_templ">
+
+        <!-- PARA TODOS -->
+        <div *ngFor="let question of survey.questions; let indexPregunta = index" class="card p-5 mb-3 position-relative" style="border: 1px solid rgba(29, 112, 183, 1);">
+
+            <a class="add-answer" (click)="addAnswerModal(indexPregunta,question.referentMedico,question.answer)">
+                <img src="assets/icons/survey/icon-add.png" alt="" class="mr-1">
+                {{question.answer ? 'Editar respuesta' : 'Agregar respuesta'}}
+            </a>
+
+            <div class="mx-4 ">
+                <div >
+                    <span class="number-question">
+                        Pregunta {{indexPregunta + 1}}
+                        <a class="ml-2" (click)="newQuestionModal(indexPregunta,question,true)">
+                            <img src="assets/icons/survey/icon-edit.png" alt="" class="mr-1">
+                        </a>
+
+                        <a class="ml-2" (click)="deleteQuestion(indexPregunta)">
+                            <img src="assets/icons/survey/icon-delete.png" alt="" class="mr-1">
+                        </a>
+                    </span>
+                    <h3 class=" mb-2 mt-3 question">
+                        {{question.question}}
+                        <button 
+                            *ngIf="question.description"
+                            type="button" 
+                            class="btn btn-info ml-2" 
+                            [ngbTooltip]="question.description" 
+                            triggers="click:blur"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="rgba(29, 112, 183, 1)" d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11t-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"/></svg>
+                        </button>
+                    </h3>
+
+
+                </div>
+
+                <!-- <div class="d-flex w-100 justify-content-center my-3">
+                    <span class="instruction ">Instrucción lorem ipsum</span>
+                    <a class="ml-2"><img src="assets/icons/survey/icon-edit.png" alt="" ></a>
+                </div> -->
+                
+                <div class="d-flex align-items-end" *ngIf="question.answer?.type === 'Entrada de texto'">
+                    <!-- <input
+                        type="text"
+                        placeholder="Ingrese su repuesta"
+                        class="form-control mr-1 w-100"
+                    /> -->
+                    <textarea class="form-control mr-1 w-100" placeholder="Ingrese su repuesta" name="entradaTextor" id="entradaTextor" rows="5"></textarea>
+                </div>
+        
+                <div class=""  *ngIf="question.answer?.type === 'Selección'">
+                    <ul class="style-list-survey " >
+                        <li  *ngFor="let respuesta of question.answer?.options; let idexRespuesta = index" class="option-answer">
+                            <input 
+                            [(ngModel)]="respuesta.select" 
+                            (click)="selectAnswer(indexPregunta,idexRespuesta)"
+                            class="checkbox-encuesta mt-0 mr-2" 
+                            type="checkbox" 
+                            id="flexCheckDefault" 
+                            disabled="true"
+                            >
+                            <span class="answer">{{respuesta.option}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end  w-auto mt-2">
+            <button class="btn btn-primary btn-add-question  w-auto" (click)="newQuestionModal()">Agregar Pregunta</button>
+        </div>
+    
+        <div class="d-flex justify-content-center  w-auto mt-2" *ngIf="survey.questions.length > 0">
+            <button class="btn btn-primary   w-auto" (click)="saveSurvey()">Guardar</button>
+        </div>
+    
+    </ng-container>
+
+    <ng-template #loading_templ>
+        <div class="d-flex justify-content-center">
+            <app-loading-table></app-loading-table>
+        </div>
+    </ng-template>
+</div>

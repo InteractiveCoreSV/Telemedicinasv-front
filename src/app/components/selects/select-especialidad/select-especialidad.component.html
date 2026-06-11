@@ -1,0 +1,13 @@
+<ng-select
+[loading]="loading"
+[notFoundText]="'No hay resultados'"
+[(ngModel)]="especialidadSelected"
+(ngModelChange)="selectedEspecialidades()"
+ [placeholder]="'Seleccione especialidad'"
+ style="min-width: 200px;text-align: center;"
+  [class]="customClass"
+>
+<ng-option *ngFor="let especialidad of especialidades" [value]="especialidad._id">{{
+  especialidad.name
+}}</ng-option>
+</ng-select>

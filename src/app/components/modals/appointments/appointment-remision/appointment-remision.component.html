@@ -1,0 +1,179 @@
+﻿<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Referir paciente</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+
+  <div class="row justify-content-center">
+    <div class="col-12 ">
+
+      <div class="card mt-4 justify-content-center w-100">
+        <div class="card-body">
+          <div class="row resume-appointment">
+
+            <div class="col-12 h-100 " *ngIf="newVirtual == true">
+              <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-1">Selecciona la aplicación preferida para la cita</label>
+              <div class="d-flex flex-column flex-md-row w-100  align-items-center">
+                  <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2 mb-2" *ngFor="let herramienta of videoConferencia">
+                      <div>
+                          <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'"> 
+                          <span class="ratioMeetingTool_title">{{herramienta.name}}</span>
+                      </div>
+                      <div>
+                          <input [(ngModel)]="appointment.meetingTool" type="radio" class="form-check-input" name="meetingTool" [id]="'herramienta'+herramienta._id" [value]="herramienta" >
+                          <label [for]="'herramienta'+herramienta._id"></label>
+                      </div>
+                  </div>
+              </div>
+
+              <div *ngIf="submited && !appointment.meetingTool" class="invalid-feedback d-block mt-2">
+                  La seleción de la aplicación es requerida
+              </div>
+            </div>
+
+            <div class="col-12 h-100 mb-1">
+                <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-1">Selecciona nivel de Urgencia</label>
+                <div class="d-flex flex-column flex-sm-row w-100  align-items-center">
+                    <div class="card border-0 position-relative mb-2 card-radio card-radio-custom ratioMeetingTool mx-2" *ngFor="let urgency of urgencies">
+                        <div class="d-flex align-items-center">
+                            <span class="level-urgency mr-3" [style.background-color]="urgency.color"> </span>
+                            <span class="ratioMeetingTool_title">{{urgency.name}}</span>
+                        </div>
+                        <div>
+                            <input [(ngModel)]="appointment.urgency" type="radio" class="form-check-input" name="urgency" [id]="urgency.name" [value]="urgency.name" >
+                            <label [for]="urgency.name"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+
+              <!-- <div *ngIf="appointment.urgency" class="mb-2 d-flex" [innerHTML]="appointment.urgency | parseUrgency"></div> -->
+
+              <p class="mb-2">        
+                <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment.name}}
+              </p>
+
+              <div class="mb-2">
+                <span class="title">Información Paciente:</span>
+                <div class="container-user-info mt-1" *ngIf="appointment && appointment.user">
+                  <ng-container *ngIf="!appointment.nameUnderAge">
+                    <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.user.names}} {{appointment.user.last_names}}
+                    <span class="info-user mr-2"><strong>Correo:</strong></span> {{appointment.user.email}}
+                    <span class="info-user mr-2"><strong>Teléfono:</strong></span> 
+                    <p class="m-0 p-0">
+                      <span class="mr-1">{{appointment.user.countryCode}}</span> <input type="text" [mask]="appointment.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phone"  [ngModelOptions]="{standalone: true}">
+                    </p>
+                    <span class="info-user mr-2">
+                      <strong>Número de identidad ({{appointment.user.typeDocument}}):</strong>
+                    </span> 
+                    <input *ngIf="appointment.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.identityNumber"  [ngModelOptions]="{standalone: true}">
+                    <input *ngIf="appointment.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.passport"  [ngModelOptions]="{standalone: true}">
+                    <input *ngIf="appointment.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.idInternacional"  [ngModelOptions]="{standalone: true}">
+                  </ng-container>
+
+                  <ng-container *ngIf="appointment.nameUnderAge">
+                    <span class="title">Menor de edad</span>
+
+                    <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.nameUnderAge}}
+                    <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{appointment.birthdateUnderAge | date:'MMMM d, y'|titlecase}}
+                  </ng-container>
+                </div>
+              </div>
+
+              <div *ngIf="appointment.nameUnderAge">
+                <span class="title">Adulto reponsable:</span>
+                <div class="container-user-info mt-1" *ngIf="appointment && appointment.user">
+                  <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.user.names}} {{appointment.user.last_names}}
+                  <span class="info-user mr-2"><strong>Correo:</strong></span> {{appointment.user.email}}
+                  <span class="info-user mr-2"><strong>Teléfono:</strong></span>
+                  <p class="m-0 p-0">
+                    <span class="mr-1">{{appointment.user.countryCode}}</span> <input type="text" [mask]="appointment.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phone"  [ngModelOptions]="{standalone: true}">
+                  </p>
+                    <span class="info-user mr-2">
+                      <strong>Número de identidad ({{appointment.user.typeDocument}}):</strong>
+                    </span> 
+                    <input *ngIf="appointment.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.identityNumber"  [ngModelOptions]="{standalone: true}">
+                    <input *ngIf="appointment.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.passport"  [ngModelOptions]="{standalone: true}">
+                    <input *ngIf="appointment.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.idInternacional"  [ngModelOptions]="{standalone: true}">                </div>
+              </div>
+
+              <div *ngIf="appointment && appointment.user && appointment.user.nameEmergency">
+                <span  class="title">Contacto de Emergencia:</span>
+                <div class="container-user-info mt-1" *ngIf="appointment && appointment.user && appointment.user.nameEmergency">
+                  <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.user.nameEmergency}}
+                  <span class="info-user mr-2"><strong>Teléfono:</strong></span>
+                  <p class="m-0 p-0">
+                    <span class="mr-1">{{appointment.user.countryCodeEmergency}}</span> <input type="text" [mask]="appointment.user.maskEmergency" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phoneEmergency"  [ngModelOptions]="{standalone: true}">
+                  </p>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-12 col-md-6 border-radius">
+              <p class="mb-2" *ngIf="appointment && appointment.subsidiary">        
+                <span class="title mr-2">Sucursal:</span> {{appointment.subsidiary.name}}
+              </p>
+
+              <p class="mb-2" *ngIf="appointment.meetingTool">        
+                <span class="title mr-2">Aplicacion preferida para la cita:</span> {{appointment.meetingTool.name}}
+              </p>
+
+              <div class="mb-2">
+                <div class="d-flex justify-content-between">
+                    <p class="mb-0">        
+                    <span class="title mr-2">Servicios:</span> 
+                    </p>
+                    <button class="btn btn-primary btn-sm w-auto mb-1" (click)="openModalSelectService()">Editar servicios</button>
+                </div>
+                <ul><li *ngFor="let service of appointment.service">{{service.name}} {{service.price | dollar }}</li></ul>
+              </div>
+
+              <p class="mb-2">        
+                <span class="title mr-2">Médico:</span> {{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}}  {{appointment.medico ? appointment.medico.last_names : ''}}
+              </p>
+
+              <p class="mb-2">        
+                <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour.hours}}
+              </p>
+
+              <p class="mb-2">        
+                <span class="title mr-2">Comentario:</span> {{appointment.commentAppointment}}
+              </p>
+
+              <p class="mb-2">        
+                <span class="title mr-2">Documento:</span> 
+                <span *ngIf="!appointment.documentAppointment">No se agrego documento a la cita</span>
+                <a class="cursor-pointer" *ngIf="appointment.documentAppointment" (click)="openModalViewDocument(appointment.documentAppointment.location, appointment.documentAppointment.key)">{{appointment.documentAppointment.key}}</a>
+              </p>
+
+              <p class="mb-2">        
+                <span class="title mr-2">Metodo de pago:</span> {{appointment.typePayment | parseTypePayment : appointment.status}}
+              </p>
+
+
+              <p class="mb-2">        
+                <span class="title mr-2">Total pagado:</span> <span style="color: rgba(0, 144, 66, 1);"><strong>L </strong> {{appointment.total}}</span>
+              </p>
+            
+            
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="row mt-3">
+    <div class="col-12 d-flex justify-content-end">
+      <ng-content select="[backButton]"></ng-content>
+      <button (click)="reagendar()" class="btn btn-primary" style="width: auto;">Referir</button>
+    </div>
+  </div>
+</div>

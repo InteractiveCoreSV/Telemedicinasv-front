@@ -1,0 +1,193 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { NgxPermissionsGuard } from 'ngx-permissions';
+import { DashboardPagesComponent } from './dashboard-pages.component';
+import { HomeRComponent } from './home-r/home-r.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: DashboardPagesComponent,
+    data:{
+      breadcrumb:{
+        title:'Escritorio',
+        url:'/dashboard/calendar'
+      }
+    },   
+    children: [
+      {
+        path:'calendar',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin','patient','medico','sac'],
+            redirectTo:'/auth'
+          },
+        },
+        loadChildren:()=>import('./calendar-appointments-page/calendar-appointments-page.module').then(m=>m.CalendarAppointmentsPageModule)
+      },
+      {
+        path:'citas',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin','patient','medico','sac'],
+            redirectTo:'/auth'
+          },
+        },
+        loadChildren:()=>import('./appointments-page/appointments-page.module').then(m=>m.AppointmentsPageModule)
+      },
+      {
+        path:'ficha-medica',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin','medico','sac'],
+            redirectTo:'/dashboard/calendar'
+          },
+        },
+        loadChildren:()=>import('./ficha-medica/ficha-medica.module').then(m=>m.FichaMedicaModule)
+      },
+      {
+        path:'expedientes',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin','medico','sac','patient'],
+            redirectTo:'/auth'
+          },
+        },
+        loadChildren:()=>import('./expediente-medico/expediente-medico.module').then(m=>m.ExpedienteMedicoModule)
+      },
+      {
+        path:'medicos',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/dashboard/calendar'
+          },
+        },
+        loadChildren:()=>import('./medicos/medicos.module').then(m=>m.MedicosModule)
+      },
+      {
+        path:'video-conferencias',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin','sac'],
+            redirectTo:'/dashboard/calendar'
+          },
+        },
+        loadChildren:()=>import('./video-conferencia/video-conferencia.module').then(m=>m.VideoConferenciaModule)
+      },
+      {
+        path:'servicios',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/dashboard/calendar'
+          },
+        },
+        loadChildren:()=>import('./services/services.module').then(m=>m.ServicesModule)
+      },
+      {
+        path:'aseguradoras',
+        canActivate:[NgxPermissionsGuard],
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/dashboard/calendar'
+          },
+        },
+        loadChildren:()=>import('./insurance/insurance.module').then(m=>m.InsuranceModule)
+      },
+      {
+        path:'sucursales',
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/dashboard/calendar'
+          }
+        },
+        canActivate:[NgxPermissionsGuard],
+        loadChildren:()=>import('./subsidiaries-page/subsidiaries-page.module').then(m=>m.SubsidiariesPageModule)
+      },
+      {
+        path:'usuarios',
+        data:{
+          permissions:{
+            only:['admin','sac'],
+            redirectTo:'/auth'
+          }
+        },
+        canActivate:[NgxPermissionsGuard],
+        loadChildren:()=>import('./users/users.module').then(m=>m.UsersModule)
+      },
+      {
+        path:'transacciones',
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/auth'
+          }
+        },
+        canActivate:[NgxPermissionsGuard],
+        loadChildren:()=>import('./transactions/transactions.module').then(m=>m.TransactionsModule)
+      },
+      {
+        path:'estadisticas',
+        data:{
+          permissions:{
+            only:['admin','sac'],
+            redirectTo:'/auth'
+          }
+        },
+        canActivate:[NgxPermissionsGuard],
+        loadChildren:()=>import('./stadistics-page/stadistics-page.module').then(m=>m.StadisticsPageModule)
+      },
+      {
+        path:'perfil',
+        loadChildren:()=>import('./profiles-page/profiles-page.module').then(m=>m.ProfilesPageModule)
+      },
+      {
+        path: 'home',
+        component: HomeRComponent
+      },
+      {
+        path:'encuestas',
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/auth'
+          },
+        },
+        canActivate:[NgxPermissionsGuard],
+        loadChildren:()=>import('./surveys/surveys.module').then(m=>m.SurveysModule)
+      },
+      {
+        path:'especialidades',
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/auth'
+          },
+        },
+        canActivate:[NgxPermissionsGuard],
+        loadChildren:()=>import('./especialidades/especialidades.module').then(m=>m.EspecialidadesModule)
+      },
+      {
+        path:'**',
+        pathMatch:'full',
+        redirectTo:'/dashboard/calendar'
+      }
+    ]
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class DashboardPagesRoutingModule { }

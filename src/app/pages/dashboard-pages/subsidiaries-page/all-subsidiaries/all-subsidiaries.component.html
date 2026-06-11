@@ -1,0 +1,103 @@
+<div class="text-right m-3">
+  <a routerLink="/dashboard/sucursales/nueva-sucursal" class="btn btn-primary btn-200">+ Agregar</a>
+</div>
+
+<div class="card-table">
+  <div class="table-responsive datatable-custom">
+      <table id="datatableusers"
+      class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+      data-hs-datatables-options='{
+             "columnDefs": [{
+                "targets": [0, 7],
+                "orderable": false
+              }],
+             "order": [],
+             "info": {
+               "totalQty": "#datatableWithPaginationInfoTotalQty"
+             },
+             "search": "#datatableSearch",
+             "entries": "#datatableEntries",
+             "pageLength": 15,
+             "isResponsive": false,
+             "isShowPaging": false,
+             "pagination": "datatablePagination"
+           }'>
+        <thead class="thead-light">
+          <tr>
+            <th>Sucursal</th>
+            <!-- <th>Servicios</th> -->
+            <th>Dirección</th>
+            <th>Consultorio Médico</th>
+            <th>Estado</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+
+      <tbody>
+        <ng-container *ngIf="!loading;else loading_templ">
+          <ng-container *ngIf="(subsidiaries).length>0;else not_results">
+            <tr *ngFor="let subsidiary of subsidiaries;let i = index">
+              <td style="white-space:wrap">{{subsidiary.name}}</td>
+
+              <td style="white-space:wrap">{{subsidiary.address.address}} <br> {{subsidiary.address.department}} {{subsidiary.address.municipality}}</td>
+
+              <td class="text-center">{{subsidiary.consultorioMedico ? 'Si' : 'No'}}</td>
+
+              <td [innerHTML]="subsidiary.status | spanStatus"></td>
+
+              <td>
+                <div class="btn-group dropdown">
+                  <button type="button" class="btn btn-outline-primary2 dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Opciones
+                  </button>
+                  <div class="dropdown-menu">
+                    <a [routerLink]="'/dashboard/sucursales/editar-sucursal/'+subsidiary._id" [state]="subsidiary" class="dropdown-item">Editar</a>
+                    <li><a class="dropdown-item cursor-pointer" (click)="changeStatus(subsidiary._id?subsidiary._id:'',subsidiary.status)">{{subsidiary.status?'Desactivar':'Activar'}}</a></li>
+
+                    <!-- <a (click)="horarioEspecial(subsidiary)" class="dropdown-item text-danger">Agregar horario especial</a> -->
+                    <a (click)="deleteSubsidiary(subsidiary._id)" class="dropdown-item text-danger">Eliminar</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #loading_templ>
+          <tr>
+            <td colspan="5">
+              <app-loading-table></app-loading-table>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template #not_results>
+          <tr>
+            <td colspan="5">
+              <app-not-results-table></app-not-results-table>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between px-3 table-footer">
+      <div class="d-flex align-items-center">
+        <span class="table-footer-text">
+          Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + subsidiaries.length : subsidiaries.length}} - 
+          de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+      </div>
+
+      <nav aria-label="Page navigation">
+      <ngb-pagination *ngIf="(paginationDetails?.totalDocs || 0)>0" class="d-flex  mt-3"
+        (pageChange)="(page=$event || 1);(getSubsidiaries())" [collectionSize]="paginationDetails?.totalDocs || 0"
+        [pageSize]="paginationDetails?.limit || 0">
+      </ngb-pagination>
+      </nav>
+    </div>
+  </div>
+  <!-- End Table -->
+</div>
+<!-- End Card -->
+

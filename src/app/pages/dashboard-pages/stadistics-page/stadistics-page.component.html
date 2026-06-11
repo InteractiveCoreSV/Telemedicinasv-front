@@ -1,0 +1,110 @@
+<div class="container-stadistics-all">
+    <h5 class="mb-2">Filtros generales</h5>
+  <div class="row pb-4 px-2">
+    <div class="col-sm-6 col-md-4 ">
+      <div class="d-flex ">
+        <button
+          [rangesSelect]="'day'"
+          [daterangepicker]="'predefined'"
+          [rangeDate]="filters.rangeDates"
+          #datePicker
+          class="btn btn-current-date dropdown-toggle filterDate d-flex justify-content-center "
+          style="width: 100% !important; min-width: 200px !important; background-color: #f5f5f5 !important;"
+        >
+          <i class="tio-date-range"></i>
+          <span #predefinedPreview class="ml-1"></span>
+        </button>
+        <button
+          class="btn btn-ghost-secondary  p-2"
+          *ngIf="btnCancelSearchByDates"
+          (click)="searchWithoutDates()"
+        >
+          <i class="tio-clear icon-botton"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="row gx-2 gx-lg-3 graficas">
+
+    <!-- REPORTE DIARIO -->
+    <div class="col-12 mb-3">
+      <app-daily-appointment-report [rangeDates]="filters.rangeDates"  [userInfo]="userInfo"></app-daily-appointment-report>
+    </div>
+
+    <!-- cCITAS POR ESTADO -->
+    <div class="col-12 mb-3" *ngxPermissionsExcept="['sac']">
+      <app-for-appointments-status [rangeDates]="filters.rangeDates" [userInfo]="userInfo"></app-for-appointments-status>
+    </div>
+
+    <!-- REGISTRO DE USUARIOS PACIENTE -->
+    <div class="col-12 mb-3" *ngxPermissionsExcept="['sac']">
+      <app-patients-register [rangeDates]="filters.rangeDates"  [userInfo]="userInfo"></app-patients-register>
+    </div>
+
+    <!-- TASA DE RETENCION -->
+    <div class="col-12 mb-3" *ngxPermissionsExcept="['sac']">
+      <app-patient-retention-rate [rangeDates]="filters.rangeDates" ></app-patient-retention-rate>
+    </div>
+
+    <!-- INGRESO POR TIPO DE CITA-->
+    <div class="col-12 mb-3" *ngxPermissionsExcept="['sac']">
+      <app-total-sale-for-type-appointment [rangeDates]="filters.rangeDates"></app-total-sale-for-type-appointment>
+    </div>
+
+    <!-- CITAS CANCELADAS-->
+    <div class="col-12 mb-3" *ngxPermissionsExcept="['sac']">
+      <app-canceled-appointments [rangeDates]="filters.rangeDates"></app-canceled-appointments>
+    </div>
+
+    <!-- TIEMPO PROMEDIO DE CONSULTA-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-average-consultation-time [rangeDates]="filters.rangeDates"></app-average-consultation-time>
+    </div>
+
+    <!-- REPORTES__________________________________ -->
+    <!-- REPORTE DIARIO DE CITAS POR SUCURSAL-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-reporte-diario-citas-sucursal [rangeDates]="filters.rangeDates"></app-reporte-diario-citas-sucursal>
+    </div>
+
+    <!-- REPORTE DE SERVICIOS POR MEDICOL-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-report-process-medico [rangeDates]="filters.rangeDates"></app-report-process-medico>
+    </div>
+
+    <!-- REPORTE DE PACIENTES EN SEGUIMIENTO-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-report-patients-in-follow-up [rangeDates]="filters.rangeDates"></app-report-patients-in-follow-up>
+    </div>
+
+  <!-- REPORTE DE PACIENTES ATENDIDOS POR MEDICO-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-report-patient-by-doctor [rangeDates]="filters.rangeDates"></app-report-patient-by-doctor>
+    </div>
+
+  <!-- REPORTE DE MOTIVO DE CANCELACION DE CITA-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-report-motivo-cancelacion-appointment [rangeDates]="filters.rangeDates"></app-report-motivo-cancelacion-appointment>
+    </div>
+
+      <!-- REPORTE DE MEDICOS FAVORITOS-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-report-favorite-medico [rangeDates]="filters.rangeDates"></app-report-favorite-medico>
+    </div>
+
+    
+      <!-- REPORTE DE MEDICOS FAVORITOS-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-report-doctors-by-rating [rangeDates]="filters.rangeDates"></app-report-doctors-by-rating>
+    </div>
+
+    <!-- REPORTE DE MEDICOS POR CALIFICACION-->
+    <div class="col-12 mb-3" *ngxPermissionsOnly="['admin']">
+      <app-report-for-survey [rangeDates]="filters.rangeDates"></app-report-for-survey>
+    </div>
+
+  </div>
+</div>

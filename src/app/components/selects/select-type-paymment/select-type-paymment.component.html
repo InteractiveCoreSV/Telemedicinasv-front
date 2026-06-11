@@ -1,0 +1,14 @@
+<ng-select 
+  style="min-width: 200px;text-align: center;"
+  [(ngModel)]="typePaymentSelected" 
+  (ngModelChange)="selectedtypePayment()" 
+  [appendTo]="appendTo" 
+  [notFoundText]="'No hay servicios'" 
+  [placeholder]="'Selecciona método de pago'"
+  >
+    <ng-option *ngFor="let typePayment of allTypes" [value]="typePayment.name">
+      <div [outerHTML]="typePayment.nameEs"></div>
+    </ng-option>
+  </ng-select>
+  
+  

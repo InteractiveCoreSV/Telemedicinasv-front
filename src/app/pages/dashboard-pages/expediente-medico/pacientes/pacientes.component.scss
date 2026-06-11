@@ -1,0 +1,16 @@
+.profile-header {
+    display: flex !important;
+    justify-content: space-between;
+    width: 92px;
+    height: 45px;
+    border-radius: 5px !important;
+    background-color: rgba(240, 240, 240, 0.25) !important;
+    margin-left: 15px;
+}
+  
+.avatar-initials {
+    background-color: rgb(46 74 118);
+    color: #fff;
+    height: 37px;
+    width: 38px;
+}

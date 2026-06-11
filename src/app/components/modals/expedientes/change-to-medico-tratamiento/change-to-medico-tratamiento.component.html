@@ -1,0 +1,74 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Cambiar Médico</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="row">
+
+         <div class="col-12 mb-2" >
+            <label class="form-label" >Nombre medico</label>
+            <input
+                [(ngModel)]="name"
+                type="text" 
+                placeholder="Nombre"
+                class="form-control "
+            />
+        </div>
+
+         <div class="col-12 col-sm-6" >
+            <label class="form-control-label">Sello Médico</label>
+            <div class="form-group">
+                <app-dropzone 
+                *ngIf="!sello"
+                [btn]="false" 
+                [label]="'Arrastra o selecciona el Sello médico'" 
+                [files]="imgsSello" 
+                [maxFile]="1" 
+                [accept]="'image/*'" 
+                (filesOutput)="imgsSello=$event"
+                [logo]="true"
+                ></app-dropzone>
+
+                <div class="d-flex justify-content-center align-items-center flex-column my-2" *ngIf="sello">
+                <img style="max-width: 150px; max-height: 150px; object-fit: contain;" [src]="sello" alt="">
+                <button type="button" (click)="changeSello()" class="btn btn-sm btn-block btn-change-img btn-primary mt-1 w-100">Cambiar sello</button>
+                </div>
+            
+            </div>
+        </div>
+         <div class="col-12 col-sm-6" >
+            <label class="form-control-label">Firma Médico</label>
+            <div class="form-group">
+                <app-dropzone 
+                *ngIf="!firma"
+                [btn]="false" 
+                [label]="'Arrastra o selecciona la firma médico'" 
+                [files]="imgsFirma" 
+                [maxFile]="1" 
+                [accept]="'image/*'" 
+                (filesOutput)="imgsFirma=$event"
+                [logo]="true"
+                ></app-dropzone>
+
+                <div class="d-flex justify-content-center align-items-center flex-column my-2" *ngIf="firma">
+                <img style="max-width: 150px; max-height: 150px; object-fit: contain;" [src]="firma" alt="">
+                <button type="button" (click)="changeFirma()" class="btn btn-sm btn-block btn-change-img btn-primary mt-1 w-100">Cambiar firma</button>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100 text-end">
+        <button type="submit" class="btn  btn-primary btn-150" (click)="save()">
+            Guardar
+        </button>
+    </div>
+</div>
+
+
+

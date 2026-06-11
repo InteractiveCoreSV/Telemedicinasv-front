@@ -1,0 +1,29 @@
+.avatar-img{
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.avatar-sm{
+  height: 2rem !important;
+  width: 2rem !important;
+}
+
+.avatar-lg{
+  height: 5rem !important;
+  width: 5rem !important;
+}
+
+.avatar-xl{
+  height: 7rem !important;
+  width: 7rem !important;
+}
+
+.avatar{
+  height: 3rem;
+  width: 3rem;
+  position: relative;
+  display: inline-block !important;
+  border-radius: 50%;
+}

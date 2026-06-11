@@ -1,0 +1,86 @@
+﻿<div class="modal-header" >
+  <!-- <img class="w-100" [src]="survey.encuesta.banner.location" alt=""> -->
+       <h3 class="title-encuesta w-100 text-center">Encuesta Contestada</h3>
+
+</div>
+
+<div class="modal-body px-3" >
+  <div class="px-4" >
+
+    <div>
+        <p class="mb-1">        
+            <span class="title">Paciente:</span> {{survey.user ? survey.user.names : 'paciente no encontrado'}}  {{survey.user ? survey.user.last_names : ''}}
+        </p>
+
+        <div class="mb-1">
+          <p class="mb-0">        
+            <span class="title">Servicios:</span> 
+          </p>
+          <ul *ngIf="survey.appointment?.service?.length ?? 0 > 0">
+            <li *ngFor="let service of survey.appointment?.service">{{service.name}} {{service.price | dollar }}</li>
+          </ul>
+          <span *ngIf="(survey.appointment?.service?.length ?? 0) === 0">Servicio no encontrada</span>
+        </div>
+
+        <p class="mb-1">
+            <span class="title">Médico:</span>
+            {{survey.appointment?.medico ? survey.appointment?.medico?.names+' '+ survey.appointment?.medico?.last_names ? survey.appointment?.medico?.last_names : '' : 'Médico no encontrado'}}
+        </p>
+
+        <p class="mb-1">
+            <span class="title">Fecha de la cita:</span> {{survey.appointment?.dateAppointment | date:'EEEE, MMMM d, y' | titlecase}}
+        </p>
+
+    </div>
+
+    <h3 class="title-encuesta w-100 text-center mt-3 mb-3">Preguntas</h3>
+
+    <div *ngFor="let pregunta of survey.response; let indexPregunta = index">
+        <div class="px-1 mb-4 " >
+            <h3 class="question d-flex">
+              {{pregunta.question}}
+              <button 
+                *ngIf="pregunta.description"
+                type="button" 
+                class="btn btn-info ml-2" 
+                [ngbTooltip]="pregunta.description" 
+                triggers="click:blur"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="#009042" d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11t-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"/></svg>
+              </button>
+            </h3>
+           
+            <div class="d-flex align-items-end" *ngIf="pregunta.answer && pregunta.answer.type === 'Entrada de texto'">
+                <!-- <input
+                    type="text"
+                    placeholder="Ingrese su repuesta"
+                    class="form-control mr-1 w-100"
+                    [(ngModel)]="pregunta.answer.enterText" 
+                    readonly
+                /> -->
+                <textarea [(ngModel)]="pregunta.answer.enterText" readonly class="form-control mr-1 w-100" placeholder="Ingrese su repuesta" name="entradaTextor" id="entradaTextor" rows="5"></textarea>
+
+            </div>
+
+            <div class="px-0 mt-4" *ngIf="pregunta.answer?.type === 'Selección'">
+              <ul class="style-list-survey mx-0 px-0" >
+                <li  *ngFor="let respuesta of pregunta.answer?.options; let idexRespuesta = index" class="option-answer">
+                  <input 
+                    [(ngModel)]="respuesta.select" 
+                    class="checkbox-encuesta mt-0 mr-2" 
+                    type="checkbox" 
+                    id="flexCheckDefault" 
+                    disabled="true"
+                  >
+                  <span class="answer">{{respuesta.option}}</span>
+                </li>
+              </ul>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  <div class="w-100 d-flex justify-content-end mt-6">
+    <button (click)="ngbActiveModal.close()" class="btn btn-primary w-auto">Cerrar</button>
+  </div>
+</div>

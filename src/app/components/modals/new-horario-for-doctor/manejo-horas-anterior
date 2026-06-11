@@ -1,0 +1,246 @@
+      <form  style="position: sticky; top: 86px;">
+        <div class="row justify-content-center">
+              <!-- HORARIO DEL LUNES -->
+              <div class="col-12 col-md-10  mb-3 row justify-content-start py-1 py-sm-2 py-md-3 align-items-center card">
+                <div class="col-6">
+                  <label class="form-label">Horario del Lunes</label>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group list-group-flush">
+                  
+                    <ng-container *ngFor="let hour of hours | orderHours:'morning':'Monday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Monday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>                         
+                        </div>             
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+                    
+                    <ng-container *ngFor="let hour of hours | orderHours:'afternoon':'Monday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Monday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>
+                        </div>
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+          
+                  </ul>
+
+                  <button class="btn btn-primary btn-sm" type="button" (click)="newHour('Monday')">
+                    Agregar nueva hora
+                  </button>
+                </div>
+              </div>
+              <!--END  HORARIO DEL LUNES -->
+
+              <!-- HORARIO DEL Tuesday -->
+              <div class="col-12 col-md-10  mb-3 row justify-content-start py-1 py-sm-2 py-md-3 align-items-center card">
+                <div class="col-6">
+                  <label class="form-label">Horario del Martes</label>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group list-group-flush">
+                  
+                    <ng-container *ngFor="let hour of hours | orderHours:'morning':'Tuesday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Tuesday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>                         
+                        </div>             
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+                    
+                    <ng-container *ngFor="let hour of hours | orderHours:'afternoon':'Tuesday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Tuesday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>
+                        </div>
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+          
+                  </ul>
+
+                  <button class="btn btn-primary btn-sm" type="button" (click)="newHour('Tuesday')">
+                    Agregar nueva hora
+                  </button>
+                </div>
+              </div>
+              <!--END  HORARIO DEL Tuesday -->
+
+              <!-- HORARIO DEL MIERCOLES -->
+              <div class="col-12 col-md-10  mb-3 row justify-content-start py-1 py-sm-2 py-md-3 align-items-center card">
+                <div class="col-6">
+                  <label class="form-label">Horario del Miercoles</label>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group list-group-flush">
+                  
+                    <ng-container *ngFor="let hour of hours | orderHours:'morning':'Wednesday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Wednesday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>                         
+                        </div>             
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+                    
+                    <ng-container *ngFor="let hour of hours | orderHours:'afternoon':'Wednesday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Wednesday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>
+                        </div>
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+          
+                  </ul>
+
+                  <button class="btn btn-primary btn-sm" type="button" (click)="newHour('Wednesday')">
+                    Agregar nueva hora
+                  </button>
+                </div>
+              </div>
+              <!--END  HORARIO DEL MIERCOLES -->
+
+              <!-- HORARIO DEL JUEVES -->
+              <div class="col-12 col-md-10  mb-3 row justify-content-start py-1 py-sm-2 py-md-3 align-items-center card">
+                <div class="col-6">
+                  <label class="form-label">Horario del Jueves</label>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group list-group-flush">
+                    <ng-container *ngFor="let hour of hours | orderHours:'morning':'Thursday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Thursday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>                         
+                        </div>             
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+                    
+                    <ng-container *ngFor="let hour of hours | orderHours:'afternoon':'Thursday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Thursday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>
+                        </div>
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+          
+                  </ul>
+
+                  <button class="btn btn-primary btn-sm" type="button" (click)="newHour('Thursday')">
+                    Agregar nueva hora
+                  </button>
+                </div>
+              </div>
+              <!--END  HORARIO DEL JUEVES -->
+
+              <!-- HORARIO DEL VIERNES -->
+              <div class="col-12 col-md-10  mb-3 row justify-content-start py-1 py-sm-2 py-md-3 align-items-center card">
+                <div class="col-6">
+                  <label class="form-label">Horario del Viernes</label>
+                </div>
+                <div class="col-6">
+                <ul class="list-group list-group-flush">
+                  
+                  <ng-container *ngFor="let hour of hours | orderHours:'morning':'Friday';let i = index">
+                    <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Friday'">
+                      <div class="d-flex flex-column">
+                        <span>{{hour.hours}}</span>                         
+                      </div>             
+                      <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                    </li>
+                  </ng-container>
+                  
+                  <ng-container *ngFor="let hour of hours | orderHours:'afternoon':'Friday';let i = index">
+                    <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Friday'">
+                      <div class="d-flex flex-column">
+                        <span>{{hour.hours}}</span>
+                      </div>
+                      <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                    </li>
+                  </ng-container>
+        
+                </ul>
+
+                <button class="btn btn-primary btn-sm" type="button" (click)="newHour('Friday')">
+                  Agregar nueva hora
+                </button>
+                </div>
+              </div>
+              <!--END  HORARIO DEL VIERNES -->
+
+                <!-- HORARIO DEL SABADO -->
+                <div class="col-12 col-md-10  mb-3 row justify-content-start py-1 py-sm-2 py-md-3 align-items-center card">
+                  <div class="col-6">
+                  <label class="form-label">Horario del Sábado</label>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group list-group-flush">
+                  
+                    <ng-container *ngFor="let hour of hours | orderHours:'morning':'Saturday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Saturday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>                         
+                        </div>             
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+                    
+                    <ng-container *ngFor="let hour of hours | orderHours:'afternoon':'Saturday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Saturday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>
+                        </div>
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+          
+                  </ul>
+
+                  <button class="btn btn-primary btn-sm" type="button" (click)="newHour('Saturday')">
+                    Agregar nueva hora
+                  </button>
+                </div>
+              </div>
+                <!-- END HORARIO DEL SABADO -->
+
+              <!-- HORARIO DEL DOMINGO -->
+              <div class="col-12 col-md-10  mb-3 row justify-content-start py-1 py-sm-2 py-md-3 align-items-center card">
+                <div class="col-6">
+                  <label class="form-label">Horario del Domingo</label>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group list-group-flush">
+        
+                    <ng-container *ngFor="let hour of hours | orderHours:'morning':'Sunday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Sunday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>
+                        </div>            
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+          
+                    <ng-container *ngFor="let hour of hours | orderHours:'afternoon':'Sunday';let i = index">
+                      <li class="list-group-item d-flex justify-content-between" *ngIf="hour.day == 'Sunday'">
+                        <div class="d-flex flex-column">
+                          <span>{{hour.hours}}</span>
+                        </div>
+                        <button type="button" (click)="deleteHour(hour._id ? hour._id : hour.idTemporal, hour.idTemporal ? true : false)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                      </li>
+                    </ng-container>
+          
+                  </ul>
+                  <button class="btn btn-primary btn-sm" type="button" (click)="newHour('Sunday')">
+                    Agregar nueva hora
+                  </button>
+                </div>
+              </div>
+              <!-- END HORARIO DEL DOMINGO -->
+        </div>
+      </form>

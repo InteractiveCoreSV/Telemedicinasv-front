@@ -1,0 +1,33 @@
+<div class="text-center">
+  <h3 class="fw-600">Selecciona la sucursal donde deseas ir</h3>
+</div>
+
+<form [formGroup]="form2">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-1 row-cols-lg-3">
+    <ng-container *ngIf="!loading;else loading_templ">
+      <div class="col-12 p-2" *ngFor="let subsidiary of subsidiaries">
+        <div class="card border-0 position-relative card-radio">
+          <app-subsidiary-card [subsidiary]="subsidiary"></app-subsidiary-card>
+          <input formControlName="subsidiary" type="radio" name="subsidiary" [id]="'subsidiary'+subsidiary._id" [value]="subsidiary" >
+          <label [for]="'subsidiary'+subsidiary._id"></label>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</form>
+
+
+<div class="row mt-3">
+  <div class="col-12 d-flex justify-content-end">
+    <ng-content select="[backButton]"></ng-content>
+    <button [disabled]="form2.invalid" (click)="nextForm()" class="btn btn-primary" style="width: auto;">Siguiente</button>
+  </div>
+</div>
+
+<ng-template #loading_templ>
+  <tr>
+    <td colspan="5">
+      <app-loading-table></app-loading-table>
+    </td>
+  </tr>
+</ng-template>

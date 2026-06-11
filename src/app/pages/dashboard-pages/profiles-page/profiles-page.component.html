@@ -1,0 +1,22 @@
+<div class="row ">
+  <div class="col-lg-12">
+    <!-- Profile header -->
+    <app-profile-header></app-profile-header>
+    <!-- End Profile header -->
+
+    <!-- Nav -->
+      <!-- <app-profile-nav></app-profile-nav> -->
+    <!-- End Nav -->
+    <div class="row">
+      <div class="col-lg-3">
+        <app-sidebard [userInfo]="userInfo"></app-sidebard>
+      </div>
+
+      <div class="col-lg-9">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    
+  </div>
+</div>
+

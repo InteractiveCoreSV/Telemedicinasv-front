@@ -1,0 +1,71 @@
+    
+    <!-- Card -->
+    <div class="card h-100" style="box-shadow: #2E4A76 0px 3px 8px;">
+      <div class="d-flex justify-content-end my-2">
+        <button type="button" class="btn btn-sm btn-ghost-primary mr-2 "(click)="exportToExcel()">
+          Descargar Excel <i class="fas fa-file-download"></i>
+        </button>
+      </div>
+        <!-- Header -->
+        <div class="card-header" *ngIf="!rangeDates">
+          <div class="row align-items-sm-center mb-1">
+            <div class="col-12 mb-2 mb-lg-0">
+              <div class="d-flex align-items-center">
+                <button (click)="todayBtn()" type="button" class="btn btn-white mr-3">Fecha actual</button>
+  
+                <button (click)="prevBtn()" type="button"
+                  class="btn btn-icon btn-sm btn-ghost-secondary btn-no-focus rounded-circle mr-1" tooltip="Día anterior"
+                  title="Mes Anterior">
+                  <i class="tio-chevron-left"></i>
+                </button>
+                <button (click)="nextBtn()" type="button"
+                  class="btn btn-icon btn-sm btn-ghost-secondary btn-no-focus rounded-circle ml-1" tooltip="Siguiente día"
+                  title="Siguiente mes">
+                  <i class="tio-chevron-right"></i>
+                </button>
+  
+                <div class="ml-3">
+                  <h4 class="h3 mb-0 text-capitalize" >{{currentDate | date:'MMMM d, y'|titlecase}}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Header -->
+    
+        <h4 class="fw-custom p-3 custom-title-statistics">Reporte diario de citas</h4>
+      <div class="row mx-2 pb-4 ">
+        <ng-container *ngIf="!loading">
+          <div class="col-6  my-2 px-2 my-md-1 px-md-1">
+            <a>
+              <div class="card text-center" [style]="'border-bottom: 5px solid #2E4A76'" style="border-radius: 0.25rem !important; height: 100%;">
+                <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
+                  <h4 class="card-title">Citas Completadas</h4>
+                  <span style="font-size: medium; color: #2E4A76;">Cantidad: {{appointments && appointments.totalAppointmentsCompleted ? appointments.totalAppointmentsCompleted : 0}}</span>
+                  <span style="font-size: medium; color: #2E4A76;">Total: <strong>L </strong> {{appointments && appointments.totalSalesCompleted ? appointments.totalSalesCompleted : 0}}</span>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-6  my-2 px-2 my-md-1 px-md-1">
+            <a>
+              <div class="card text-center" [style]="'border-bottom: 5px solid #ea4850'" style="border-radius: 0.25rem !important; height: 100%;">
+                <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
+                  <h4 class="card-title">Citas Canceladas</h4>
+                  <span style="font-size: medium; color: #ea4850;">Cantidad: {{appointments && appointments.totalAppointmentsRefuse ? appointments.totalAppointmentsRefuse : 0}}</span>
+                  <span style="font-size: medium; color: #ea4850;">Total: <strong>L </strong> {{appointments && appointments.totalSalesRefuse ? appointments.totalSalesRefuse : 0}}</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="loading">
+            <div  class="w-100 text-center pt-5">
+              <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+              </div>
+            </div>
+          </ng-container>
+      </div>
+    </div>

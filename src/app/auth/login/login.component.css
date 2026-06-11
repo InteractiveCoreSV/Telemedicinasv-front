@@ -1,0 +1,17 @@
+.title-welcome {
+  font-weight: 500;
+  font: 30px;
+  line-height: 36.31px;
+  color: #EA4850;
+}
+
+.recovery-password {
+  display: block;
+  color: rgba(23, 95, 255, 1) !important;
+  width: 100%;
+  text-align: end;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18.15px;
+  margin-top: 10px;
+}

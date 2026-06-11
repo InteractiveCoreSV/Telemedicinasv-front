@@ -1,0 +1,17 @@
+<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Detalle de pregunta</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close({accepted:false})">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body mx-auto" style="padding: 2rem !important;">
+    <h3 class=" mb-2 question">
+        {{question.questionText}}
+    </h3>
+   <div *ngFor="let comment of question.comments" class="card p-2 mb-3 position-relative" style="border: 1px solid rgba(29, 112, 183, 1);">
+        <div class="mx-2 ">
+            <p class="p-0 m-0">{{comment}}</p>
+        </div>
+   </div>
+
+</div>

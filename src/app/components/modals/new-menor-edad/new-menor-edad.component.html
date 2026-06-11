@@ -1,0 +1,108 @@
+<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Nuevo menor de edad</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close({reload:true})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <!-- Form -->
+      <form [formGroup]="registerForm">
+        <!-- End Form -->
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="name">Nombre</label>
+          <input
+            formControlName="name"
+            [class]=" registerForm.get('name')?.invalid && formSubmited? 'is-invalid' : '' "
+            type="text"
+            name="name"
+            aria-label="Nombre"
+            placeholder="Escribe tu nombre"
+            class="form-control form-input-auth"
+          />
+          <span
+            *ngIf="registerForm.get('name')?.invalid && formSubmited"
+            class="invalid-feedback d-block"
+            >{{ getErrorNamesMessage() }}</span
+          >
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="birthdate">Fecha de nacimiento</label>
+          <div class="d-flex align-items-center position-relative">
+            <input
+              placeholder="DD/MM/YYYY"
+              type="text"
+              mask="00/00/0000"
+              class="form-control dateEnter"
+              [(ngModel)]="birthdate"
+              [ngModelOptions]="{standalone: true}"
+              (change)="changeDateEnter()"
+            >
+            <input
+                placeholder="DD/MM/YYYY"
+                formControlName="birthdate"
+                [class]="formSubmited && registerForm.get('birthdate')?.invalid ? 'is-invalid' : ''"
+                [owlDateTime]="dt1"
+                class="form-control dateCalendar"
+                (ngModelChange)="changeDateCalendar()"
+            >
+            <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
+                <i class="fa fa-calendar" style="height: 100%; font-size: 25px;"></i>
+            </span>
+            <owl-date-time [pickerType]="'calendar'" #dt1 ></owl-date-time>
+          
+           </div>
+            <span
+              *ngIf="registerForm.get('birthdate')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >{{ getErrorBirthdateMessage() }}</span
+            >
+        </div>
+
+        <div class="mb-3">
+              <label class="form-label label-auth" for="sexo">Sexo</label>
+                    <div class="d-flex">
+                      <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                        <input 
+                          class="custom-control-input" 
+                          type="radio" 
+                          value="M"  
+                          id="M" 
+                          name="sexo"
+                          [(ngModel)]="sexo"  
+                          [ngModelOptions]="{standalone: true}">
+                        <label class="custom-control-label" for="M">
+                          Masculino
+                        </label>
+                      </div>
+
+                      <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                        <input 
+                          class="custom-control-input" 
+                          type="radio" 
+                          value="F"  
+                          id="F" 
+                          name="sexo"
+                          [(ngModel)]="sexo"  
+                          [ngModelOptions]="{standalone: true}">
+                        <label class="custom-control-label" for="F">
+                          Femenino
+                        </label>
+                      </div>
+                    </div>
+                <span
+                  *ngIf="registerForm.get('sexo')?.invalid && formSubmited"
+                  class="invalid-feedback d-block"
+                  >Seleccione el sexo</span
+                >
+            </div>
+        
+
+        <div class="d-flex mb-3 justify-content-center">
+            <button (click)="cancelar()" type="button" class="btn btn-primary2 btn-sm mr-2 btn-150">Cancelar</button>
+            <button (click)="edit ? editUnderAge() : register()" type="button" class="btn btn-primary btn-sm" style="width: auto !important;">{{edit ? 'Editar' : 'Regístrar'}} menor de edad</button>
+        </div>
+      </form>
+</div>
+  

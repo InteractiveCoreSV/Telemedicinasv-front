@@ -1,0 +1,9 @@
+<div class="card">
+  <img style="height: 200px;object-fit: cover;" [src]="subsidiary?.photos?.[0]?.location" class="card-img-top" alt="Photo">
+  <div class="card-body">
+    <h5 class="card-title fw-600 text-center">{{subsidiary?.name}}</h5>
+    <p class="card-text fs-sm text-muted text-center">
+      <i class="fas fa-map-marker-alt"></i> {{subsidiary?.address?.address}}, {{subsidiary?.address?.municipality}} {{subsidiary?.address?.department}}
+    </p>
+  </div>
+</div>

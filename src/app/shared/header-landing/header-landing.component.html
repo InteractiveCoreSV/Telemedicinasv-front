@@ -1,0 +1,153 @@
+<header id="header" class="navbar navbar-fixed  navbar-flush navbar-container header m-0 m-auto">
+    <nav class="navbar-nav-wrap container row m-0" style="height: 75px !important;">
+  
+      <div class="col-5  col-md-2 container-items">
+        <div class="">
+          <!-- Logo -->
+          <a class="navbar-brand" routerLink="/inicio" aria-label="Front" >
+            <img class="logo" src="/assets/logos/telemedicina-head.png" alt="Logo Telemedicina">
+          </a>
+          <!-- End Logo -->
+        </div>
+
+        
+        <div class="navbar-nav-wrap-content-left d-block d-md-none ml-2">
+          <button  type="button" class="js-navbar-vertical-aside-toggle-invoker close mr-3">
+            <i class="tio-menu-hamburger navbar-vertical-aside-toggle-short-align" data-toggle="tooltip" data-placement="right" title="Collapse"></i>
+            <i class="tio-menu-hamburger navbar-vertical-aside-toggle-full-align" data-template='<div class="tooltip d-none d-sm-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-toggle="tooltip" data-placement="right" title="Expand"></i>
+            <!-- <img src="/assets/icons/icon-menu.png" alt="menu" class="navbar-vertical-aside-toggle-short-align" data-toggle="tooltip" data-placement="right" title="Collapse"> -->
+            <!-- <img src="/assets/icons/icon-menu.png" alt="menu" class="navbar-vertical-aside-toggle-full-align" data-template='<div class="tooltip d-none d-sm-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-toggle="tooltip" data-placement="right" title="Expand"> -->
+          </button>
+        </div>
+
+      </div>
+
+      <div class="col-8 col-lg-7 container-items p-0  d-none d-md-flex">
+        <!-- Navbar -->
+        <ul class="navbar-nav align-items-center flex-row">
+          
+          <li class="nav-item ">
+              <a class="container-link" [ngClass]="{ 'active': selectMenu === 'inicio'}" (click)="onButtonClick('inicio')">
+                Inicio
+              </a>
+          </li>
+
+          <li class="nav-item ">
+            <a class="container-link " [ngClass]="{ 'active': selectMenu === 'servicios'}" (click)="onButtonClick('servicios')">
+              Servicios
+            </a>
+          </li>
+
+          <li class="nav-item ">
+            <a class="container-link " [ngClass]="{ 'active': selectMenu === 'quienesSomos'}" (click)="onButtonClick('quienesSomos')">
+              Quienes somos
+            </a>
+          </li>
+
+          <li class="nav-item  m-0">
+            <a class="container-link " [ngClass]="{ 'active': selectMenu === 'contactanos'}" (click)="onButtonClick('contactanos')">
+              Contáctanos
+            </a>
+          </li>
+        </ul>
+
+        <!-- End Navbar -->
+      </div>
+  
+      <!-- Secondary Content -->
+      <div class="col-2 col-lg-3 container-items">
+        <!-- Navbar -->
+        <ul class="navbar-nav align-items-center flex-row">
+            
+          <li class="mr-3" >
+              <a class="btn-header btn-header-primary" [href]="redirectCreateRecruiter">Inicia Sesión</a>
+          </li>
+
+          <li class="d-none d-lg-block">
+            <a class=" btn-header btn-header-secundary" style="color: rgba(255, 255, 255, 1) !important;" [href]="redirectCreateRecruiterRegister">Registrate  </a>
+          </li>
+        </ul>
+        <!-- End Navbar -->
+      </div>
+
+
+  
+      <!-- End Secondary Content -->
+    </nav>
+</header>
+
+<aside NavbarVerticalNavigation id="sideBar" style="transition: 0.6s; background-color: rgb(255, 255, 255);"
+class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-md navbar-bordered sidebar-custom d-block d-md-none">
+
+  <div class="navbar-vertical-container">
+      <div class="navbar-vertical-header-offset">
+        <div class="navbar-brand-wrapper justify-content-center mt-2" style="overflow: hidden !important;">
+          <!-- Logo -->
+          <a class="navbar-brand mr-0" routerLink="/dashboard" aria-label="Front">
+            <img
+              style="max-width: 8.5rem; min-width: 8.5rem"
+              class="navbar-brand-logo"
+              [src]=" '/assets/logos/telemedicina-head.png'
+              "
+              alt="Telemedicina Analiza El Salvador"
+            />
+            <img
+              class="navbar-brand-logo-mini"
+              src="/assets/logos/telemedicina-head.png"
+              alt="Telemedicina Analiza El Salvador"
+            />
+          </a>
+
+          <button
+            id="buttonNavVertical"
+            type="button"
+            class="js-navbar-vertical-aside-toggle-invoker navbar-vertical-aside-toggle btn btn-icon btn-clode-menu"
+          >
+          <i class="tio-clear tio-lg"></i>
+        </button>
+        </div>
+
+        <ul class="navbar-nav align-items-center flex-column mt-2">
+          
+          <li class="nav-item m-0">
+            <a class="container-link" [ngClass]="{ 'active': selectMenu === 'inicio'}" (click)="onButtonClick('inicio')">
+              Inicio
+            </a>
+        </li>
+
+        <li class="nav-item ">
+          <a class="container-link m-0" [ngClass]="{ 'active': selectMenu === 'servicios'}" (click)="onButtonClick('servicios')">
+            Servicios
+          </a>
+        </li>
+
+        <li class="nav-item ">
+          <a class="container-link m-0" [ngClass]="{ 'active': selectMenu === 'quienesSomos'}" (click)="onButtonClick('quienesSomos')">
+            Quienes somos
+          </a>
+        </li>
+
+        <li class="nav-item  m-0">
+          <a class="container-link " [ngClass]="{ 'active': selectMenu === 'contactanos'}" (click)="onButtonClick('contactanos')">
+            Contáctanos
+          </a>
+        </li>
+        </ul>
+
+        <div class="mt-6 container-items">
+          <!-- Navbar -->
+          <ul class="navbar-nav align-items-center flex-column">
+              
+            <li class="mb-3" >
+                <a class="btn-header btn-header-primary"  [href]="redirectCreateRecruiter">Inicia Sesión</a>
+            </li>
+
+            <li class="">
+              <a class=" btn-header btn-header-secundary" style="color: rgba(255, 255, 255, 1) !important;" [href]="redirectCreateRecruiterRegister">Registrate  </a>
+            </li>
+          </ul>
+          <!-- End Navbar -->
+        </div>
+      </div>
+  </div>
+</aside>

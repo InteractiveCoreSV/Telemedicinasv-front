@@ -1,0 +1,42 @@
+.buttonSaveIMG{
+  margin-bottom: 5px;
+}
+.buttonSaveIMG button{
+  margin-left: 4px ;
+  margin-right: 4px;
+  border:1px solid #e6dddd;
+}
+
+
+.bannerProfilebtn{
+  display: flex;
+  /* flex-direction: column; */
+  margin-top: 5px;
+  justify-content: flex-end;
+}
+
+.bannerProfilebtn button{
+  margin-bottom: 5px;
+  width: 41px;
+  margin-left: 4px ;
+  margin-right: 4px;
+  border:1px solid #e6dddd;
+}
+
+@media(min-width:610px){
+  .bannerProfilebtn{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 7px;
+    margin-right: 32px;
+    flex-direction: row;
+  }
+}
+
+
+@media (min-width: 1615px) {
+  .example-content-main{
+    flex: 0 0 24.88888% !important;
+    max-width: 24.88888% !important;
+  }
+}

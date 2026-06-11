@@ -1,0 +1,38 @@
+/* Contenedor con scroll */
+.datatable-custom {
+  max-height: 70vh; /* ajusta según necesidad */
+  overflow: auto;
+}
+
+/* Todas las celdas del thead fijas */
+.datatable-custom thead th {
+  position: sticky;
+  top: 0;
+  z-index: 7;
+  background: #f8f9fa; /* mismo color del thead-light */
+}
+
+/* Segunda fila del thead (debajo de la primera) */
+.datatable-custom thead tr:nth-child(2) th {
+  top: 45px; /* altura aproximada de la primera fila */
+  z-index: 10;
+}
+
+.date {
+    z-index: 11 !important;
+}
+
+/* Primera columna fija (Fecha) */
+.datatable-custom .date,
+.datatable-custom td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: white;
+}
+
+/* Prioridad cuando es encabezado */
+.datatable-custom thead th:first-child {
+  z-index: 6;
+  background: #f8f9fa;
+}

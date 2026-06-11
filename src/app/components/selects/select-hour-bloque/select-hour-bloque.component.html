@@ -1,0 +1,21 @@
+<div class="d-flex  justify-content-center">
+    <div class="d-flex align-content-center flex-column">
+        <ng-select class="select-new-hour"  [(ngModel)]="hourSelect" (ngModelChange)="selectHourComplete()">
+            <ng-option *ngFor="let hour of hours" [value]="hour">{{hour}}</ng-option>
+        </ng-select>
+        <label class="mx-auto">HH</label>
+    </div>
+    
+    <div class="d-flex align-content-center flex-column mx-2">
+        <ng-select class="select-new-hour"  [(ngModel)]="minuteSelect" (ngModelChange)="selectHourComplete()">
+            <ng-option *ngFor="let minute of minutes" [value]="minute">{{minute}}</ng-option>
+        </ng-select>
+        <label class="mx-auto">MM</label>
+    </div>
+    
+    <div class="d-flex align-content-center flex-column">
+        <ng-select class="select-new-hour"  [(ngModel)]="pm_amSelect" (ngModelChange)="selectHourComplete()">
+            <ng-option *ngFor="let meridian of pm_am" [value]="meridian">{{meridian}}</ng-option>
+        </ng-select>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+
+   <form [formGroup]="form">
+    <div class="row " translate="no">
+
+        <div class="col-12 h-100 mt-3">
+            <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet mb-5">Seleccion tipo de Cita</label>
+            <div class="d-flex w-100 justify-content-center align-items-center">
+                <ng-container *ngIf="!loading">
+                    <div class="card ratioTypeAppoinment border-0 position-relative card-radio card-radio-custom  mx-2" *ngFor="let category of categoriesServices">
+                        <div class="container-ratio-type-appointment mt-3">
+                            <img class="img-type-appointment" [src]="category.photo.location" [alt]="category.name+'-icon'"> 
+                            <span class="ratioMeetingTool_title">{{category.name}}</span>
+                        </div>
+                        <div>
+                            <input formControlName="typeAppoinment" (ngModelChange)="setSubsidiaryFunction()" type="radio" class="form-check-input" name="typeAppoinment" [id]="'herramienta'+category._id" [value]="category" >
+                            <label [for]="'herramienta'+category._id"></label>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="loading">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                        </div>
+                    </div>
+                  </ng-container>
+            </div>
+
+            <div *ngIf="formSubmited && getControl('typeAppoinment')?.invalid" class="invalid-feedback d-block mt-2">
+                El tipo de cita es requerido
+            </div>
+        </div>
+  
+        <div class="col-12 h-100 mt-4" *ngIf="getControl('typeAppoinment')?.value.online == true">
+            <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet mb-5">Selecciona aplicacion preferida para la cita</label>
+            <div class="d-flex flex-column flex-md-row w-100 justify-content-center align-items-center">
+                <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2 mb-2" *ngFor="let herramienta of videoConferencia">
+                    <div>
+                        <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'"> 
+                        <span class="ratioMeetingTool_title">{{herramienta.name}}</span>
+                    </div>
+                    <div>
+                        <input formControlName="meetingTool" type="radio" class="form-check-input" name="meetingTool" [id]="'herramienta'+herramienta._id" [value]="herramienta" >
+                        <label [for]="'herramienta'+herramienta._id"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="formSubmited && getControl('typeAppoinment')?.invalid" class="invalid-feedback d-block mt-2">
+                La seleción de la aplicación es requerida
+            </div>
+        </div>
+    </div>
+  </form>
+  
+  <div class="row mt-3">
+    <div class="col-12 d-flex justify-content-end">
+      <ng-content select="[backButton]"></ng-content>
+      <button [disabled]="form.invalid" (click)="nextForm()" class="btn btn-primary btn-150">Siguiente</button>
+    </div>
+  </div>
+  
+  

@@ -1,0 +1,67 @@
+
+ <ng-container *ngIf="!loading">
+  <ul class="list-group">
+    <!-- Item -->
+    <li class="list-group-item card" *ngFor="let medico of medicos">
+      <div class="row flex-column">
+        <div class="col-auto d-flex">
+          <img
+          class="avatar-cutom avatar  avatar-4x3" 
+              appBrokenImagen
+              *ngIf="medico?.imageProfile"
+              [src]="medico?.imageProfile"
+              [alt]="medico?.names + ' ' + medico?.last_names"
+          />
+          <span
+              *ngIf="!medico?.imageProfile"
+              class="avatar-cutom avatar-initials"
+          >
+              {{ medico?.names | slice:0:1}}
+              {{ medico?.last_names | slice:0:1}}
+          </span>
+
+          <h5 class="mb-0 pl-4">
+            <a class="text-dark" >{{medico.names}} {{medico.last_names}}</a>
+          </h5>
+          <div>
+            <span></span>
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-auto">
+          <!-- Dropdown -->
+          <div class="btn-group " >
+            <!-- <a class="btn btn-outline-primary" type="button" [routerLink]="['/dashboard/expedientes/detalle-expediente', medico._id]">
+                Ir al expediente
+            </a> -->
+                 <a class="cursor-pointer" [innerHTML]="medico?.statusMedico | parseStatusMedico " (click)="openModalNewAppoinment(medico)"></a>
+
+          </div>
+          <!-- End Dropdown -->
+        </div>
+      </div>
+      <!-- End Row -->
+    </li>
+    <!-- End Item -->
+  </ul>
+
+ </ng-container>
+
+ <nav aria-label="Page navigation">
+  <ngb-pagination 
+  *ngIf="paginationDetails && paginationDetails.totalPages > 1" 
+    class="d-flex justify-content-center mt-3"
+    (pageChange)="(page=$event || 1);(getMedicos())"
+    [collectionSize]="paginationDetails.totalDocs || 0"
+    [pageSize]="paginationDetails.limit || 0"
+  > 
+  </ngb-pagination>
+</nav>
+
+ <ng-container *ngIf="loading">
+    <div class="w-100   text-center pt-5">
+      <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+      </div>
+    </div>
+</ng-container>

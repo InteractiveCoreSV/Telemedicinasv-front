@@ -1,0 +1,680 @@
+﻿
+
+    <!-- Card -->
+    <div class="card mb-3 mb-lg-5">
+      <!-- Header -->
+      <div class="card-header">
+        <h5 class="card-header-title">Editar perfil</h5>
+      </div>
+
+      <div class="card-body " >
+
+        <form [formGroup]="createUserForm"  (ngSubmit)="editUser()">
+
+  
+              <div class="row">
+              <!-- START ROW -->
+              <div class="col-12 col-sm-6">
+                <label class="form-control-label">Nombre</label>
+                <div class="form-group">
+                  <input formControlName="names" [class]="formSubmited && createUserForm.get('names')?.invalid?'is-invalid':''" type="text" class="form-control">
+                  <div *ngIf="formSubmited && createUserForm.get('names')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+                </div>
+              </div>
+              <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6">
+                  <label class="form-control-label">Apellidos</label>
+                  <div class="form-group">
+                    <input formControlName="last_names" [class]="formSubmited && createUserForm.get('last_names')?.invalid?'is-invalid':''" type="text" class="form-control">
+                    <div *ngIf="formSubmited && createUserForm.get('last_names')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-6">
+                  <label class="form-label" for="dateBirthday">Fecha de Cumpleaños</label>
+  
+                    <input formControlName="dateBirthday" [class]="formSubmited && createUserForm.get('dateBirthday')?.invalid?'is-invalid':''" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" class="form-control"  placeholder="Seleciona la fecha del cumpleaños">
+                    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                </div> -->
+                <!-- END ROW -->
+                 <!-- START ROW -->
+                 <div class="col-12 col-sm-6">
+                   <label class="form-control-label">Email</label>
+                    <div class="form-group">
+                     <input formControlName="email" [class]="formSubmited && createUserForm.get('email')?.invalid?'is-invalid':''" type="text" class="form-control">
+                    <div *ngIf="formSubmited && createUserForm.get('email')?.invalid" class="invalid-feedback">{{getErrorMessageEmail()}}</div>
+                  </div>
+                </div>
+
+              <div class="col-12 col-sm-6" *ngIf="roleObjet && roleObjet.name === 'patient'">
+                <label class="form-control-label">Nombre de usuario</label> 
+                <div class="form-group">
+                    <input formControlName="userName" [class]="formSubmited && createUserForm.get('userName')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre del usuario">
+                </div>
+              </div>
+                <!-- END ROW -->
+                 <!-- START ROW -->
+                 <!-- <div class="col-12 col-sm-6">
+                   <label class="form-control-labe">Rol del usuario</label>
+                  <div class="form-group">
+                    <app-select-role [roleSelected]="role" [classSelect]="formSubmited && createUserForm.get('password')?.invalid?'is-invalid':''" [formGroup]="createUserForm" [formControlNameRole]="'roles'"></app-select-role>
+                    <div *ngIf="formSubmited && createUserForm.get('roles')?.invalid" class="invalid-feedback d-block">{{getErrorMessageRole()}}</div>
+                  </div>
+                </div> -->
+                <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 col-sm-8 col-md-6">
+                  <label class="form-control-label">Número de Telefono</label>
+                  <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+                    <div ngbDropdown class="d-inline-block" container="body">
+                      <button
+                        type="button"
+                        class="btn pr-0"
+                        style="
+                          background-color: #f6f6f6; 
+                          height: 100%;
+                          border:1px solid #E4E4E4 !important;
+                          border-right: none !important;
+                        "
+                        (click)="isOpenDropdown = !isOpenDropdown"
+                        id="changeCountryCode"
+                        ngbDropdownToggle
+                        [class]="
+                          formSubmited && getControl('countryCode')?.invalid
+                            ? 'is-invalid'
+                            : ''
+                        "
+                      >
+                        {{ getControl("COICode")?.value }}
+                        <i
+                          class="fas ml-2"
+                          [ngClass]="{
+                            'fa-chevron-up': isOpenDropdown,
+                            'fa-chevron-down': !isOpenDropdown
+                          }"
+                        ></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <ng-container *ngFor="let item of countries">
+                          <button
+                            ngbDropdownItem
+                            [ngClass]="{
+                              selected: item.name === getControl('country')?.value
+                            }"
+                            (click)="
+                              getControl('countryCode')?.setValue(item.countryCode);
+                              getControl('country')?.setValue(item.name);
+                              getControl('COICode')?.setValue(item.COICode);
+                              getControl('mask')?.setValue(item.mask)
+                            "
+                          >
+                            {{ item.name }}
+                          </button>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <input
+                      type="text"
+                      id="phone"
+                      placeholder="9587-6543"
+                      class="form-control input-phone pl-1"
+                      formControlName="phone"
+                      [class]="
+                        formSubmited && getControl('phone')?.invalid
+                          ? 'is-invalid d-block'
+                          : ''
+                      "
+                      [allowNegativeNumbers]="false"
+                      [mask]="getControl('mask')?.value"
+                      [prefix]="getControl('countryCode')?.value + ' '"
+                      style=" padding-left: 1rem !important;"
+                    />
+                    <span
+                      *ngIf="createUserForm.get('phone')?.invalid && formSubmited"
+                      class="invalid-feedback d-block"
+                      >{{ getErrorMessagePhone() }}
+                    </span>
+                  </div>
+               </div>
+
+               <div class="col-12 col-sm-6">
+                  <label class="form-control-label">Documento de Identidad</label>
+                  <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+                    <div ngbDropdown class="d-inline-block custom-dropdawn" container="body" >
+                        <button
+                        type="button"
+                        class="btn p-2"
+                        style="
+                            background-color: #f6f6f6; 
+                            height: 100%;
+                            border:1px solid #E4E4E4 !important;
+                            border-right: none !important;
+                        "
+                        (click)="isOpenDropdown = !isOpenDropdown"
+                        id="changeCountryCode"
+                        ngbDropdownToggle
+                        [class]="
+                            formSubmited && getControl('typeDocument')?.invalid
+                            ? 'is-invalid'
+                            : ''
+                        "
+                        >
+                        {{ getControl("typeDocument")?.value }}
+                        <i
+                            class="fas ml-2"
+                            [ngClass]="{
+                            'fa-chevron-up': isOpenDropdown,
+                            'fa-chevron-down': !isOpenDropdown
+                            }"
+                        ></i>
+                        </button>
+                        <div ngbDropdownMenu>
+                        <ng-container *ngFor="let item of typesDocuments">
+                            <button
+                            ngbDropdownItem
+                            [ngClass]="{
+                                selected: item === getControl('typeDocument')?.value
+                            }"
+                            (click)="
+                                updateTypeDocument(item)
+                            "
+                            >
+                            {{ item }}
+                            </button>
+                        </ng-container>
+                        </div>
+                    </div>
+                    <input
+                        *ngIf="getControl('typeDocument')?.value === 'DUI'" 
+                        formControlName="identityNumber"
+                        [class]=" createUserForm.get('identityNumber')?.invalid && formSubmited ? 'is-invalid' : ''"
+                        mask="00000000-0" 
+                        type="text"
+                        name="identityNumber"
+                        aria-label="RNP"
+                        placeholder="Número de identidad"
+                        class="form-control form-input-auth"
+                      />
+
+                    <input 
+                      *ngIf="getControl('typeDocument')?.value === 'Pasaporte'"
+                      formControlName="passport"
+                      [class]="
+                      createUserForm.get('passport')?.invalid && formSubmited
+                          ? 'is-invalid'
+                          : ''
+                      "
+                      type="text"
+                      name="passport"
+                      [placeholder]="'Pasaporte'"
+                      class="form-control" 
+                    />
+
+                    <input 
+                      *ngIf="getControl('typeDocument')?.value === 'ID internacional'"
+                      formControlName="idInternacional"
+                      [class]="
+                      createUserForm.get('idInternacional')?.invalid && formSubmited
+                          ? 'is-invalid'
+                          : ''
+                      "
+                      type="text"
+                      name="idInternacional"
+                      [placeholder]="'ID Internacional'"
+                      class="form-control" 
+                    />
+                  </div>
+                    <span
+                      *ngIf="createUserForm.get('identityNumber')?.invalid && formSubmited"
+                      class="invalid-feedback d-block"
+                      >{{ getErroridentityNumberMessage() }}</span
+                    >
+                    <span
+                      *ngIf="createUserForm.get('passport')?.invalid && formSubmited"
+                      class="invalid-feedback d-block"
+                      >El pasaporte es requerido</span
+                    >
+                    <span
+                      *ngIf="createUserForm.get('idInternacional')?.invalid && formSubmited"
+                      class="invalid-feedback d-block"
+                      >El ID internacional es requerido</span
+                    >
+                </div>
+
+
+                              <!-- START ROW -->  
+              <div class="col-12 col-sm-6">
+                <label class="form-control-label">Nombre del contacto de emergencia</label>
+                <div class="form-group">
+                  <input formControlName="nameEmergency" [class]="formSubmited && createUserForm.get('nameEmergency')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre de contacto de emergencia">
+                  <div *ngIf="formSubmited && createUserForm.get('nameEmergency')?.invalid" class="invalid-feedback">Este campo es requerido</div>
+                </div>
+              </div>
+              <!-- END ROW -->
+
+              <div class="col-12 col-sm-8 col-md-6">
+                <label class="form-control-label">Número del contacto de emergencia</label>
+                <div class="input-group d-flex justify-content-center justify-content-md-start">
+                  <div ngbDropdown class="d-inline-block" container="body">
+                    <button
+                      type="button"
+                      class="btn pr-0"
+                      style="
+                        background-color: #f6f6f6; 
+                        height: 100%;
+                        border:1px solid #E4E4E4 !important;
+                        border-right: none !important;
+                      "
+                      (click)="isOpenDropdown = !isOpenDropdown"
+                      id="changecountryCodeEmergency"
+                      ngbDropdownToggle
+                      [class]="
+                        formSubmited && getControl('countryCodeEmergency')?.invalid
+                          ? 'is-invalid'
+                          : ''
+                      "
+                    >
+                      {{ getControl("COICodeEmergency")?.value }}
+                      <i
+                        class="fas ml-2"
+                        [ngClass]="{
+                          'fa-chevron-up': isOpenDropdown,
+                          'fa-chevron-down': !isOpenDropdown
+                        }"
+                      ></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <ng-container *ngFor="let item of countries">
+                        <button
+                          ngbDropdownItem
+                          [ngClass]="{
+                            selected: item.name === getControl('countryEmergency')?.value
+                          }"
+                          (click)="
+                            getControl('countryCodeEmergency')?.setValue(item.countryCode);
+                            getControl('countryEmergency')?.setValue(item.name);
+                            getControl('COICodeEmergency')?.setValue(item.COICode);
+                            getControl('maskEmergency')?.setValue(item.mask)
+                          "
+                        >
+                          {{ item.name }}
+                        </button>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    id="phone"
+                    placeholder="9587-6543"
+                    class="form-control input-phone pl-1"
+                    formControlName="phoneEmergency"
+                    [class]="
+                      formSubmited && getControl('phoneEmergency')?.invalid
+                        ? 'is-invalid d-block'
+                        : ''
+                    "
+                    [allowNegativeNumbers]="false"
+                    [mask]="getControl('maskEmergency')?.value"
+                    [prefix]="getControl('countryCodeEmergency')?.value + ' '"
+                    style=" padding-left: 1rem !important;"
+                  />
+                  <span
+                    *ngIf="createUserForm.get('phoneEmergency')?.invalid && formSubmited"
+                    class="invalid-feedback d-block"
+                    >Este campo es requerido
+                  </span>
+                </div>
+              </div>
+
+                <!-- START ROW -->
+                <div class="col-12 col-sm-8 col-md-6">
+                  <label class="form-control-label">{{userToEdit?'Nueva contraseña':'Contraseña'}}</label>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input formControlName="password" [class]="formSubmited && createUserForm.get('password')?.invalid?'is-invalid':''" [type]="showPassword?'text':'password'" class="form-control" autocomplete="new-password">
+                      <button (click)="showPassword = !showPassword" class="btn btn-white border btn-icon" type="button">
+                        <i [class]="showPassword?'fas fa-eye':'fas fa-eye-slash'"></i>
+                      </button>
+                    </div>
+                    <app-password-strength
+                      [passwordToCheck]="createUserForm.get('password')?.value"
+                      (passwordStrength)="onPasswordStrengthChanged($event)"
+                    ></app-password-strength>
+                    <div *ngIf="formSubmited && createUserForm.get('password')?.invalid" class="invalid-feedback d-block">{{getErrorMessagePassword()}}</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+
+                <div class="col-12 col-sm-6" *ngIf="isMedico">
+                  <label class="form-control-label">Sello Médico</label>
+                  <div class="form-group">
+                    <div class="form-group">
+                      <app-dropzone 
+                        *ngIf="!userToEdit?.sello"
+                        [btn]="false" 
+                        [label]="'Arrastra o selecciona tu Sello médico'" 
+                        [files]="imgsSello" 
+                        [maxFile]="1" 
+                        [accept]="'image/*'" 
+                        (filesOutput)="imgsSello=$event"
+                        [logo]="true"
+                      ></app-dropzone>
+  
+                      <div class="d-flex justify-content-center align-items-center flex-column my-2" *ngIf="userToEdit.sello">
+                        <img style="max-width: 150px; max-height: 150px; object-fit: contain;" [src]="userToEdit.sello.location" alt="">
+                        <button type="button" (click)="changeSello()" class="btn btn-sm btn-block btn-change-img btn-primary mt-1 w-100">Cambiar sello</button>
+                      </div>
+                  
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 " *ngIf="isMedico">
+                  <label class="form-control-label">Firma Médico</label>
+                  <ng-container *ngIf="!userToEdit.firma">
+                    <div class="form-group w-100 text-center">
+                      <div class="d-flex flex-column justify-content-center">
+                        <signature-pad
+                            *ngIf="!userToEdit?.firma"
+                            class="container-firma"
+                            #signature 
+                            [options]="signaturePadOptions" 
+                            (drawStart)="drawStart($event)">
+                        </signature-pad>
+                        <div class="d-flex justify-content-center mt-2" *ngIf="!btnRehacerFirma" >
+                            <button type="button" class="btn btn-danger btn-sm btn-icon rounded btn-firma btn-200" (click)="cancelFirm()" [disabled]="btnFirmDisable">Cancelar firma</button>
+                            <button type="button" class="btn btn-sm btn-primary btn-icon rounded btn-firma btn-200" (click)="aceptFirm()" [disabled]="btnFirmDisable">Aceptar firma</button>
+                        </div>
+                        <div class="d-flex justify-content-center mt-2" *ngIf="btnRehacerFirma">
+                            <button type="button" class="btn btn-danger btn-sm btn-icon rounded btn-firma btn-200" (click)="reacerFirma()">Hacer de nuevo</button>
+                        </div>
+                    </div> 
+                  </div>
+                </ng-container>  
+
+                <ng-container *ngIf="userToEdit.firma">
+                  <div class="d-flex justify-content-center align-items-center flex-column my-2" >
+                    <img style="max-width: 150px; max-height: 150px; object-fit: contain;" [src]="userToEdit.firma.location" alt="">
+                    <button type="button" (click)="changeFirma()" class="btn btn-sm btn-block btn-change-img btn-primary mt-1 btn-200">Cambiar firma</button>
+                  </div>
+                </ng-container>
+
+                </div>
+  
+              </div>
+
+              <div class="col-12 row" *ngIf="isMedico">
+                <div class="col-12">
+                  <label class="form-control-label">Complemento de perfil médico</label>
+                </div>
+                <!-- START ROW -->
+                <div class="col-12 col-sm-6">
+                  <label class="label-section mb-0">Año que comenzó a ejercer</label>
+                   <div class="d-flex align-items-center position-relative">
+                        
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          type="text"
+                          mask="00/00/0000"
+                          [dropSpecialCharacters]="false"
+                          class="form-control dateEnter"
+                          [ngModel]="createUserForm.get('yearStartedPracticing')?.value | date:'dd/MM/yyyy'"
+                          (ngModelChange)="changeDateEnterForm($event,'yearStartedPracticing')"
+                          [ngModelOptions]="{standalone: true}"
+                          [class]="formSubmited && createUserForm.get('yearStartedPracticing')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- INPUT DEL CALENDARIO -->
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          class="form-control dateCalendar"
+                          formControlName="yearStartedPracticing"
+                          [owlDateTime]="dt2"
+                          (dateChange)="changeDateCalendarForm($event, 'yearStartedPracticing')"
+                          [class]="formSubmited && createUserForm.get('yearStartedPracticing')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- ICONO -->
+                        <span [owlDateTimeTrigger]="dt2" class="ml-2" style="cursor: pointer;">
+                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
+                        </span>
+
+                        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+
+                      </div>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                  <label class="label-section mb-0">Tiempo ejerciendo</label>
+                  <p>{{createUserForm.get('yearStartedPracticing')?.value | calcYearsOfPracticePipe}}</p>
+                </div>
+                <!-- END ROW -->
+
+                <div formArrayName="educacion" class="col-12 d-flex flex-column mb-3 card py-3 mt-3">
+                  <!-- <label class="label-section mb-2">Institución educativa</label> -->
+
+                  <div *ngFor="let edu of educacion.controls; let i = index" [formGroupName]="i" class="row mb-2 align-items-center">
+                    <div class="col-12 col-md-8 px-1 pl-3">
+                      <label class="label-section mb-0 col-12">Institución educativa</label>
+                      <input 
+                        formControlName="institucion"
+                        [class]="formSubmited && edu.get('institucion')?.invalid ? 'is-invalid' : ''"
+                        type="text"
+                        class="form-control"
+                        placeholder="Institución educativa"
+                      >
+                    </div>
+
+                    <div class="col-10 col-md-3 px-1 pl-3 pl-md-1 mt-2 mt-md-0">
+                      <label class="label-section mb-0 col-12">Año de egreso</label>
+                      <div class="d-flex align-items-center position-relative">
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          type="text"
+                          mask="00/00/0000"
+                          [dropSpecialCharacters]="false"
+                          class="form-control dateEnter"
+                          [ngModel]="edu.get('year')?.value | date:'dd/MM/yyyy'"
+                          (ngModelChange)="changeDateEnter($event, edu)"
+                          [ngModelOptions]="{standalone: true}"
+                          [class]="formSubmited && edu.get('year')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- INPUT DEL CALENDARIO -->
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          class="form-control dateCalendar"
+                          formControlName="year"
+                          [owlDateTime]="dt1"
+                          (dateChange)="changeDateCalendar($event, edu)"
+                          [class]="formSubmited && edu.get('year')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- ICONO -->
+                        <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
+                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
+                        </span>
+
+                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ESPECIALIDADES -->
+                <div  class="col-12 d-flex flex-column mb-3 card py-3">
+                  <div class="row mb-2 align-items-center">
+                    <div class="col-12 col-md-6 px-1 pl-3">
+                      <label class="label-section mb-0 col-12">Especiliadad</label>
+                      <app-select-especialidad 
+                        [especialidadSelected]="especialidad"
+                        (changeEspecialidad)="setEspecialidad($event)"
+                      ></app-select-especialidad>
+                      <div *ngIf="formSubmited && createUserForm.get('especialidad')?.invalid" class="invalid-feedback d-block">La especialidad es requerida</div>
+                    </div>
+
+                    <div class="col-12 col-md-8 mt-2">
+                      <label class="label-section mb-0 ">Institución educativa</label>
+                      <input formControlName="especialidadInstitucion" [class]="formSubmited && createUserForm.get('especialidadInstitucion')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Institución">
+                      <div *ngIf="formSubmited && createUserForm.get('especialidadInstitucion')?.invalid" class="invalid-feedback d-block">La institución es requerida</div>
+                    </div>
+
+                    <div class="col-10 col-md-3 px-1 pl-3 pl-md-1 mt-md-0">
+                      <label class="label-section mb-0 col-12">Año de egreso</label>
+                      <div class="d-flex align-items-center position-relative">
+                        <!-- INPUT CON MÁSCARA DD/MM/YYYY -->
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          type="text"
+                          mask="00/00/0000"
+                          class="form-control dateEnter"
+                          [dropSpecialCharacters]="false"
+                          [ngModel]="createUserForm.get('especialidadYear')?.value | date:'dd/MM/yyyy'"
+                          (ngModelChange)="changeDateEnterForm($event, 'especialidadYear')"
+                          [ngModelOptions]="{standalone: true}"
+                          [class]="formSubmited && createUserForm.get('especialidadYear')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- INPUT DEL CALENDARIO -->
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          class="form-control dateCalendar"
+                          formControlName="especialidadYear"
+                          [owlDateTime]="dt1"
+                          (dateChange)="changeDateCalendarForm($event, 'especialidadYear')"
+                          [class]="formSubmited && createUserForm.get('especialidadYear')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- ICONO -->
+                        <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
+                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
+                        </span>
+
+                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- SUBESPECIALIDADES -->
+                <div formArrayName="subespecialidades" class="col-12 d-flex flex-column mb-3 card py-3">
+                  <div *ngFor="let subespecialidad of subespecialidades.controls; let i = index" [formGroupName]="i" class="row mb-2 align-items-center">
+                    <div class="col-12 col-md-8 px-1 pl-3">
+                      <label class="label-section mb-0 col-12">Subespecialidad</label>
+                      <input 
+                        formControlName="name"
+                        [class]="formSubmited && subespecialidad.get('name')?.invalid ? 'is-invalid' : ''"
+                        type="text"
+                        class="form-control"
+                        placeholder="Nombre"
+                      >
+                    </div>
+
+                    <div class="col-10 col-md-3 px-1 pl-3 pl-md-1 mt-2 mt-md-0">
+                      <label class="label-section mb-0 col-12">Año de egreso</label>
+                      <div class="d-flex align-items-center position-relative">
+                        <!-- INPUT CON MÁSCARA DD/MM/YYYY -->
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          type="text"
+                          mask="00/00/0000"
+                          class="form-control dateEnter"
+                          [dropSpecialCharacters]="false"
+                          [ngModel]="subespecialidad.get('year')?.value | date:'dd/MM/yyyy'"
+                          (ngModelChange)="changeDateEnter($event, subespecialidad)"
+                          [ngModelOptions]="{standalone: true}"
+                          [class]="formSubmited && subespecialidad.get('year')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- INPUT DEL CALENDARIO -->
+                        <input
+                          placeholder="DD/MM/YYYY"
+                          class="form-control dateCalendar"
+                          formControlName="year"
+                          [owlDateTime]="dt1"
+                          (dateChange)="changeDateCalendar($event, subespecialidad)"
+                          [class]="formSubmited && subespecialidad.get('year')?.invalid ? 'is-invalid' : ''"
+                        >
+
+                        <!-- ICONO -->
+                        <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
+                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
+                        </span>
+
+                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+
+                      </div>
+                    </div>
+
+                    
+                    <div class="col-12 mt-2">
+                      <label class="label-section mb-0 ">Institución educativa</label>
+                      <input formControlName="institucion" [class]="formSubmited && subespecialidad.get('institucion')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Institución">
+                      <div *ngIf="formSubmited && subespecialidad.get('institucion')?.invalid" class="invalid-feedback d-block">La institución es requerida</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 d-flex flex-column mb-3 card py-3">
+                  <label class="label-section mb-2">Cursos</label>
+                  <textarea formControlName="cursos" placeholder="Ingrese sus cursos (nombre, donde, fecha)" class="form-control" style="text-align: start !important; height: auto !important;" rows="5"></textarea>
+
+                </div>
+
+                
+                <div class="col-12 d-flex flex-column mb-3 card py-3">
+                  <label class="label-section mb-2">Diplomas</label>
+                  <textarea formControlName="diplomas" placeholder="Ingrese sus diplomas (nombre, donde, fecha)" class="form-control" style="text-align: start !important; height: auto !important;" rows="5"></textarea>
+
+                </div>
+              </div>
+
+              <div *ngxPermissionsOnly="'patient'">
+                <label class="form-control-label">Menores de edad</label>
+
+                <div class="d-flex justify-content-end mb-2">
+                  <button class="btn btn-primary btn-sm" type="button" style="width: 177px;" (click)="openNewMenoDeEdad()">Nuevo menor de edad </button>
+                </div>
+
+                <ng-container *ngIf="menoresDeEdad.length>0;else notResult">
+
+                  <div class="container-user-info mt-1 mb-2" *ngFor="let menor of menoresDeEdad">
+                    <span class="info-user mr-2"><strong>Nombre:</strong></span> {{menor.name}}
+                   <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{menor.birthdate | date:'MMMM d, y'|titlecase}}
+
+                   <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary btn-sm mr-2" style="width: auto;" (click)="openNewMenoDeEdad(menor)">
+                      Editar
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm" style="width: auto;"(click)="deleteMenorEdad(userToEdit._id,menor.name,menor._id)">
+                      Eliminar
+                    </button>
+                   </div>
+                  </div>
+                </ng-container>
+
+                  
+                <ng-template #notResult>
+                  <p class="my-2">Aún no tienes menores de edad registrados</p>
+                </ng-template>
+
+
+              </div>
+
+          <div class="card-footer">
+            <div class="row d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+
+

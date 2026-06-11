@@ -1,0 +1,233 @@
+﻿<div class="row align-items-sm-center mb-4">
+  <div class="col-12 mb-2 mb-lg-0 d-flex flex-column flex-md-row">
+    <div class="d-flex align-items-center mr-0 mr-md-3 mb-2 mb-md-0">
+      <button (click)="todayBtn()" type="button" class="btn btn-current-date  mr-2 p-1" >Fecha Actual</button>
+
+      <button (click)="prevMonthBtn()" type="button" class="btn btn-icon btn-sm btn-arrows btn-no-focus rounded-circle mr-1" tooltip="Mes anterior" title="Mes Anterior" [hideDelay]="0">
+        <i class="tio-chevron-left" style="color: #fff !important; font-size: 20px !important;"></i>
+      </button>
+      <button (click)="nextMonthBtn()" type="button" class="btn btn-icon btn-sm btn-arrows btn-no-focus rounded-circle ml-1" tooltip="Siguiente mes" title="Siguiente mes" [hideDelay]="0">
+        <i class="tio-chevron-right" style="color: #fff !important; font-size: 20px !important;"></i>
+      </button>
+
+      <div class="ml-3">
+        <h4 class="h3 mb-0 text-capitalize" style="font-size: 14px !important;">{{currentTitle}}</h4>
+      </div>
+    </div>
+
+    <div class="input-group input-group-merge input-group-borderless input-group-flush input-group-light pr-3" style="max-width: 430px !important;" *ngxPermissionsExcept="['patient']">
+      <input 
+        style="padding-right: 2.75rem !important; padding-left: 0.75rem !important;" 
+        type="text" 
+        class="form-control center" 
+        id="inputGroupMergeSearch" 
+        placeholder="Buscar Nombre, N° identidad, Email, teléfono"  
+        aria-describedby="inputGroupMergeSearchlAddOn"
+        [(ngModel)]="filters.user"
+        (input)="getForSearch()"
+      >
+      <div class="input-group-append input-group-text"  id="inputGroupMergeSearchlAddOn">
+        <img src="assets/icons/icon-search.png" alt="">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12  mt-2">
+    <div class="row d-flex justify-content-start align-items-center gap-1">
+    
+      <div class="d-flex mb-2 px-2 col-sm-6 col-md-auto">
+        <button
+        [daterangepicker]="'predefined'"
+        #datePicker
+        class="btn btn-current-date dropdown-toggle filterDate d-flex justify-content-center "
+        style="width: 100% !important; min-width: 200px !important; background-color: #f5f5f5 !important;"
+      >
+        <i class="tio-date-range"></i>
+        <span #predefinedPreview class="ml-1"></span>
+      </button>
+      <button
+        class="btn btn-ghost-secondary  p-2"
+        *ngIf="btnCancelSearchByDates"
+        (click)="searchWithoutDates()"
+      >
+        <i class="tio-clear icon-botton"></i>
+      </button>
+      </div>
+
+      <div class="mb-2 px-2 col-sm-6 col-md-auto">
+        <app-select-category-services (changecategoriesServices)="filters.typeAppoinment = $event; getAppointments()"></app-select-category-services>
+      </div>
+
+      <div class="mb-2 px-2 col-sm-6 col-md-auto" *ngxPermissionsOnly="['admin','sac','medico']">
+        <app-select-meeting-tool (changemeetingTool)="filters.meetingTool= $event; getAppointments()"></app-select-meeting-tool>
+      </div>
+
+      <div class="mb-2 px-2 col-sm-6 col-md-auto" *ngIf="!noFilter">
+        <app-select-status (statusSelectedEv)="filters.status = $event; getAppointments()"></app-select-status>
+      </div>
+
+      <div class="mb-2 px-2 col-sm-6 col-md-auto" *ngxPermissionsExcept="['patient','medico']">
+        <app-select-medico (changeEmployee)="filters.medico = $event; getAppointments()"></app-select-medico>
+      </div>
+
+      <div class="mb-2 px-2 col-sm-6 col-md-auto" *ngxPermissionsExcept="['patient','medico']">
+        <app-select-especialidad (changeEspecialidad)="filters.especialidad = $event; getAppointments()"></app-select-especialidad>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card-table">
+  <div class="table-responsive datatable-custom">
+      <table id="datatableusers"
+      class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+      data-hs-datatables-options='{
+             "columnDefs": [{
+                "targets": [0, 7],
+                "orderable": false
+              }],
+             "order": [],
+             "info": {
+               "totalQty": "#datatableWithPaginationInfoTotalQty"
+             },
+             "search": "#datatableSearch",
+             "entries": "#datatableEntries",
+             "pageLength": 15,
+             "isResponsive": false,
+             "isShowPaging": false,
+             "pagination": "datatablePagination"
+           }'>
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fecha</th>
+            <th scope="col" >Paciente</th>
+            <th scope="col">Sucursal</th>
+            <th scope="col">Servicio</th>
+            <th scope="col" >Médico</th>
+            <th scope="col" >Estado</th>
+            <th scope="col" >Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="!loading;else loading_templ">
+            <ng-container *ngIf="(appointments).length>0;else not_results">
+              <tr *ngFor="let appointment of appointments;let i =index">
+                <td >#{{appointment.appointmentNumber}}</td>
+
+                <td>
+                  <div  class="d-flex flex-column">
+                    <span>{{appointment.dateAppointment | date:'MMMM d, y' | titlecase}}, {{appointment.hour ? appointment.hour.hours : 'Hora no encontrada'}}</span>
+                    <span *ngIf="appointment.reprogramada" class="badge" style="background-color:#00bcd4;width: 140px;">Cita Reprogramada</span>
+                    <span *ngIf="appointment.remitida" class="badge" style="background-color:#5f5f5f;width: 140px;">Cita Remitida</span>
+                    <span *ngIf="appointment.referencedAppointment" class="badge" style="background-color:#748a8df7;width: 140px;">Cita Referida</span>
+                  </div>
+                </td>
+
+
+                <td >
+                  <div class="d-flex flex-column">
+                    <div>
+                      {{appointment.user ? appointment.user.names : 'Usuario no encontrado'}} {{appointment.user ? appointment.user.last_names : ''}}
+                    </div>
+
+                    <div class="d-flex flex-column"  *ngIf="appointment.nameUnderAge">
+                      <span style="color: #000;">Menor de edad:</span>
+                       <span> {{appointment.nameUnderAge}}</span>
+                    </div>
+
+                  </div>
+                </td>
+
+                <td>{{appointment.subsidiary ? appointment.subsidiary.name : 'Sucursal no encontrada'}}</td>
+
+
+                <td >
+                  <ul>
+                    <li *ngFor="let service of appointment?.service">{{service.name}} {{service.price | dollar }}</li>
+                  </ul>
+                </td>
+
+                <td>
+                  <div class="d-flex flex-column">
+                    <span>
+                      {{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}}  {{appointment.medico ? appointment.medico.last_names : ''}}
+                    </span>
+                    <span style="color: #4e4e4e;" *ngIf="appointment.medico && appointment.medico.especialidad">{{appointment.medico.especialidad.name}}</span>
+                  </div>
+                </td>
+
+                <td class="cursor-pointer" *ngxPermissionsOnly="['admin','sac','medico']" (click)="changeStatusModal(appointment)">
+                    <div [innerHTML]="appointment.status | parseStatusName"></div>
+                  
+              </td>
+
+              <td class="cursor-pointer" *ngxPermissionsOnly="['patient']" >
+                <div class="d-flex flex-column">
+                  <div [innerHTML]="appointment.status | parseStatusName"></div>
+                  <div *ngIf="appointment.dateAndHourCancel && appointment.status === 'Refuse'">
+                    {{appointment.dateAndHourCancel.fechaActual | calcDateCancel : appointment.dateAppointment : appointment.dateAndHourCancel.horaMilitar : appointment.hour.order}}
+                  </div>
+                </div>
+              </td>
+              <td *ngxPermissionsOnly="['admin','sac','medico']">
+                <div class="btn-group dropdownk" ngbDropdown #myDrop="ngbDropdown">
+                  <button class="btn dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                  Opciones
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu>
+                    <li><a class="dropdown-item cursor-pointer" (click)="viewDetailAppointment(appointment)">Ver Detalle</a></li>
+                    <li><a class="dropdown-item cursor-pointer" *ngIf="appointment.meetingTool" (click)="openModalInsertLink(appointment)">Insertar Enlace</a></li>
+                  </ul>
+                </div>
+              </td>
+
+              <td *ngxPermissionsOnly="['patient', 'contabilidad']">
+                <div class="btn-group dropdown">
+                  <button type="button" class="btn btn-outline-primary " (click)="viewDetailAppointment(appointment)">
+                    Ver Detalle
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            </ng-container>
+          </ng-container>
+          <ng-template #loading_templ>
+            <tr>
+              <td colspan="8">
+                <app-loading-table></app-loading-table>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template #not_results>
+            <tr>
+              <td colspan="8">
+                <app-not-results-table></app-not-results-table>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between px-3 table-footer">
+        <div class="d-flex align-items-center">
+          <span class="table-footer-text">
+            Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + appointments.length : appointments.length}} - 
+            de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+        </div>
+
+        <nav aria-label="Page navigation">
+          <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+            (pageChange)="(page=$event || 1);(getAppointments())" [collectionSize]="paginationDetails.totalDocs || 0"
+            [pageSize]="paginationDetails.limit || 0"
+            [maxSize]="10"
+            >
+          </ngb-pagination>
+        </nav>
+      </div>
+  </div>
+    
+</div>

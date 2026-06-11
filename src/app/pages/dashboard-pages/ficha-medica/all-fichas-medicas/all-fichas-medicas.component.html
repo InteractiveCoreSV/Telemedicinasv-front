@@ -1,0 +1,43 @@
+
+<ng-container *ngIf="!loading">
+<!-- List Group -->
+ <ul class="list-group">
+    <!-- Item -->
+    <li class="list-group-item" *ngFor="let fichaMedica of fichasMedicas">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <img class="avatar avatar-xs avatar-4x3" src="assets/icons/icon-ficha_medica.png" alt="Imagen ficha medica">
+        </div>
+
+        <div class="col">
+          <h5 class="mb-0">
+            <a class="text-dark">{{fichaMedica.name}}</a>
+          </h5>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-auto">
+          <!-- Dropdown -->
+          <div class="btn-group dropdownk" >
+            <a class="btn btn-outline-primary" type="button" [routerLink]="'/dashboard/ficha-medica/personalizar-ficha-medica'" [state]="{fichaMedica:fichaMedica}">
+                <span class="d-none d-sm-inline-block me-1">Editar</span>
+              <i class="bi-chevron-down"></i>
+            </a>
+          </div>
+          <!-- End Dropdown -->
+        </div>
+      </div>
+      <!-- End Row -->
+    </li>
+    <!-- End Item -->
+  </ul>
+  <!-- End List Group -->
+</ng-container>
+
+<!-- LOADINGS -->
+<ng-container *ngIf="loading">
+    <div class="w-100   text-center pt-5">
+      <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+      </div>
+    </div>
+</ng-container>

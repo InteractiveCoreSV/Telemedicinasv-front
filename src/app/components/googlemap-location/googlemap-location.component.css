@@ -1,0 +1,21 @@
+#map {
+  width: 100%; min-height: 480px;
+}
+
+#marker{
+  position: absolute;
+  top: calc(50% - 58px);
+  left: 0;
+  right: 0;
+  display: table;
+  margin: auto;
+}
+
+#buttonCenter{
+  position: absolute;
+  top: 15%;
+  left: 0;
+  right: 0;
+  display: table;
+  margin: auto;
+}

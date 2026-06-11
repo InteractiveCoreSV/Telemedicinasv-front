@@ -1,0 +1,130 @@
+﻿
+    <div class="card mt-4 justify-content-center w-100" translate="no">
+      <div class="card-body">
+        <div class="row resume-appointment">
+  
+          <div class="col-12 col-md-6">
+
+            <div *ngIf="form1Values && form1Values.urgency" class="mb-2 d-flex" [innerHTML]="form1Values.urgency.name | parseUrgency"></div>
+
+            <p class="mb-2">        
+              <span class="title mr-2">Tipo de Cita:</span> {{formValues?.typeAppoinment?.name}}
+            </p>
+
+            <div class="mb-2">
+              <span class="title">Información Paciente:</span>
+              <div class="container-user-info mt-1" *ngIf="form1Values && form1Values.user">
+                <ng-container *ngIf="!form1Values.underAge">
+                  <span class="info-user mr-2"><strong>Nombre:</strong></span> {{form1Values.user.names}} {{form1Values.user.last_names}}
+                  <span class="info-user mr-2"><strong>Correo:</strong></span> {{form1Values.user.email}}
+                  <span class="info-user mr-2"><strong>Telefono:</strong></span>             
+                  <p class="m-0 p-0">
+                    <span class="mr-1">{{form1Values.user.countryCode}}</span> <input type="text" [mask]="form1Values.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.phone"  [ngModelOptions]="{standalone: true}">
+                  </p>
+                  <span> <strong>Documento de identidad ({{form1Values.user.typeDocument}}):</strong>
+                  </span> 
+                  <input *ngIf="form1Values.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.identityNumber"  [ngModelOptions]="{standalone: true}">
+                  <input *ngIf="form1Values.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.passport"  [ngModelOptions]="{standalone: true}">
+                  <input *ngIf="form1Values.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.idInternacional"  [ngModelOptions]="{standalone: true}"> 
+                                </ng-container>
+                <ng-container *ngIf="form1Values.underAge">
+                  <span class="title">Menor de edad</span>
+                  <span class="info-user mr-2"><strong>Nombre:</strong></span> {{form1Values.nameUnderAge}}
+                  <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{form1Values.birthdateUnderAge | date:'MMMM d, y'|titlecase}}
+                </ng-container>
+              </div>
+            </div>
+
+            <div *ngIf="form1Values && form1Values.nameUnderAge">
+              <span class="title">Adulto reponsable:</span>
+              <div class="container-user-info mt-1" *ngIf="form1Values && form1Values.user">
+                <span class="info-user mr-2"><strong>Nombre:</strong></span> {{form1Values.user.names}} {{form1Values.user.last_names}}
+                  <span class="info-user mr-2"><strong>Correo:</strong></span> {{form1Values.user.email}}
+                  <span class="info-user mr-2"><strong>Telefono:</strong></span> <input type="text" mask="+(000) 0000-0000" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.phone"  [ngModelOptions]="{standalone: true}">
+                  <span class="info-user mr-2">
+                  <strong>Documento de identidad ({{form1Values.user.typeDocument}}):</strong>
+                  </span> 
+                  <input *ngIf="form1Values.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.identityNumber"  [ngModelOptions]="{standalone: true}">
+                  <input *ngIf="form1Values.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.passport"  [ngModelOptions]="{standalone: true}">
+                  <input *ngIf="form1Values.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1Values.user.idInternacional"  [ngModelOptions]="{standalone: true}"> 
+            </div>
+            </div>
+          </div>
+
+
+          <div class="col-12 col-md-6 border-radius">
+            <p class="mb-2" *ngIf="form3Values && form3Values.subsidiary">        
+              <span class="title mr-2">Sucursal:</span> {{form3Values.subsidiary.name}}
+            </p>
+
+            <p class="mb-2" *ngIf="formValues?.meetingTool">        
+              <span class="title mr-2">Aplicacion preferida para la cita:</span> {{formValues?.meetingTool?.name}}
+            </p>
+
+            <!-- <p class="mb-2">        
+              <span class="title mr-2">Servicio:</span> {{form3Values?.service?.name}}
+            </p> -->
+
+            <div class="mb-2">
+              <p class="mb-0">        
+                <span class="title mr-2">Servicio:</span> 
+              </p>
+              <ul><li *ngFor="let service of form3Values?.service">{{service.name}} {{service.price | dollar }}</li></ul>
+            </div>
+
+            <!-- <p class="mb-2">        
+              <span class="title mr-2">Médico:</span> {{form3Values?.medico?.names}} {{form3Values?.medico?.last_names}}
+            </p> -->
+
+            <div class="mb-2 d-flex">        
+              <span class="title mr-2">Médico:</span> 
+              <div class="d-flex flex-column " style="margin-top: 2.7px;">
+                <span>{{form3Values?.medico ? form3Values?.medico?.names : 'Médico no encontrado'}}  {{form3Values?.medico ? form3Values?.medico?.last_names : ''}}</span>
+                <span *ngIf="form3Values && form3Values.medico && form3Values.medico.especialidad " style="color: #4e4e4e;" >{{ form3Values.medico.especialidad.name }}</span>
+              </div>
+            </div>
+
+            <p class="mb-2">        
+              <span class="title mr-2">Fecha y Hora:</span> {{form3Values?.date | date:'EEEE, MMMM d, y'|titlecase}} de {{form3Values?.hour?.hours}}
+            </p>
+
+           <ng-container *ngxPermissionsOnly="['admin','sac']">
+             <p class="mb-2" *ngIf="form1Values && form1Values.referencedAppointment">        
+              <span class="title mr-2">Cita referida por parte de la clinica:</span> {{form1Values.referencedSubsidiary.name}}
+            </p>
+           </ng-container>
+
+            <p class="mb-2">        
+              <span class="title mr-2">Comentario:</span> <textarea [(ngModel)]="commentAppointment" class="form-control center" rows="3" placeholder="Agregar comentarios o indicaciones necesarias"></textarea>
+            </p>
+
+            <p class="mb-2">        
+              <span class="title mr-2">Documento:</span> {{form3Values?.documentAppointment ? form3Values?.documentAppointment.name : 'No se agrego documento a la cita'}}
+            </p>
+
+            <p class="mb-2">        
+              <span class="title mr-2">Total a pagar:</span> <span style="color: rgba(0, 144, 66, 1);"><strong>L </strong> {{total}}</span>
+            </p>
+            
+
+           
+          </div>
+
+        </div>
+      </div>
+
+      <!-- <div class="m-0 p-0 align-items-center">
+        <a class="btn btn-primary" href="assets/pdfs/test_legal.pdf" style="max-width: 216px;" download="Terminos_y_Condiciones.pdf">
+          Ver Terminos y Condiciones
+        </a>
+      </div> -->
+
+    </div>
+
+
+<div class="row mt-3 modal-footer">
+  <div class="col-12 d-flex justify-content-end">
+    <ng-content select="[backButton]"></ng-content>
+    <button (click)="createAppointment()" class="btn btn-primary" style="width: auto;">Crear cita</button>
+  </div>
+</div>

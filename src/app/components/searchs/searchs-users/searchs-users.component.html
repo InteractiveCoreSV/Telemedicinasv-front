@@ -1,0 +1,90 @@
+﻿<div class=" d-flex justify-content-start align-items-center p-0">
+  <ul class="nav nav-segment p-0" id="expensesTab" role="tablist" style="background-color: #fff !important;">
+    <li class="nav-item pl-0" data-toggle="chart-bar" data-datasets="thisWeek" data-trigger="click"
+      (click)="searchFor('names','Nombres')" data-action="toggle">
+      <a class="nav-link active pl-0" href="javascript:;" data-toggle="tab">Nombres</a>
+    </li>
+    <li class="nav-item" data-toggle="chart-bar" data-datasets="thisWeek" data-trigger="click"
+      (click)="searchFor('last_names','Apellidos')" data-action="toggle">
+      <a class="nav-link " href="javascript:;" data-toggle="tab">Apellidos</a>
+    </li>
+    <li class="nav-item" data-toggle="chart-bar" data-datasets="thisWeek" data-trigger="click"
+      (click)="searchFor('email','Correo')" data-action="toggle">
+      <a class="nav-link " href="javascript:;" data-toggle="tab">Correo</a>
+    </li>
+    <li class="nav-item" data-toggle="chart-bar" data-datasets="thisWeek" data-trigger="click"
+      (click)="searchFor('identityNumber','Número de Identidad')" data-action="toggle">
+      <a class="nav-link " href="javascript:;" data-toggle="tab">Número de identidad</a>
+    </li>
+    <li class="nav-item" data-toggle="chart-bar" data-datasets="thisWeek" data-trigger="click"
+      (click)="searchFor('phone','Teléfono')" data-action="toggle">
+      <a class="nav-link " href="javascript:;" data-toggle="tab">Teléfono</a>
+    </li>
+  </ul>
+</div>
+
+<!-- <label class="form-label text-primary fw-600">Buscando por <span style="font-weight: 900;" >{{placeholder}} </span></label> -->
+
+<div class=" w-100" [ngClass]="classes">
+  <form autocomplete="off">
+
+      <div class="input-group input-group-merge input-group-borderless input-group-flush input-group-light pr-3 " >
+        <!-- <input style="padding-right: 2.75rem !important; padding-left: 0.75rem !important;" type="text" 
+        class="form-control center" id="inputGroupMergeSearch" placeholder="Buscar Nombre, DUI, Email, teléfono"  aria-describedby="inputGroupMergeSearchlAddOn"> -->
+        <div class="ng-autocomplete">
+          <ng-autocomplete
+            #searchInputComponent
+            [(ngModel)]="searchInput"
+            [ngModelOptions]="{standalone: true}"
+            (keyup.enter)="search()"
+            [debounceTime]="500"
+            historyIdentifier="users"
+            (selected)="selected($event)"
+            (inputCleared)="changeValue('')"
+            (inputChanged)="changeValue($event)"
+            [placeholder]="placeholder"
+            [data]="users"
+            [searchKeyword]="keyboard"
+            [notFoundText]="'No hay usuarios'"
+            [itemTemplate]="itemTemplate"
+            id="inputGroupMergeSearch"
+            aria-describedby="inputGroupMergeSearchlAddOn"
+          >
+          </ng-autocomplete> 
+        </div>
+  
+        <div class="input-group-append input-group-text"  id="inputGroupMergeSearchlAddOn">
+          <img src="assets/icons/icon-search.png" alt="">
+        </div>
+      </div>
+
+
+
+      <ng-template #itemTemplate let-item>
+        <div class="item-search border-top p-2">
+          <h4 class="mb-0 info-user-title" > <span style="margin-right: 5px;" [innerHTML]="item.names"> </span> <span [innerHTML]="item.last_names"></span></h4>
+          <div class="d-flex flex-column">
+            <span class="ml-2 pl-2 info-user">Correo del usuario: <span [innerHTML]="item.email"></span></span>
+            <span class="ml-2 pl-2 info-user d-flex">Numero de telefono: 
+              <p class="m-0 p-0 ">
+                <span class="mr-1">{{item.countryCode}}</span> <input type="text" [mask]="item.mask" class="viewInputFormatMask" disabled [(ngModel)]="item.phone"  [ngModelOptions]="{standalone: true}">
+              </p>
+            </span>
+
+            <div class="d-flex  ml-2 pl-2 mb-4">
+              <span class="info-user mr-2">
+                <strong>Documento de identidad ({{item.typeDocument}}):</strong>
+              </span> 
+              <input *ngIf="item.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="item.identityNumber"  [ngModelOptions]="{standalone: true}">
+              <input *ngIf="item.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="item.passport"  [ngModelOptions]="{standalone: true}">
+              <input *ngIf="item.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="item.idInternacional"  [ngModelOptions]="{standalone: true}">        
+            </div>          
+          </div>
+        </div>
+      </ng-template>
+  </form>
+</div>
+
+<!-- <span style="width: 80px;" [innerHTML]="item.names"></span>
+<span class="ml-2 pl-2" style="border-left: 1px solid;" [innerHTML]="item.email"></span> -->
+

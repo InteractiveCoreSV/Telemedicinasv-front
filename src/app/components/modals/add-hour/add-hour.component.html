@@ -1,0 +1,28 @@
+<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Nuevo bloque de hora</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body mx-auto">
+    <label class="form-label" for="">Ingrese el bloque horario</label>
+
+    <div>
+        <label class="form-label" for="">Hora de inicio</label>
+        <app-select-hour-bloque (hourComplete)="completeHour($event,true)"></app-select-hour-bloque>
+    </div>
+
+    <div>
+        <label class="form-label" for="">Hora de finalización</label>
+        <app-select-hour-bloque (hourComplete)="completeHour($event,false)"></app-select-hour-bloque>
+    </div>
+
+    <div *ngIf="forEspecialDay">
+        <label class="form-label">Cupos</label>
+        <input type="number" class="form-control" [(ngModel)]="cupos">
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-sm btn-primary  btn-200" (click)="closeModal()">Agregar</button>
+</div>

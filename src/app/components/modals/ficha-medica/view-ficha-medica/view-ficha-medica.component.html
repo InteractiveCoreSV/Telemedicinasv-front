@@ -1,0 +1,270 @@
+﻿<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Ficha médica</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>  
+<div class="modal-body">
+    <div *ngIf="fichaMedica">
+        <div>
+            <div >
+            <div class="col-12 d-flex justify-content-between align-items-center mb-5 mt-5">
+                <div>
+                    <span class="text-header-pdf">Ficha Médica</span>
+                </div>
+                <div class="d-flex justify-content-end align-items-center">
+
+                    <div>
+                        <img style="width: 160px;" src="assets/logos/telemedicina.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+                <h3 class="my-2 text-center">Datos generales</h3>
+                <!-- INFO DEL PACIENTE -->
+                <div class="row">
+                    <div class="mb-2 col-12" >
+                        <label class="form-label label-auth mb-0" for="date">Fecha de la cita</label>
+                        <p class="m-0 p-0">{{fichaMedica.appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{fichaMedica.appointment.hour?.hours}}</p>
+                    </div>
+
+                    <div class="mb-2 col-12 col-md-9" *ngIf="fichaMedica.appointment.underAge">
+                        <label class="form-label label-auth mb-0" for="date">Nombre del paciente (Menor de edad)</label>
+                        <p class="m-0 p-0">{{fichaMedica.appointment.nameUnderAge}}</p>
+                    </div>
+
+
+                    <div class="mb-2 col-12 col-md-3" *ngIf="fichaMedica.appointment.underAge">
+                        <label class="form-label label-auth mb-0" for="date">Fecha de nacimiento</label>
+                        <p class="m-0 p-0">{{fichaMedica.appointment.birthdateUnderAge | date:'MMMM d, y'|titlecase}}</p>
+                    </div>
+
+                    <div *ngIf="fichaMedica.appointment.underAge" class="mb-2 col-6" >
+                        <label class="form-label label-auth mb-0" for="date">Edad</label>
+                        <p class="m-0 p-0">{{fichaMedica.infoGeneral.age}}</p>
+                    </div>
+    
+                    <div *ngIf="fichaMedica.appointment.underAge" class="mb-2 col-6" >
+                        <label class="form-label label-auth mb-0" for="date">Sexo</label>
+                        <p class="m-0 p-0">{{fichaMedica.infoGeneral.sexo}}</p>
+                    </div>
+
+                    <div class="mb-2 col-12" >
+                        <label class="form-label label-auth mb-0" for="date">{{fichaMedica.appointment.underAge ? 'Adulto responsable' : 'Nombre del paciente'}}</label>
+                        <p class="m-0 p-0">{{fichaMedica.infoGeneral.name}}</p>
+                    </div>
+
+                    <div class="mb-2 col-12 col-sm-6" >
+                        <label class="form-label label-auth mb-0" for="date">Teléfono</label>
+                        <p class="m-0 p-0">
+                           {{fichaMedica.infoGeneral.phone}}
+                        </p>
+                    </div>
+
+                    <div class="mb-2 col-12 col-sm-6" >
+                        <label class="form-label label-auth mb-0" for="date">{{fichaMedica.infoGeneral.typeDocument ?? 'DUI'}}</label>
+                        <p class="m-0 p-0">
+                            <input 
+                                *ngIf="!fichaMedica.infoGeneral.typeDocument || fichaMedica.infoGeneral.typeDocument === 'DUI'"
+                                type="text" 
+                                mask="00000000-0" 
+                                class="viewInputFormatMask" 
+                                disabled
+                                [(ngModel)]="fichaMedica.infoGeneral.identityNumber"  
+                                [ngModelOptions]="{standalone: true}"
+                            >
+                            <input 
+                                *ngIf="fichaMedica.infoGeneral.typeDocument && fichaMedica.infoGeneral.typeDocument !== 'DUI'"
+                                type="text" 
+                                class="viewInputFormatMask" 
+                                disabled
+                                [(ngModel)]="fichaMedica.infoGeneral.identityNumber"  
+                                [ngModelOptions]="{standalone: true}"
+                            >
+                        </p>
+                    </div>
+
+                    <div class="mb-2 col-12 col-md-10" >
+                        <label class="form-label label-auth mb-0" for="date">Dirección (Domicilio)</label>
+                        <p class="m-0 p-0">{{fichaMedica.infoGeneral.address}}</p>
+                    </div>
+
+                    <div *ngIf="!fichaMedica.appointment.underAge" class="mb-2 col-6 col-md-2" >
+                        <label class="form-label label-auth mb-0" for="date">Edad</label>
+                        <p class="m-0 p-0">{{fichaMedica.infoGeneral.age}}</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;" *ngIf="fichaMedica.appointment && fichaMedica.appointment.commentAppointment || fichaMedica.appointment.documentAppointment">
+                <h3 class="my-2 text-center">Adicional paciente</h3>
+
+                <div class="row">
+                    <div class="mb-2 col-12" *ngIf="fichaMedica.appointment.commentAppointment">
+                        <label class="form-label label-auth mb-0" for="date">Comentario para la cita</label>
+                        <p class="m-0 p-0">{{fichaMedica.appointment.commentAppointment}}</p>
+                    </div>
+
+                    <div class="mb-2 col-12" *ngIf="fichaMedica.appointment.documentAppointment">
+                        <label class="form-label label-auth mb-0" for="date">Documento</label>
+                        <div>
+                            <a class="cursor-pointer" (click)="openModalViewDocument(fichaMedica.appointment.documentAppointment.location, fichaMedica.appointment.documentAppointment.key)">{{fichaMedica.appointment.documentAppointment.key}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECIONES DE FICHA MEDICA SOLO MUJERES-->
+            <div *ngIf="fichaMedica.isWoman" class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+                <h3 class="my-2 text-center">{{fichaMedica.seccionWoman.name}}</h3>
+                
+                <div class="row flex-wrap px-2">
+                    <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.seccionWoman.campos; let i = index">
+                        <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
+                        <p class="m-0 p-0" *ngIf="!campo.selectMultiple">{{campo.value}}</p>
+                        <ul class="p-0 pl-3" *ngIf="campo.selectMultiple">
+                            <li *ngFor="let v of campo.value">
+                                {{v}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- SECIONES DE FICHA MEDICA -->
+            <div *ngFor="let fichaMedica of fichaMedica.sections"  class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+                <h3 class="my-2 text-center">{{fichaMedica.name}}</h3>
+                
+                <div class="row flex-wrap px-2">
+                    <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.campos; let i = index">
+                        <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
+                        <p class="m-0 p-0">{{campo.value}}</p>
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
+
+            <div class="row mb-3">  
+                <div class="col-12 ">
+                    <h4 class="mt-4">Estudios</h4>
+
+                    <ul class="list-group" *ngIf=" fichaMedica.estudios && fichaMedica.estudios?.length > 0">
+                        <!-- Item -->
+                        <li class="list-group-item" *ngFor="let estudio of fichaMedica.estudios">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                            <img 
+                                class="avatar avatar-xs avatar-4x3" 
+                                src="assets/images/type-document/pdf.svg" 
+                                alt="Imagen representativa de archivo"
+                            >
+                            </div>
+                    
+                            <div class="col">
+                            <h5 class="mb-0">
+                                <a class="text-dark">{{estudio.nameDoc}}</a>
+                            </h5>
+                            </div>
+                            <!-- End Col -->
+                    
+                            <div class="col-auto" >
+                            <!-- Dropdown -->
+                                <a *ngIf="estudio.pdf" class="dropdown-item" (click)="descargarPDF(estudio.pdf.location, estudio.nameDoc,'pdf')">
+                                    <i class="bi-share dropdown-item-icon"></i> Descargar
+                                </a>
+                                <a *ngIf="!estudio.pdf" class="dropdown-item" (click)="descargarEstudioPDF(fichaMedica._id, estudio.id)">
+                                    <i class="bi-share dropdown-item-icon"></i> Descargar
+                                </a>
+                            <!-- End Dropdown -->
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                        </li>
+                        <!-- End Item -->
+                    </ul>
+                    
+                    <div *ngIf="!fichaMedica.estudios || fichaMedica.estudios.length === 0">
+                        <p class="m-0 p-0">No se agregaron estudios</p>
+                    </div>
+                </div>
+        
+                <div class="col-12 mt-2">
+                    <h4>Tratamientos</h4>
+                    <ul class="list-group" *ngIf="fichaMedica.tratamientos && fichaMedica.tratamientos?.length > 0">
+                        <!-- Item -->
+                        <li class="list-group-item" *ngFor="let tratamiento of fichaMedica.tratamientos; let i = index">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                            <img 
+                                class="avatar avatar-xs avatar-4x3" 
+                                src="assets/images/type-document/pdf.svg" 
+                                alt="Imagen representativa de archivo"
+                            >
+                            </div>
+                    
+                            <div class="col">
+                            <h5 class="mb-0">
+                                <a class="text-dark">{{tratamiento.nameDoc}}</a>
+                            </h5>
+                            </div>
+                            <!-- End Col -->
+                    
+                            <div class="col-auto" >
+                                <a class="dropdown-item" (click)="descargarTratamientoPDF(fichaMedica._id,tratamiento.id)">
+                                    <i class="bi-share dropdown-item-icon"></i> Descargar
+                                </a>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                        </li>
+                        <!-- End Item -->
+                    </ul>
+
+                    <div *ngIf="!fichaMedica.tratamientos || fichaMedica.tratamientos.length === 0">
+                        <p class="m-0 p-0">No se agregaron tratamientos</p>
+                    </div>
+                </div>
+
+                <div class="col-6 d-flex justify-content-center flex-column mt-8">
+                <div class="d-flex justify-content-center">
+                    <img style="max-height: 140px;" [src]="fichaMedica.sello?.location" alt="">
+                </div>
+                <label class="text-center mt-1">Sello</label>
+                </div>
+
+                <div class="col-6 d-flex justify-content-center flex-column mt-8">
+                <div class="d-flex justify-content-center">
+                    <img style="max-height: 140px;" [src]="fichaMedica.firma?.location" alt="">
+                </div>
+                <label class="text-center mt-1">Firma</label>
+                </div>
+
+                <div class="col-12 mt-2 mb-8 d-flex justify-content-center flex-column">
+                    <h4 class="text-center">{{fichaMedica.medico?.names}} {{fichaMedica.medico?.last_names}}</h4>
+                    <label class="text-center">Médico</label>
+                </div>
+
+                <div class="col-12 d-flex justify-content-between mt-8 mb-8">
+                <div>
+                    <img style="width: 140px;" src="assets/logos/telemedicina.png" alt="">
+                </div>
+
+                <div>
+                    <span class="text-footer">Analiza Telemedicina El Salvador</span>
+                </div>
+            </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

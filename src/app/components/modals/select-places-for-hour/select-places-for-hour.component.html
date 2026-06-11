@@ -1,0 +1,25 @@
+<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Cupos por hora</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close({reset:true})">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <p><strong style="color: #000 !important;">Día</strong>: <span>{{hour.day | parseDay}}</span></p>
+    <p><strong style="color: #000 !important;">Horario</strong>: <span>{{hour.hours}}</span></p>
+
+    <label class="form-label" for=""><strong style="color: #000 !important;">Cupos disponibles</strong></label>
+    <input
+    [(ngModel)]="places"
+      [class]="!places && formSubmited?'is-invalid':''"
+      type="number"
+      aria-label="Cupos"
+      class="form-control "
+    />
+    <span *ngIf="!places  && formSubmited" class="invalid-feedback d-block">Selecione la cantidad de cupos disponibles</span>
+
+    <div class="w-100 ext-center">
+        <button class="btn btn-sm btn-primary mt-2 btn-200 " (click)="closeModal()">Aceptar</button>
+    </div>
+
+</div>

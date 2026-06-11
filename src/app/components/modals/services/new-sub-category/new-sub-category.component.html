@@ -1,0 +1,51 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">{{title}} sub catégoria de servicio</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class="container mb-4 mt-2 " >
+
+        <form [formGroup]="subCategoryForm" style="max-width: 724px;" class="px-md-5">
+            
+            <div class="row ">
+                <div class="form-gorup col-12 ">
+                    <input type="text" class="form-control center"  name="service" id="" formControlName="name" placeholder="Nombre de la sub categoría" >
+                    <div *ngIf="subCategoryForm.get('name')?.invalid && formSubmited" class="invalid-feedback d-block" >
+                        El nombre es requerido
+                    </div>
+                </div> 
+
+                <div class="form-gorup col-12 mt-3">
+                    <app-select-category-services-for-subcategory [categoriesServicesSelected]="category" (changecategoriesServices)="setCategory($event)"></app-select-category-services-for-subcategory>
+                    <div *ngIf="subCategoryForm.get('category')?.invalid && formSubmited" class="invalid-feedback d-block" >
+                        El nombre es requerido
+                    </div>
+                </div> 
+
+                <div class="form-gorup col-12 mt-3">
+                    <textarea formControlName="description" class="form-control center" rows="3" placeholder="Descripción de la sub categoría"></textarea>
+                    
+                    <div *ngIf="subCategoryForm.get('description')?.invalid && formSubmited" class="invalid-feedback d-block" >
+                        La descripción es requerida
+                    </div>
+                </div> 
+                
+            </div>
+            
+        </form>
+    </div>
+
+    <div class=" d-flex justify-content-end">
+        <button type="submit" class="btn  btn-primary btn-150" (click)="toEdit?editSubCategoryService():newSubCategoryService()" >
+            {{toEdit ? 'Guardar' : '+ Agregar'}}
+        </button>
+    </div>
+</div>
+
+
+

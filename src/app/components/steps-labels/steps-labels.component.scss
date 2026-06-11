@@ -1,0 +1,46 @@
+.steps-light .step-count, .steps-light .step-progress{
+  background-color: var(--bs-gray-400) !important;
+}
+
+.steps-light .step-item.active .step-count, .steps-light .step-item.active .step-progress{
+  background-color: var(--bs-primary) !important;
+}
+
+
+.step-sm .step-icon.encuesta::after {
+  border: 3.5px solid #D9D9D9;
+  height: 0px;
+  width: 92%  !important;
+}
+
+.step-encuesta.step-sm .step-item {
+    flex-grow: 1;
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.step-icon-sm .step-icon.encuesta::after, .step-icon-sm.step-icon.encuesta::after {
+  top: 1rem;
+}
+
+.step-item.ultimo .step-icon.encuesta::after {
+  display: none !important;
+}
+
+.step-item.ultimo {
+  max-width: 36px !important;
+}
+
+.step .active .step-icon.encuesta::after {
+  border: 3.5px solid rgba(46, 74, 118, 1);
+  height: 0px;
+  background-color: #D9D9D9;
+}
+
+.encuesta {
+  background-color: #D9D9D9;
+}
+
+.step-sm.step-icon-sm .step-icon.encuesta::after {
+  left: 1rem !important;
+}

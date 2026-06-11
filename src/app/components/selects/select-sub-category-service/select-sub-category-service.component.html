@@ -1,0 +1,18 @@
+<ng-select
+*ngIf="!manualSearch"
+[loading]="loading"
+[notFoundText]="'No hay resultados'"
+[(ngModel)]="subCategoriesServicesSelected"
+(ngModelChange)="selectedsubCategoriesServices()"
+(keydown.enter)="keydownInDropdown($event)"
+(search)="setSearch($event)"
+ [placeholder]="placeholder"
+ style="text-align: center;"
+[disabled]="category ? false : true"
+ >
+ <ng-option *ngFor="let subCategory of subCategoriesServices" [value]="subCategory._id">
+  {{subCategory.name}}
+  </ng-option>
+</ng-select>
+
+

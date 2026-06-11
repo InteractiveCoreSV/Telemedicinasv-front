@@ -1,0 +1,205 @@
+<!-- Title -->
+<form [formGroup]="subsidiaryForm">
+  <div class="row justify-content-lg-center">
+      <div class="col-lg-10">
+        <div class="card card-lg mb-3 mb-lg-5">
+          <div class="card-header">
+            <h1 class="fs-2 fw-bold" *ngIf="!subsidiaryToEdit">Rellena los siguientes campos para registrar la sucursal</h1>
+            <h1 class="fs-2 fw-bold" *ngIf="subsidiaryToEdit">Actualiza los campos que requieras para editar la sucursal</h1>
+          </div>
+          
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-12 mb-3" *ngIf="!subsidiaryToEdit">
+                <label class="form-label fw-bold">Fotos de la sucursal</label>
+                <ng-container>
+                  <swiper #swiperPhotos [config]="settingsSwiper">
+                    <ng-template swiperSlide *ngFor="let photo of photos;let i = index">
+                      <div class="swiper-slide-photo position-relative">
+                        <div class="card h-100">
+                          <div class="rounded overflow-hidden">
+                            <div class="card-overlay-hover" style="height: 250px;">
+                              <img [src]="(photo | convertToBase64) | async" class="card-img-top" [alt]="'Photo'">
+                            </div>
+                            <div class="card-img-overlay">
+                              <div class="card-element-hover d-flex justify-content-end">
+                                <a role="button" (click)="($event.stopPropagation());(removeFromPhotos(i))" class="btn btn-sm btn-icon bg-white rounded-circle text-center">
+                                  <i class="fas fa-trash text-danger"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+          
+                    <ng-template swiperSlide *ngIf="(photos?.length || 0)<5">
+                      <div class="swiper-slide-photo w-100">
+                        <!-- <img src="/assets/banner.png" alt="Agregar foto" style="object-fit: cover;"> -->
+                        <app-dropzone [files]="photosTemp" [maxFile]="1" [accept]="'image/jpeg, image/jpg, image/png'" (filesOutput)="addPhotoToPhotos($event[0])" [label]="'Suelta o selecciona una imagen'"></app-dropzone>
+                      </div>
+                    </ng-template>
+                  </swiper>
+                </ng-container>
+                <div *ngIf="formSubmited && photos?.length==0" class="invalid-feedback d-block">
+                  Se requiere al menos una foto de tu sucursal
+                </div>
+              </div>
+          
+              <div class="col-12 mb-3" *ngIf="subsidiaryToEdit">
+                <label class="form-label fw-bold">Fotos de la sucursal</label>
+                <ng-container>
+                  <swiper [config]="settingsSwiper">
+                    <ng-template swiperSlide *ngFor="let photo of subsidiaryToEdit.photos">
+                      <div class="swiper-slide-photo position-relative">
+                        <div class="card h-100">
+                          <div class="rounded overflow-hidden">
+                            <div class="card-overlay-hover" style="height: 250px;">
+                              <img [src]="photo.location" class="card-img-top" [alt]="photo.key">
+                            </div>
+                            <div class="card-img-overlay">
+                              <div class="card-element-hover d-flex justify-content-end">
+                                <a role="button" (click)="($event.stopPropagation());(removePhotoFromSubsidiary(photo.key))" class="btn btn-sm btn-icon bg-white rounded-circle text-center">
+                                  <i class="fas fa-trash text-danger"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+          
+                    <ng-template swiperSlide *ngIf="(subsidiaryToEdit.photos || 0).length<5">
+                      <div class="swiper-slide-photo w-100">
+                        <!-- <img src="/assets/banner.png" alt="Agregar foto" style="object-fit: cover;"> -->
+                        <app-dropzone [files]="filesToEdit" [maxFile]="1" [accept]="'image/jpeg, image/jpg, image/png'" (filesOutput)="addPhotoToSubsidiary($event[0])" [label]="'Suelta o selecciona una imagen para agregarla a la sucursal'"></app-dropzone>
+                      </div>
+                    </ng-template>
+                  </swiper>
+                </ng-container>
+              </div>
+          
+              <div class="col-12 col-md-6 mb-3">
+                <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                <input [class]="formSubmited && getControl('name')?.invalid?'is-invalid':''" formControlName="name" class="form-control" type="text">
+                <div *ngIf="formSubmited && getControl('name')?.invalid" class="invalid-feedback d-block">
+                  El nombre es requerido
+                </div>
+              </div>
+          
+             
+              <div class="col-12 mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea formControlName="description" class="form-control" rows="5"></textarea>
+              </div>
+          
+              <div class="col-12 mb-3">
+                <div class="custom-control custom-switch">
+                  <input formControlName="status" type="checkbox" class="custom-control-input" id="statusSwitch">
+                  <label class="custom-control-label" for="statusSwitch">Habilitar para activar la sucursal</label>
+                </div>
+                <div *ngIf="formSubmited && getControl('status')?.invalid" class="invalid-feedback d-block">
+                  El estado es requerido
+                </div>
+              </div>
+          
+              <div formGroupName="address" class="col-12 col-md-6">
+                <div class="row">
+                  <div class="col-12 mb-3">
+                    <label class="form-label">Dirección <span class="text-danger">*</span></label>
+                    <app-autocomplete-google
+                    [value]="getControl('address')?.get('address')?.value"
+                    [classes]="{'form-control':true,'is-invalid':formSubmited && getControl('address')?.invalid}"
+                    [placeholder]="'ej. Calle principal'"
+                    (customAddress)="setValueAddress('address',$event)"
+                    (placeInfo)="setPlaceInfo($event)"></app-autocomplete-google>
+                  </div>
+          
+                  <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                      <label for="businessApt" class="form-label" style="white-space: pre;">Departamento <span class="text-danger">*</span></label>
+                      <!-- <app-select-department [useService]="false" [allCountry]="true" [formGroup]="form6" [formControlNameDepartment]="'businessDepartment'"></app-select-department> -->
+                      <app-select-department2 (changeDepartment)="setValueAddress('department',$event)" [departmentSelected]="getControl('address')?.get('department')?.value"></app-select-department2>
+                      <div *ngIf="formSubmited && getControl('address')?.get('department')?.invalid" class="invalid-feedback d-block">
+                        El departamento es requerido
+                      </div>
+                    </div>
+                  </div>
+          
+                  <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                      <label for="businessApt" class="form-label" style="white-space: pre;">Municipio <span class="text-danger">*</span></label>
+                      <!-- <app-select-municipality [useService]="false" [formGroupDepartment]="form6" [formControlNameDepartment]="'businessDepartment'" [formGroup]="form6" [formControlNameMunicipality]="'businessMunicipality'"></app-select-municipality> -->
+                      <app-select-municipality2 [municipalitySelected]="getControl('address')?.get('municipality')?.value" (changeMunicipality)="setValueAddress('municipality',$event)" [currentDepartment]="getControl('address')?.get('department')?.value"></app-select-municipality2>
+                      <div *ngIf="formSubmited && getControl('address')?.get('department')?.invalid" class="invalid-feedback d-block">
+                        El municipio es requerido
+                      </div>
+                    </div>
+                  </div>
+          
+          
+                  <div class="col-12">
+                    <label class="form-label">Punto de Referencia</label>
+                    <textarea
+                      [class]="
+                        formSubmited && getControl('address')?.get('aditionalInfo')?.invalid
+                          ? 'is-invalid'
+                          : ''
+                      "
+                      class="form-control"
+                      rows="3"
+                      formControlName="aditionalInfo"
+                    ></textarea>
+                    <div
+                      *ngIf="formSubmited && getControl('address')?.get('aditionalInfo')?.invalid"
+                      class="invalid-feedback d-block"
+                    >
+                      Has execido el número de carácteres
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
+              <div class="col-12 col-md 6">
+                <div class="mb-3">
+                  <label class="form-label" style="white-space: pre;">Ubicación exacta <span class="text-danger">*</span></label>
+                  <app-googlemap-location (mapLoaded)="setDefaultCords()" #googlemapLocation (cords)="setValueAddress('cords',$event)"></app-googlemap-location>
+          
+                  <div class="alert alert-info mt-3" role="alert" style="background-color: rgba(46, 74, 118, 1) !important;"> 
+                    Coloca el pin exactamente donde se encuentra la sucursal
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="col-12 mb-3">
+                <div class="custom-control custom-switch">
+                  <input formControlName="consultorioMedico" type="checkbox" class="custom-control-input" id="consultorioMedicoSwitch">
+                  <label class="custom-control-label" for="consultorioMedicoSwitch">La sucursal cuenta con consultorio médico</label>
+                </div>
+                <!-- <div *ngIf="formSubmited && getControl('consultorioMedico')?.invalid" class="invalid-feedback d-block">
+                  El estado es requerido
+                </div> -->
+              </div>
+          
+          </div>
+
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-12 text-end">
+                <button *ngIf="!subsidiaryToEdit" (click)="registerSubsidiary()" class="btn btn-primary">Registrar sucursal</button>
+                <button *ngIf="subsidiaryToEdit" (click)="editSubsidiary()" class="btn btn-primary">Editar sucursal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</form>
+
+
+
+
+

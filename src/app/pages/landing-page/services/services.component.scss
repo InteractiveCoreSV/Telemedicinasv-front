@@ -1,0 +1,142 @@
+.nuestros_servicios {
+    height: 228px;
+    width: 100%;
+    background-color: #EA4850;
+}
+
+.nuestros_servicios div{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    height: 100%;
+}
+
+
+.title_proncipal {
+    font-size: 35px;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: left;
+    color: #FFFFFF;
+    margin-bottom: 50px;
+}
+
+.section-2_title {
+    max-width: 840px;
+    text-align: start;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36.31px;
+    color: rgba(0, 0, 0, 1);
+}
+
+.section-2_description {
+    max-width: 706px;
+    text-align: start;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(128, 128, 128, 1)
+}
+
+.img-section-2 {
+    width: 100%;
+    max-width: 368px;
+    max-height: 366px;
+    border-radius: 10px;
+}
+
+.section-2_title {
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 30px;
+    text-align: left;
+    color: #2E4A76;
+}
+
+.section-2_description {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+    color: #808080;
+}
+
+.section-2_btn {
+    width: 211px;
+    height: 55px;
+    border-radius: 10px;
+    background-color: rgba(46, 74, 118, 0.15);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: rgba(46, 74, 118, 1);    
+}
+
+.section-4_title {
+    max-width: 524px;
+    text-align: start;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36.31px;
+    color: rgba(0, 0, 0, 1);
+}
+
+.section-4_description {
+    max-width: 497px;
+    text-align: start;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    color: rgba(128, 128, 128, 1)
+}
+
+.section-3_btn {
+    width: 211px;
+    height: 55px;
+    border-radius: 10px;
+    background-color: rgba(234, 72, 80, 1);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color:#fff
+}
+
+.img-section-3 {
+    width: 100%;
+    max-width: 636px;
+    max-height: 636px;
+    border-radius: 10px;
+}
+
+.chip_service {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 211px;
+    max-width: 280px;
+    height: 55px;
+    border-radius: 10px;
+    background-color: rgba(234, 72, 80, 0.5);
+    color: #fff;
+}
+
+.chip_service:hover {
+    background-color: rgba(234, 72, 80, 1)
+}
+
+.chip_service.active {
+    background-color: rgba(234, 72, 80, 1)
+}
+
+.section5 {
+    background-color: rgba(249, 249, 251, 1);
+    border-radius: 15px;
+}
+
+.img-section-5 {
+    width: 100%;
+    max-width: 578px;
+    max-height: 365px;
+    border-radius: 10px;
+}

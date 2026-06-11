@@ -1,0 +1,166 @@
+ <!-- Header -->
+ <div class="card-header px-0">
+  <div class="row  align-items-center flex-grow-1">
+    
+    <div class="col-12 col-sm-auto mb-2">
+      <div class="input-group input-group-merge input-group-borderless input-group-flush input-group-light " style="max-width: 430px !important;min-width:300px">
+        <input 
+          style="padding-right: 2.75rem !important; padding-left: 0.75rem !important;" 
+          type="text" 
+          class="form-control center" 
+          id="inputGroupMergeSearch" 
+          placeholder="Buscar nombre, monto, #cita, RRN"  
+          aria-describedby="inputGroupMergeSearchlAddOn"
+          [(ngModel)]="filters.search"
+          (ngModelChange)="getForSearch($event)"
+
+        >
+        <div class="input-group-append input-group-text" style="right: 0px !important;" id="inputGroupMergeSearchlAddOn">
+          <img src="assets/icons/icon-search.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex col-12 col-sm-auto mb-2">
+      <button
+        [rangesSelect]="'day'"
+        [daterangepicker]="'predefined'"
+        #datePicker
+        [rangeDate]="filters.rangeDates"
+        class="btn btn-current-date dropdown-toggle filterDate d-flex justify-content-center "
+        style="width: 100% !important; min-width: 200px !important; background-color: #f5f5f5 !important;"
+      >
+        <i class="tio-date-range"></i>
+        <span #predefinedPreview class="ml-1"></span>
+      </button>
+      <button
+        class="btn btn-ghost-secondary  p-2"
+        *ngIf="btnCancelSearchByDates"
+        (click)="searchWithoutDates()"
+      >
+        <i class="tio-clear icon-botton"></i>
+      </button>
+    </div>
+
+    <div class="col-12 col-sm-auto mb-2">
+      <app-select-type-paymment (typePaymentSelectedEv)="filters.typePayment = $event; getTransactions()"></app-select-type-paymment>
+    </div>
+
+    <div class="col-12 col-sm-auto mb-2">
+      <div class="text-right">
+        <button (click)="getTransactions()" class="btn btn-primary">Actualizar</button>
+      </div>
+    </div>
+  </div>
+  <!-- End Row -->
+</div>
+<!-- End Header -->
+
+<div class="card-table">
+  <div class="table-responsive datatable-custom">
+      <table id="datatableusers"
+      class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+      data-hs-datatables-options='{
+             "columnDefs": [{
+                "targets": [0, 7],
+                "orderable": false
+              }],
+             "order": [],
+             "info": {
+               "totalQty": "#datatableWithPaginationInfoTotalQty"
+             },
+             "search": "#datatableSearch",
+             "entries": "#datatableEntries",
+             "pageLength": 15,
+             "isResponsive": false,
+             "isShowPaging": false,
+             "pagination": "datatablePagination"
+           }'>
+        <thead class="thead-light">
+          <tr>
+            <th>Paciente</th>
+            <th>Método de pago</th>
+            <th>Monto</th>
+            <th>Fecha de transacción</th>
+            <th>RRN</th>
+            <th>Nro. Cita</th>
+            <!-- <th>Citas</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="!loading">
+            <ng-container
+              *ngIf="
+                (trans).length > 0;
+                else notResult
+              "
+            >
+              <tr
+                *ngFor="let tran of trans"
+              >
+                <td class="py-3">{{tran.appointmentID && tran.appointmentID.user ? tran.appointmentID.user.names : 'Paciente no encontrado'}} {{tran.appointmentID?.user?.last_names}}</td>
+                <td class="py-3">{{tran.appointmentID?.typePayment | parseTypePayment : 'Completed'}}</td>
+                <td class="py-3">$ {{tran.data.TotalAmount}}</td>
+                <td class="py-3">{{tran.createdAt | date : 'EEEE, MMMM d, y' | titlecase}}</td>
+                <td class="py-3">{{tran.data.RRN ? tran.data.RRN : ''}}</td>
+                <td class="py-3">
+                  #{{tran.appointmentID?.appointmentNumber}}
+                  <!-- <ul>
+                    <li *ngFor="let appointment of tran.appointmentID">
+                      <p>Nro. Cita: <strong>{{appointment.appointmentNumber}}</strong></p>
+                      <p>Cita creada el: <strong>{{appointment.createdAt | date : 'EEEE, MMMM d, y' | titlecase}}</strong></p>
+                    </li>
+                    <li >
+                      <p class="m-0 p-0">Nro. Cita: <strong>2</strong></p>
+                      <p class="m-0 p-0">Cita creada el: <strong>{{tran.createdAt | date : 'EEEE, MMMM d, y' | titlecase}}</strong></p>
+                    </li>
+                  </ul> -->
+                </td>
+
+            </ng-container>
+          </ng-container>
+          <ng-template #notResult>
+            <tr>
+              <td colspan="12" class="text-center pt-5">
+                <img
+                  width="150"
+                  src="/assets/not_results.svg"
+                  alt="No hay resultados"
+                />
+                <p class="my-2">No hay resultados</p>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-container *ngIf="loading">
+            <tr>
+              <td colspan="6" class="text-center pt-5">
+                <div
+                  class="spinner-grow"
+                  style="width: 3rem; height: 3rem"
+                  role="status"
+                ></div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-between px-3 table-footer">
+        <div class="d-flex align-items-center">
+          <span class="table-footer-text">
+            Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + trans.length : trans.length}} - 
+            de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+        </div>
+
+        <nav aria-label="Page navigation">
+          <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+            (pageChange)="(page=$event || 1);(getTransactions())" [collectionSize]="paginationDetails.totalDocs || 0"
+            [pageSize]="paginationDetails.limit || 0"
+            [maxSize]="10"
+            >
+          </ngb-pagination>
+        </nav>
+      </div>
+    </div>
+    <!-- End Table -->
+  </div>
+  <!-- End Card -->

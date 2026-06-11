@@ -1,0 +1,53 @@
+.btn-add {
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+    background-color:rgba(46, 74, 118, 0.12);
+    border: 2px solid rgba(46, 74, 118, 1)
+}
+
+.name_doctor {
+    font-family: Inter;
+    font-weight: 600;
+    font-style: Semi Bold;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(0, 0, 0, 1);
+}
+
+.container-element {
+    height: auto;
+    min-height: 68px;
+}
+
+.container-status {
+    height: 100%;
+    width: 30px;
+}
+
+.bg-light-gray {
+    background-color: rgba(242, 242, 242, 1);
+}
+
+.offcanvas-header {
+    justify-content: space-between;
+    padding: 15px !important;
+}
+
+.card-header-title {
+    font-weight: 600 !important;
+    font-style: Bold !important;
+    font-size: 16px !important;
+    color: #000 !important;
+    text-align: center;
+    width: 100%;
+}
+
+.close {
+    font-size: 33px;
+    color: #000;
+}
+
+
+

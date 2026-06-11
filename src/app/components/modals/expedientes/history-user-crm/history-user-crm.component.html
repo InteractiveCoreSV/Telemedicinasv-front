@@ -1,0 +1,106 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Historial del paciente [CRM]</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>  
+<div class="modal-body pb-4 px-2">
+    <label class="label-section mb-2">Correo del médico a consultar</label>
+
+    <div class="row">
+
+        <div class="form-group col-10">
+            <input
+            [formControl]="emailControl"       
+            type="text"
+            class="form-control"
+            [ngClass]="{
+                'is-invalid': formSubmited && emailControl.invalid
+            }"
+            placeholder="Ejem: medico@gmail.com"
+            />
+
+            <div
+            *ngIf="formSubmited && emailControl.invalid"
+            class="invalid-feedback"
+            >
+            El correo es necesario
+            </div>
+        </div>
+
+        <div class="col-2">
+            <button
+                type="button"
+                class="btn btn-primary "
+                (click)="getHistoryUserCRM()"
+            >
+                Consultar
+            </button>
+        </div>
+    </div>
+
+    
+<!-- Profile Header -->
+    <ng-container *ngIf="!loading">
+        <ng-container *ngIf="history.length>0;else not_results">
+    
+            <ul class="list-group">
+                <!-- Item -->
+                <li class="list-group-item" *ngFor="let document of history">
+                    <div class="row align-items-center">
+            
+                        <div class="col">
+                            <h5 class="mb-0">
+                                <a class="text-dark">{{document.paciente}}</a>
+                            </h5>
+                            <ul class="list-inline list-separator small text-body d-flex flex-column">
+                                <li ><span style="color: #000;">Fecha:</span> {{document.fecha_orden | date:'MMMM dd yyyy' : 'es' }}</li>
+                                <li ><span style="color: #000;">Número de orden:</span> {{document.numero_orden}}</li>
+                                <li ><span style="color: #000;">Sucursal:</span> {{document.sucursal }}</li>
+
+                            </ul>
+                        </div>
+                    <!-- End Col -->
+            
+                        <div class="col-auto">
+                            <!-- Dropdown -->
+                            <div class="btn-group ">
+                                <button class="btn btn-outline-primary" type="button" (click)="viewDocument(document)">
+                                    <span class="me-1">Ver documento</span>
+                                    <i class="bi-chevron-down"></i>
+                                </button>
+                               
+                            </div>
+                            <!-- End Dropdown -->
+                        </div>
+                    </div>
+                    <!-- End Row -->
+                </li>
+                <!-- End Item -->
+            </ul>
+
+
+        </ng-container>
+
+        <ng-template #not_results>
+            <div class="w-100   text-center pt-5">
+                <app-not-results-table 
+                [description]="
+                !emailControl.value ||  !formSubmited ? 'Ingrese el correo del médico para ver los resultados' : 
+                customError ? customError : 
+                'No hay información que mostrar'"
+                ></app-not-results-table>
+            </div>
+        </ng-template>
+    </ng-container>
+
+    <ng-container *ngIf="loading">
+      <div class="w-100   text-center pt-5">
+        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+        </div>
+      </div>
+  </ng-container>
+</div>

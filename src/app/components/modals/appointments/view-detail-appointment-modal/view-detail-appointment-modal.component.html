@@ -1,0 +1,268 @@
+﻿<div class="modal-header border-bottom pb-3">
+  <h4 class="modal-title">Detalle de la cita</h4>
+  <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <ng-container *ngIf="!loading;else loading_templ">
+
+<div class="d-flex justify-content-end">
+      <button 
+        class="btn btn-sm btn-primary  btn-dowloader-comprobante mr-2"  style="width: auto;    height: 35.1px;"
+        (click)="openViewSummaryFichasMedicas(
+          appointment.user._id,
+          {
+            _id: appointment.idUnderAge,
+            name: appointment.nameUnderAge, 
+            birthdate: appointment.birthdateUnderAge
+          }  
+        )"
+      >
+        Resumen de Fichas Médicas
+      </button>
+      <button  *ngIf="appointment.status === 'Completed'"
+        class="btn btn-sm btn-primary  btn-dowloader-comprobante mr-2"  style="width: 140px;    height: 35.1px;"
+        (click)="openViewExpediente(
+          appointment.user._id,
+          {
+            _id: appointment.idUnderAge,
+            name: appointment.nameUnderAge, 
+            birthdate: appointment.birthdateUnderAge
+          }  
+        )"
+      >
+        Ver Expediente
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-primary mr-2 btn-dowloader-comprobante mb-1"
+        style="width: 140px;"
+        (click)="dowloaderInfoAppointment(appointment)"
+      >
+        Descargar <i class="fas fa-file-download"></i>
+      </button>
+    </div>
+
+    <div *ngxPermissionsOnly="['medico']" >
+        <a *ngIf="appointment.status === 'InProgress'"
+        (click)="remitirPaciente(appointment)"
+          class="btn btn-sm btn-secondary mb-2 w-auto px-2" style="background-color: #919191;"
+          type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"
+        >
+          Remitir paciente
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-12 ">
+        
+        <div class="col-12 ">
+          <div class="d-flex justify-content-center" [innerHTML]="appointment.status | parseStatusName"></div>
+          <button *ngIf="appointment.status === 'pending_payment'" class="btn btn-sm btn-primary my-1 w-auto  " (click)="payRequest()">Pagar Cita</button>
+          <div *ngIf="appointment.status === 'Refuse'">
+            <p class="text-center mb-1"><strong>{{appointment.typeCancel === 'interno' ? 'Cancelada por Telemedicina' : 'Cancelada por paciente'}}</strong></p>
+            <div *ngIf="appointment.status === 'Refuse' && appointment.typeCancel === 'interno'" class="text-center">
+              <p><strong style="color: #000 !important;">Motivo de la cancelación:</strong> {{appointment.motivoCancel}}</p>
+              <p *ngIf="appointment.commentCancel"><strong style="color: #000 !important;">Comentario de cancelación:</strong> {{appointment.commentCancel}}</p>
+            </div>
+
+            <div *ngxPermissionsOnly="['admin', 'sac' ]" class="d-flex justify-content-center">
+              <button class="btn btn-primary btn-sm btn-150" type="button" (click)="appintmentReprogramin()">Reprogramar cita</button>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center mt-2" *ngIf="appointment.reprogramada">
+            <span  class="badge" style="background-color:#00bcd4;">Cita Reprogramada</span>
+          </div>
+          <div class="d-flex justify-content-center mt-2" *ngIf="appointment.remitida">
+            <span  class="badge" style="background-color:#5f5f5f;">Cita Remitida</span>
+          </div>
+        </div>
+
+        <ng-container *ngxPermissionsExcept="'patient'">
+          <div class="col-12 " *ngIf="appointment.historyStatus && appointment.historyStatus.length > 0">
+            <p class="mb-0 pb-0" ><strong style="color: #000 !important;">Fecha de cambio de estado:</strong> {{appointment.historyStatus[appointment.historyStatus.length - 1].dateChange | date:'dd/MM/yyyy hh:mm a'}}</p>
+            <p class="mb-1"><strong style="color: #000 !important;">Usuario:</strong> {{appointment.historyStatus[appointment.historyStatus.length - 1].user.name}} [{{appointment.historyStatus[appointment.historyStatus.length - 1].user.role}}]</p>
+            <button class="btn btn-primary btn-sm w-auto" (click)="viewHistoriStatus(appointment)">Ver historial de estados</button>
+          </div>
+        </ng-container>
+
+
+        <div class="card mt-2 justify-content-center w-100">
+          <div class="card-body">
+            <div class="row resume-appointment">
+
+              <ng-container *ngIf="appointment.status === 'Confirmed' || appointment.status === 'InProgress'">
+                <div class="col-12 d-flex justify-content-end" *ngxPermissionsOnly="['medico']">
+                  <a class="btn btn-primary" style="width: auto;" (click)="iniciarConsulta()">{{appointment.status === 'InProgress' ? 'Ingresar a la consulta' : 'Iniciar Consulta'}}</a>
+                </div>
+              </ng-container>
+      
+              <div class="col-12 col-md-6">
+
+                <div *ngIf="appointment.urgency" class="mb-2 d-flex" [innerHTML]="appointment.urgency | parseUrgency"></div>
+
+                <p class="mb-2">        
+                  <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment.name}}
+                </p>
+
+                <div class="mb-2">
+                  <span class="title">Información Paciente:</span>
+                  <div class="container-user-info mt-1" *ngIf="appointment && appointment.user">
+                    <ng-container *ngIf="!appointment.nameUnderAge">
+                      <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.user.names}} {{appointment.user.last_names}}
+                      <span class="info-user mr-2"><strong>Correo:</strong></span> {{appointment.user.email}}
+                      <span class="info-user mr-2"><strong>Teléfono:</strong></span> 
+                      <p class="m-0 p-0">
+                        <span class="mr-1">{{appointment.user.countryCode}}</span> <input type="text" [mask]="appointment.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phone"  [ngModelOptions]="{standalone: true}">
+                      </p>
+                      <span class="info-user mr-2">
+                        <strong>Documento de identidad ({{appointment.user.typeDocument}}):</strong>
+                      </span> 
+                      <input *ngIf="appointment.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.identityNumber"  [ngModelOptions]="{standalone: true}">
+                      <input *ngIf="appointment.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.passport"  [ngModelOptions]="{standalone: true}">
+                      <input *ngIf="appointment.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.idInternacional"  [ngModelOptions]="{standalone: true}">   
+                  </ng-container>
+
+                    <ng-container *ngIf="appointment.nameUnderAge">
+                      <span class="title">Menor de edad</span>
+
+                      <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.nameUnderAge}}
+                      <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{appointment.birthdateUnderAge | date:'MMMM d, y'|titlecase}}
+                    </ng-container>
+                  </div>
+                </div>
+
+                <div *ngIf="appointment.nameUnderAge">
+                  <span class="title">Adulto reponsable:</span>
+                  <div class="container-user-info mt-1" *ngIf="appointment && appointment.user">
+                    <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.user.names}} {{appointment.user.last_names}}
+                    <span class="info-user mr-2"><strong>Correo:</strong></span> {{appointment.user.email}}
+                    <span class="info-user mr-2"><strong>Teléfono:</strong></span>
+                    <p class="m-0 p-0">
+                      <span class="mr-1">{{appointment.user.countryCode}}</span> <input type="text" [mask]="appointment.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phone"  [ngModelOptions]="{standalone: true}">
+                    </p>
+                      <span class="info-user mr-2">
+                        <strong>Documento de identidad ({{appointment.user.typeDocument}}):</strong>
+                      </span> 
+                      <input *ngIf="appointment.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.identityNumber"  [ngModelOptions]="{standalone: true}">
+                      <input *ngIf="appointment.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.passport"  [ngModelOptions]="{standalone: true}">
+                      <input *ngIf="appointment.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.idInternacional"  [ngModelOptions]="{standalone: true}">                     </div>
+                </div>
+
+                <div *ngIf="appointment && appointment.user && appointment.user.nameEmergency">
+                  <span  class="title">Contacto de Emergencia:</span>
+                  <div class="container-user-info mt-1" *ngIf="appointment && appointment.user && appointment.user.nameEmergency">
+                    <span class="info-user mr-2"><strong>Nombre:</strong></span> {{appointment.user.nameEmergency}}
+                    <span class="info-user mr-2"><strong>Teléfono:</strong></span>
+                    <p class="m-0 p-0">
+                      <span class="mr-1">{{appointment.user.countryCodeEmergency}}</span> <input type="text" [mask]="appointment.user.maskEmergency" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phoneEmergency"  [ngModelOptions]="{standalone: true}">
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="col-12 col-md-6 border-radius">
+                <div class="mb-2" *ngIf="appointment && appointment.subsidiary">
+                  <p  class="mb-0">        
+                    <span class="title mr-2">Sucursal:</span> {{appointment.subsidiary.name}}
+                  </p>
+                  <p class="mb-0">{{appointment.subsidiary.address.address}}{{appointment.subsidiary.address.aditionalInfo ? ', '+appointment.subsidiary.address.aditionalInfo : ''}}</p>
+                  <p class="mb-0">{{appointment.subsidiary.address.department}}, {{appointment.subsidiary.address.municipality}}</p>
+                </div>
+
+                <p class="mb-2" *ngIf="appointment.meetingTool">        
+                  <span class="title mr-2">Aplicacion preferida para la cita:</span> {{appointment.meetingTool.name}}
+                </p>
+
+                <p class="mb-2" *ngIf="appointment.meetingTool">        
+                  <span class="title mr-2">Enlace para la cita:</span> 
+                  <span *ngIf="appointment.link">
+                    <a class="btn btn-outline-primary" [href]="appointment.link" target="_blank">Ingresar</a>
+                  </span> 
+                  <span *ngIf="!appointment.link" style="color: red;">Pendiente de ingresar</span>
+                </p>
+
+                <div class="mb-2">
+                  <p class="mb-0">        
+                    <span class="title mr-2">Servicio:</span> 
+                  </p>
+                  <ul><li *ngFor="let service of appointment?.service">{{service.name}} {{service.price | dollar }}</li></ul>
+                  <button *ngxPermissionsOnly="['admin','sac']" class="btn btn-primary btn-sm w-auto mb-1" (click)="openModalSelectService()">Agregar más servicios</button>
+                </div>
+
+                <div class="mb-2 d-flex">        
+                  <span class="title mr-2">Médico:</span> 
+                  <div class="d-flex flex-column " style="margin-top: 2.7px;">
+                    <span>{{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}}  {{appointment.medico ? appointment.medico.last_names : ''}}</span>
+                    <span *ngIf="appointment.medico.especialidad " style="color: #4e4e4e;" >{{ appointment.medico.especialidad.name }}</span>
+                  </div>
+                </div>
+
+                <p class="mb-2">        
+                  <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour.hours}}
+                </p>
+
+                <p class="mb-2">        
+                  <span class="title mr-2">Comentario:</span> {{appointment.commentAppointment}}
+                </p>
+
+                <ng-container >
+                    <p class="mb-2" *ngIf="appointment.referencedAppointment">        
+                    <span class="title mr-2">Cita referida por parte de la clinica:</span> {{appointment.referencedSubsidiary.name}}
+                  </p>
+                </ng-container>
+
+                <p class="mb-2">        
+                  <span class="title mr-2">Documento:</span> 
+                  <span *ngIf="!appointment.documentAppointment">No se agrego documento a la cita</span>
+                  <a class="cursor-pointer" *ngIf="appointment.documentAppointment" (click)="openModalViewDocument(appointment.documentAppointment.location, appointment.documentAppointment.key)">{{appointment.documentAppointment.key}}</a>
+                </p>
+
+                <p class="mb-2">        
+                  <span class="title mr-2">Metodo de pago:</span> {{appointment.typePayment | parseTypePayment : appointment.status}}
+                </p>
+
+                
+                <p class="mb-2 d-flex flex-column" *ngIf="appointment.typePayment === 'transferencia' && appointment.imgComprobante.location">        
+                  <span class="title mr-2">Comprobante de pago:</span> 
+                  <img class="cursor-pointer" (click)="viewAtt(appointment.imgComprobante.location)" [src]="appointment.imgComprobante.location" alt="" style="max-width: 300px; border: 1px solid #2e4a76; border-radius: 8px;">
+                </p>
+
+                <p class="mb-2" *ngIf="appointment.typePayment === 'insurance'">        
+                  <span class="title mr-2">Nombre de la aseguradora:</span> {{appointment.insuranceName}}
+                </p>
+
+                <p class="mb-2">        
+                  <span class="title mr-2">Total pagado:</span> <span style="color: rgba(0, 144, 66, 1);"><strong>$</strong> {{appointment.total}}</span>
+                </p>
+                
+
+              
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loading_templ>
+    <div class="d-flex justify-content-center">
+      
+        <app-loading-table></app-loading-table>
+      
+    </div>
+  </ng-template>
+</div>
+<!--  -->
+<div class="modal-footer">
+  <button class="btn btn-danger btn-sm" type="button" (click)="ngbActiveModal.close()">Cerrar</button>
+</div>
+
+

@@ -1,0 +1,14 @@
+<ng-select 
+  style="min-width: 200px;text-align: center;"
+  [(ngModel)]="statusSelected" 
+  (ngModelChange)="selectedstatus()" 
+  [appendTo]="appendTo" 
+  [notFoundText]="'No hay servicios'" 
+  [placeholder]="'Selecciona método de pago'"
+  >
+    <ng-option *ngFor="let status of allStatus" [value]="status.name">
+      <div [outerHTML]="status.nameEs"></div>
+    </ng-option>
+  </ng-select>
+  
+  

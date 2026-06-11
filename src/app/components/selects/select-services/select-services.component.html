@@ -1,0 +1,16 @@
+<ng-select
+[loading]="loading"
+[notFoundText]="'No hay resultados'"
+[(ngModel)]="servicesSelected"
+(ngModelChange)="selectedservices()"
+ [placeholder]="'Seleccione servicio'"
+ style="min-width: 200px;text-align: center;"
+
+>
+  <!-- <ng-template ng-option-tmp let-item="item">
+    {{item.name}} <span class="badge rounded-pill" [class]="item.status?'bg-success':'bg-danger'">{{item.status?'Activa':'Desactivada'}}</span>
+</ng-template> -->
+<ng-option *ngFor="let service of services" [value]="service._id">{{
+  service.name
+}}</ng-option>
+</ng-select>

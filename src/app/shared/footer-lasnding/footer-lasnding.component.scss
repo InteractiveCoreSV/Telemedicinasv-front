@@ -1,0 +1,120 @@
+.container {
+    max-width: 1024px;
+    margin: 0px auto;
+}
+
+.btn-footer {
+    width: 140px;
+    height: 40px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-footer:hover {
+    background-color: rgb(234 72 80)!important;
+    color: rgb(254, 254, 254) !important;
+}
+
+.btn-footer-primary{
+    border: 3px solid rgba(46, 74, 118, 1);
+    color: rgba(112, 112, 112, 1);
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.btn-footer-secundary {
+    background-color: rgba(46, 74, 118, 1);
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 1);
+}
+
+.title-items-footer {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24.2px;
+    letter-spacing: 0.05em;
+    text-align: left;
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+.text-footer {
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    max-width: 385px;
+    color: rgba(46, 74, 118, 1);      
+}
+
+.text-footer-bottom {
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #fff;
+    text-align: center;
+}
+
+.widget-list{
+    list-style-type: none
+}
+
+.widget-list-item .widget-list-link{
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 24.2px;
+    letter-spacing: 0.05em;
+    text-align: left;
+    color: #9B9B9B !important;
+
+}
+
+.url-footer {
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-thickness: 0%;
+    text-decoration-skip-ink: auto;
+    color: #fff;
+}
+
+.first-section {
+    height:  235px ;
+}
+
+.footer-botom {
+    height: 50px;
+}
+
+@media (max-width:400px) {
+    .first-section {
+        height:  280px !important;
+    }
+}
+
+@media (max-width:768px) {
+    .first-section {
+        height:  260px ;
+    }
+
+    .text-footer {
+        max-width: 100%;     
+    }
+    
+    .footer-botom {
+        height: 70px !important;
+    }
+    
+}

@@ -1,0 +1,9 @@
+<ng-select
+  placeholder="Rol"
+  [notFoundText]="'No hay resultados'"
+  [(ngModel)]="roleSelected"
+  (change)="selectRole()"
+  appendTo="body"
+>
+  <ng-option *ngFor="let role of roles" [value]="role._id">{{role.nameEs}}</ng-option>
+</ng-select>

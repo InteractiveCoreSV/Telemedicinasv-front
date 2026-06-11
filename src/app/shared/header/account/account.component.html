@@ -1,0 +1,93 @@
+<div class="hs-unfold">
+  <a
+    unfold
+    class="navbar-dropdown-account-wrapper m-0 profile-header px-1 px-sm-2 px-md-3 ml-1 ml-md-3 ml-xl-4"
+    href="javascript:;"
+    data-hs-unfold-options='{
+      "target": "#accountNavbarDropdown",
+      "type": "css-animation"
+
+    }'
+  >
+    <div class="avatar avatar-sm avatar-circle ">
+      <img
+        class="avatar-img"
+        appBrokenImagen
+        *ngIf="userInfo?.imageProfile"
+        [src]="userInfo?.imageProfile"
+        [alt]="userInfo?.names + ' ' + userInfo?.last_names"
+      />
+      <span
+        *ngIf="!userInfo?.imageProfile"
+        class="avatar-initials"
+      >
+        {{ userInfo?.names | slice:0:1}}
+        {{ userInfo?.last_names | slice:0:1}}
+      </span>
+    </div>
+
+    <img src="assets/icons/icon-arrow-profile.png" alt="">
+
+  </a>
+
+  <div
+    id="accountNavbarDropdown"
+    class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right navbar-dropdown-menu navbar-dropdown-account"
+    style="width: 16rem"
+  >
+    <div class="dropdown-item-text">
+      <div class="media align-items-center">
+        <div
+          class="avatar avatar-sm avatar-circle mr-2"
+          style="min-width: 2.1875rem"
+        >
+          <!-- <img
+            class="avatar-img"
+            appBrokenImagen
+            [src]="userInfo?.imageProfile"
+            [alt]=""
+          /> -->
+
+          <img
+            class="avatar-img"
+            appBrokenImagen
+            *ngIf="userInfo?.imageProfile"
+            [src]="userInfo?.imageProfile"
+            [alt]="userInfo?.names + ' ' + userInfo?.last_names"
+          />
+          <span
+            *ngIf="!userInfo?.imageProfile"
+            class="avatar-initials"
+          >
+            {{ userInfo?.names | slice:0:1}}
+            {{ userInfo?.last_names | slice:0:1}}
+          </span>
+        </div>
+        <div class="media-body">
+          <span class="card-title h5"
+            >{{ userInfo?.names }} {{ userInfo?.last_names }}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown-divider"></div>
+
+    <a
+      class="dropdown-item"
+      routerLink="/dashboard/perfil/mi-cuenta"
+      data-target="#accountNavbarDropdown"
+      (click)="hideModal()"
+    >
+      <span class="text-truncate pr-2" title="Profile &amp; account"
+        >Mi cuenta</span
+      >
+    </a>
+
+    <div class="dropdown-divider"></div>
+
+    <a class="dropdown-item" (click)="signout()">
+      <span class="text-truncate pr-2" title="Cerrar sesión">Cerrar sesión</span>
+    </a>
+  </div>
+</div>

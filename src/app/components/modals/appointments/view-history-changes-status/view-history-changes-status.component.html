@@ -1,0 +1,38 @@
+<div class="modal-header border-bottom pb-3">
+  <h4 class="modal-title">Historial de cambios de estado</h4>
+  <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="row justify-content-center">
+      <div class="col-12 ">
+        <div class="col-12 ">
+          <div class="d-flex justify-content-center" [innerHTML]="status | parseStatusName"></div>
+          <div *ngIf="status === 'Refuse'">
+            <p class="text-center mb-1"><strong>{{typeCancel === 'interno' ? 'Cancelada por Telemedicina' : 'Cancelada por paciente'}}</strong></p>
+            <div *ngIf="status === 'Refuse' && typeCancel === 'interno'" class="text-center">
+              <p><strong style="color: #000 !important;">Motivo de la cancelación:</strong> {{motivoCancel}}</p>
+              <p *ngIf="commentCancel"><strong style="color: #000 !important;">Comentario de cancelación:</strong> {{commentCancel}}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <ng-container *ngxPermissionsExcept="'patient'">
+          <div class="col-12 mb-2 separator" *ngFor="let item of history">
+            <div  [innerHTML]="item.status | parseStatusName"></div>
+            <p class="mb-0 pb-0" ><strong style="color: #000 !important;">Fecha de cambio de estado:</strong> {{item.dateChange | date:'dd/MM/yyyy hh:mm a'}}</p>
+            <p class="mb-1"><strong style="color: #000 !important;">Usuario:</strong> {{item.user.name}} [{{item.user.role}}]</p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+</div>
+<!--  -->
+<div class="modal-footer">
+  <button class="btn btn-danger btn-sm" type="button" (click)="ngbActiveModal.close()">Cerrar</button>
+</div>
+
+

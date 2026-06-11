@@ -1,0 +1,189 @@
+.sidebar-custom {
+  background-color: #2E4A76 !important;
+  color: #fff !important;
+}
+
+.nav-item {
+  height: 40px;
+}
+
+.nav-link {
+  color: #fff !important;
+  font-size: 14px !important;
+}
+
+.btn-sidebar {
+  width: 100%;
+  height: 45px;
+  background-color: rgba(240, 240, 240, 0.19);
+  border-radius: 5px !important;
+  color: #fff !important;
+  border: 2px solid #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-ghosts{
+  .btn-ghost-primary{
+    font-weight: bold;
+    &:hover{
+      background-color: rgba(255, 255, 255,0.15) !important;
+    }
+  }
+
+  li{
+    padding: 5px 0;
+  }
+}
+
+.btn-ghosts .btn-ghost-primary.active{
+  background-color: rgba(255, 255, 255,0.15) !important;
+}
+
+
+.btn-special {
+  width: 150px;
+  text-align: center;
+  background: #FFF;
+  font-size: 16px;
+}
+
+.btn-special:hover {
+  background: #677788;
+}
+
+.active {
+  background-color: rgba(242, 242, 242, 0.25) !important;
+  border-left: 5px solid #fff !important;
+}
+
+.show .height {
+  background-color: rgba(242, 242, 242, 0.25) !important;
+}
+
+.navbar-vertical:not([class*="container"]) .navbar-nav .nav .nav-link {
+  padding-left: 1.25rem !important;
+  margin-left: 27px !important;
+}
+
+.height {
+  height: 50px !important;
+}
+
+.container-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.container-icon img{
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.navbar-vertical .navbar-nav.nav-tabs .nav-link {
+  padding-right: 1rem !important;
+  padding-left: 1rem !important;
+}
+
+.navbar-vertical-aside-mini-mode-hidden-elements {
+  margin-left: 20px !important;
+}
+
+/* Estilos para la barra de scroll */
+.navbar-vertical-content::-webkit-scrollbar {
+  width: 5px; /* Cambia el grosor de la barra */
+}
+
+.navbar-vertical-content::-webkit-scrollbar-track {
+  background: transparent; /* Color de fondo de la pista de la barra de scroll */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+.navbar-vertical-content::-webkit-scrollbar-thumb {
+  background-color: #96b7e3  ; /* Color de la barra de scroll */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 2px solid transparent; /* Añade espacio entre la barra y los bordes */
+  background-clip: padding-box; /* Clip para el borde */
+}
+
+/* Opcional: estilos para scroll en Firefox */
+.navbar-vertical-content {
+  scrollbar-width: thin; /* Hace la barra más delgada */
+  scrollbar-color: #96b7e3   transparent; /* Color de la barra y de la pista */
+}
+
+.profile-info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 76px;
+  background-color: #FFFFFF;
+  margin: 0px 7px;
+  margin-top: 25px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+
+.profile-info-title {
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  line-height: 14.52px !important;
+  color: #000 !important;
+  margin-bottom: 3px;
+}
+
+.profile-info-subtitle {
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 12.1px;
+  color: rgba(135, 135, 135, 1);
+  margin-bottom: 3px;
+}
+
+.avatar {
+  height: 45px !important;
+  width: 45px !important;
+  border: 1px solid #2e4a76;
+}
+
+.avatar-initials {
+  background: rgb(234, 72, 80);
+  color: #fff;
+  height: 45px;
+  width: 45px;
+}
+
+.footer-mi-account {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16.94px;
+  text-decoration: underline;
+}
+
+.btn-footer {
+  height: 45px;
+  width: 220px;
+  background-color: rgba(240, 240, 240, 0.19);
+  color: #fff ;
+}
+
+.btn-clode-menu {
+  background-color: #fff;
+  color: #000;
+  margin-left: 26px;
+  font-size: 111px;
+  height: 35px;
+  width: 35px;
+  font-size: 25px;
+  font-weight: 900;
+}

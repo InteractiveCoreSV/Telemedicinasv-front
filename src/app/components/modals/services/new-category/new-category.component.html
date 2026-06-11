@@ -1,0 +1,99 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Rellena los siguientes campos para {{title}} catégoria de servicio</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class="container mb-4 mt-2 " >
+
+        <form [formGroup]="categoryForm" (ngSubmit)="toEdit?editCategoryService():newCategoryService()" style="max-width: 724px;" class="px-md-5">
+            
+            <div class="row ">
+                <div class="col-12">
+                    <div class="form-group d-flex">
+                      <app-dropzone 
+                        *ngIf="!toEdit"
+                        [btn]="false" 
+                        [label]="'150*150 pixels'" 
+                        [max_height]="'95px'" 
+                        [max_width]="'95px'"
+                        [dimensionState]="true"
+                        [dimensionesImg]="dimensiones" 
+                        [files]="imgs" 
+                        [maxFile]="1" 
+                        [accept]="'image/*'" 
+                        (filesOutput)="imgs=$event"
+                        [logo]="true"
+                      ></app-dropzone>
+  
+                      <div class="d-flex justify-content-center align-items-center flex-column my-2" *ngIf="toEdit">
+                        <img style="max-width: 95px; max-height: 95px;; object-fit: contain;" *ngIf="toEdit" [src]="toEdit.photo.location" alt="">
+                        <button type="button" (click)="changeimg()" class="btn btn-sm btn-block btn-change-img btn-primary mt-1 w-100">Cambiar imagen</button>
+                      </div>
+  
+                      <div class="ml-3">
+                        <h3 class="title-logo">Imagen para la categoría</h3>
+                        <!-- <p class="sub-title-logo">lorm ipsum lorem</p> -->
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="form-gorup col-12 ">
+                    <input type="text" class="form-control center"  name="service" id="" formControlName="name" placeholder="Nombre de la categoría" >
+                    <div *ngIf="categoryForm.get('service')?.invalid && formSubmited" class="invalid-feedback d-block" >
+                        El nombre es requerido
+                    </div>
+                </div> 
+
+                <div class="form-gorup col-12 mt-3">
+                    <textarea formControlName="description" class="form-control center" rows="3" placeholder="Descripción de la categoría"></textarea>
+                    
+                    <div *ngIf="categoryForm.get('description')?.invalid && formSubmited" class="invalid-feedback d-block" >
+                        La descripción es requerida
+                    </div>
+                </div> 
+                
+                <div class="col-12 my-3">
+                    <div class="d-flex w-100 justify-content-center align-items-center">
+                        <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2" >
+                            <div>
+                                <!-- <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'">  -->
+                                <span class="ratioMeetingTool_title">Presencial</span>
+                            </div>
+                            <div>
+                                <input formControlName="online" type="radio" class="form-check-input" name="online" id="presencial" [value]="false" >
+                                <label for="presencial"></label>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2" >
+                            <div>
+                                <!-- <img class="img mr-3" [src]="herramienta.img.location" [alt]="herramienta.name+'-icon'">  -->
+                                <span class="ratioMeetingTool_title">Virtual</span>
+                            </div>
+                            <div>
+                                <input formControlName="online" type="radio" class="form-check-input" name="online" id="virtual" [value]="true" >
+                                <label for="virtual"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+        </form>
+    </div>
+
+    <div class=" d-flex justify-content-end">
+        <button type="submit" class="btn  btn-primary btn-150" (click)="toEdit ? editCategoryService() : newCategoryService()">
+            {{toEdit ? 'Guardar' : '+ Agregar'}}
+        </button>
+    </div>
+</div>
+
+
+

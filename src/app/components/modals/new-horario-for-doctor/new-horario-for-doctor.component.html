@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="addQuestionLabel">Horario | {{doctor.names}} {{doctor.last_names}}</h5>
+  <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+  </button>
+
+</div>
+<div class="modal-body">
+  <div class="container mb-4 mt-2 " >
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-primary btn-sm" style="width: auto;" type="button" (click)="newHour()">
+        Agregar nueva hora
+      </button>
+    </div>
+
+      <div class="overflow-x-auto mt-2">
+        <table class="table-auto w-100 border border-gray-300 text-sm" style="min-width: 695px;">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-2 text-center">Bloque de hora</th>
+              <th *ngFor="let dia of daysList" class="p-2 text-center">{{ dia.name | parseAllDay }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bloque of hoursForView; let index = index">
+              <td class="p-2 text-center">
+                <button type="button" (click)="deleteHour(bloque,index)" class="btn btn-icon text-danger"><i class="fas fa-trash"></i></button>
+                {{ bloque.start }} - {{ bloque.end }}
+              </td>
+              <td *ngFor="let day of daysList" class="text-center">
+                <input type="checkbox" class="checkbox"
+                    [checked]="bloque.days | verifyHour : day.name"
+                    (change)="toggleDay(bloque, day.name,$event)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+  </div>
+</div>
+
+<div class="modal-footer">
+<button type="submit" (click)="saveHorarioForDoctor()" class="btn btn-primary btn-200"><i class="ci-upload font-size-lg"></i> Guardar horario</button>
+</div>
+
+
+

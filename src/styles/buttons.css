@@ -1,0 +1,4 @@
+.btn-gray{
+  background-color: var(--bs-gray-200) !important;
+  color: var(--bs-primary) !important;
+}

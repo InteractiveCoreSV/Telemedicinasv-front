@@ -1,0 +1,16 @@
+<ng-select
+[loading]="loading"
+[notFoundText]="'No hay resultados'"
+[(ngModel)]="categoriesServicesSelected"
+(ngModelChange)="selectedCategoriesServices()"
+ [placeholder]="'Seleccione tipo de cita'"
+ style="min-width: 200px;text-align: center;"
+
+>
+  <!-- <ng-template ng-option-tmp let-item="item">
+    {{item.name}} <span class="badge rounded-pill" [class]="item.status?'bg-success':'bg-danger'">{{item.status?'Activa':'Desactivada'}}</span>
+</ng-template> -->
+<ng-option *ngFor="let category of categoriesServices" [value]="category._id">{{
+  category.name
+}}</ng-option>
+</ng-select>

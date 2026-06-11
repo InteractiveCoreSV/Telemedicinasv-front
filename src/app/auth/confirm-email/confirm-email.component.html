@@ -1,0 +1,39 @@
+<app-header-verify-email></app-header-verify-email>
+
+<ng-container *ngIf="!loading && successConfirm">
+  <div class="row d-flex justify-content-center align-items-center" style="height: 83vh; width: 100vw;" >
+    <div>
+      <div class="card" style="min-height: 425px;">
+        <p style="text-align: center; margin: 1rem; font-size: 18px; font-weight: 500;">
+          ¡Su correo electrónico ha sido verificado con éxito!
+        </p>
+        <p style="text-align: center;"><strong>Ahora puedes iniciar sesión en la plataforma.</strong>
+        </p>
+        <div style="display: flex; height: 62%; align-items: center; justify-content: center;" class="imgActivity">
+          <img style="width: 230px;" src="/assets/confirm.svg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="!loading && !successConfirm">
+  <div class="row" style="display: block;" >
+    <div>
+      <div class="card" style="min-height: 425px;">
+        <p style="text-align: center; margin: 1rem; font-size: 18px; font-weight: 500;">
+          Error
+        </p>
+        <p style="text-align: center;"><strong> {{message}}</strong>
+        </p>
+        <div style="display: flex; height: 62%; align-items: center; justify-content: center;" class="imgActivity">
+          <img style="width: 230px;" src="/assets/noCode.svg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="loading">
+  <div class="col-12 d-flex justify-content-center">
+    <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status"></div>
+  </div>
+</ng-container>

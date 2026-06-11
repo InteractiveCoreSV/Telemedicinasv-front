@@ -1,0 +1,206 @@
+<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Pagar cita</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    
+
+<div class="card">
+  <div class="card-body">
+    <form class="container mb-4 mt-2 ">
+
+      <div class="text-center mb-3">
+        <h3 class="title-pay-appointment">Escoge el método de pago deseado</h3>
+      </div>
+
+        <div class="row">
+          <!-- PAGO CON TARJETA -->
+            <div class="col-12 mb-3">
+              <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom pb-4" >
+                <input
+                  [(ngModel)]="typePayment"
+                  value="creditCard"
+                  class="form-check-input cursor-pointer"
+                  type="radio"
+                  id="creditCard"
+                  name="medico"
+                  style="height:1rem !important; width:1rem;"
+                />
+                <label class="ms-2 form-check-label cursor-pointer" for="creditCard">
+                  Pago con tarjeta de crédito o debito <img class="ml-2" height="25" src="assets/icons/new-appointment/icons-cards-pay.png" alt="">
+                </label>
+              </div>
+            </div>
+
+            <div class="col-12 mb-3" [ngClass]="{'d-none': typePayment != 'creditCard'}">
+               <form [formGroup]="cardMethodForm" class="mt-3">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label class="form-label">Titular*</label>
+                      <input [class]="isInvalidControlCard('name')? 'is-invalid': ''" type="text" class="form-control" formControlName="name">
+
+                      <div *ngIf="isInvalidControlCard('name')" class="invalid-feedback d-block">
+                        El titular de la tarjeta es requerido
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="mb-3">
+
+                      <label class="form-label">
+                        Número Tarjeta*
+
+                        <img *ngIf="cardType === 'visa'" src="assets/img/payment-methods/visa-light-mode.svg" width="36" alt="Visa">
+                        <img *ngIf="cardType === 'mastercard'" src="assets/img/payment-methods/mastercard.svg" width="36" alt="Mastercard">
+                        <img *ngIf="cardType === 'amex'" src="assets/img/payment-methods/amex.png" width="36" alt="American Express">
+                      </label>
+
+                      <!-- <input id="cc-number" autocomplete="cc-number" [class]="isInvalidControlCard('number')? 'is-invalid': ''" type="tel" class="form-control" formControlName="number" ccNumber #ccNumber="ccNumber"> -->
+                      <input id="cc-number" autocomplete="cc-number" [class]="isInvalidControlCard('number')? 'is-invalid': ''" type="tel" class="form-control" formControlName="number">
+
+                      <div *ngIf="isInvalidControlCard('number')" class="invalid-feedback d-block">
+                        El número de la tarjeta es inválido
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label">Fecha de vencimiento*</label>
+                      <input id="cc-exp-date" autocomplete="cc-exp" mask="M0/00" [dropSpecialCharacters]="false" [class]="isInvalidControlCard('expDate')? 'is-invalid': ''" type="text" class="form-control" formControlName="expDate" placeholder="MM/YY" >
+
+                      <div *ngIf="isInvalidControlCard('expDate')" class="invalid-feedback d-block">
+                        La fecha de vencimiento es inválida
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label">CCV*</label>
+                      <input id="cc-cvc" autocomplete="off" [class]="isInvalidControlCard('ccv')? 'is-invalid': ''" type="tel" class="form-control" formControlName="ccv">
+
+                      <div *ngIf="isInvalidControlCard('ccv')" class="invalid-feedback d-block">
+                        La código de seguridad es requerido
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          <!--FIN DE PAGO CON TARJETA -->
+
+          <!-- PAGO CON TARJETA -->
+            <div class="col-12 mb-3" *ngIf="!virtual">
+              <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom pb-4" >
+                <input
+                  [(ngModel)]="typePayment"
+                  value="cash"
+                  class="form-check-input cursor-pointer"
+                  type="radio"
+                  id="cash"
+                  name="cash"
+                  style="height:1rem !important; width:1rem;"
+                />
+                <label class="ms-2 form-check-label cursor-pointer" for="cash">
+                  Pago en sucursal
+                </label>
+              </div>
+            </div>
+            <!-- FIN DE PAGO CON TARJETA -->
+
+            <!-- TRASNFERENCIA BANCARIA -->
+            <div class="col-12 mb-3">
+              <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom pb-4" >
+                <input
+                  [(ngModel)]="typePayment"
+                  value="transferencia"
+                  class="form-check-input cursor-pointer"
+                  type="radio"
+                  id="transferencia"
+                  name="transferencia"
+                  style="height:1rem !important; width:1rem;"
+                />
+                <label class="ms-2 form-check-label cursor-pointer" for="transferencia">
+                  Transferencia bancaria <img class="ml-2" style="width: 115px;" src="assets/icons/new-appointment/credomatic.png" alt="">
+                </label>
+              </div>
+
+              <div class="w-100 border-bottom pb-4" *ngIf="typePayment === 'transferencia'">
+                <span class="title" style="width: auto;">Información para transferencia:</span>
+                <div class="container-user-info mt-1">
+                  <span class="info-user mr-2"><strong>Banco:</strong></span> BAC CREDOMATIC
+                  <span class="info-user mr-2"><strong>N° de cuenta:</strong></span> 730435231
+                  <span class="info-user mr-2"><strong>Tipo de cuenta:</strong></span> Cuenta de cheque
+                  <span class="info-user mr-2"><strong>Nombre de cuenta:</strong></span> LABORATORIOS CENTROAMERICANOS DE HONDURAS S.A DE C.V
+                  <span class="info-user mr-2"><strong>Subir comprobante de pago:</strong></span>
+                  <app-dropzone
+                  style="border: 1px solid #2e4a76; border-radius: 8px;"
+                    [btn]="false"
+                    [label]="'Arrastra o selecciona el comprobante'"
+                    [files]="imgComprobante"
+                    [maxFile]="1"
+                    [accept]="'image/*'"
+                    (filesOutput)="imgComprobante=$event"
+                    [logo]="true"
+                  ></app-dropzone>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- FIN DE TRASNFERENCIA BANCARIA -->
+
+            <!-- ASEGURADORA -->
+            <div class="col-12 mb-3" *ngIf="!virtual">
+              <div class="form-check form-check-inline d-flex align-items-center text-left border-bottom pb-4" >
+                <input
+                  [(ngModel)]="typePayment"
+                  value="insurance"
+                  class="form-check-input cursor-pointer"
+                  type="radio"
+                  id="insurance"
+                  name="insurance"
+                  style="height:1rem !important; width:1rem;"
+                />
+                <label class="ms-2 form-check-label cursor-pointer" for="insurance">
+                  Aseguradora
+                </label>
+              </div>
+            </div>
+
+            <div class="col-12 mt-1" *ngIf="typePayment === 'insurance'">
+              <span class="title" style="width: auto;">Selecione la aseguradora:</span>
+              <div>
+                <app-select-insurance (changeInsuranceObject)="insurance = $event"></app-select-insurance>
+              </div>
+            </div>
+            <!-- FIN DE ASEGURADORA -->
+
+
+            <div class="col-12 mt-2">
+              <div class="form-check" style="text-align: end;" >
+                <input (click)="openModalTermsAndCondictions()" class="form-check-input" style="margin-top:7px" type="checkbox"  id="flexCheckDefault" [(ngModel)]="termsnAndCondition" [ngModelOptions]="{standalone: true}" >
+                <label  class="form-check-label label-terms-condition" style="color: #000; font-size: 14px;cursor: pointer;" for="flexCheckDefault">
+                  Aceptar términos y condiciones
+                </label>
+              </div>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+
+<div class="row mt-3">
+  <div class="col-12 d-flex justify-content-end">
+    <ng-content select="[backButton]"></ng-content>
+    <button class="btn btn-primary" [disabled]="canProccedPayement" style="width: auto;" (click)="procedPayment()">Continuar</button>
+  </div>
+</div>
+
+</div>

@@ -1,0 +1,12 @@
+:root{
+  --bs-primary-rgb:23, 41, 85;
+  --bs-gray-100: #f6f9fc;
+  --bs-gray-200: #f3f5f9;
+  --bs-gray-300: #e3e9ef;
+  --bs-gray-400: #dae1e7;
+  --bs-gray-500: #aeb4be;
+  --bs-gray-600: #7d879c;
+  --bs-gray-700: #4b566b;
+  --bs-primary:var(--primary);
+  --bs-success:var(--success)
+}

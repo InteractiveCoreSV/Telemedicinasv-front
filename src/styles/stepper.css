@@ -1,0 +1,7 @@
+.stepper-no-header .stepper-header{
+  display: none !important;
+}
+
+.stepper-mt-0 .stepper-body{
+  margin-top: 0 !important;
+}

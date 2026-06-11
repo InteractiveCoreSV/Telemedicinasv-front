@@ -1,0 +1,12 @@
+<ng-select
+  [(ngModel)]="subsidiarySelected"
+  (ngModelChange)="selectedSubsidiary()"
+  [appendTo]="appendTo"
+  [notFoundText]="'No hay sucursales'"
+  [placeholder]="placeholder"
+>
+  <ng-option *ngFor="let subsidiary of subsidiaries" [value]="subsidiary._id">
+    <span>{{subsidiary.name}}</span> <div [outerHTML]="subsidiary.status | spanStatus:'ml-3'"></div>
+  </ng-option>
+</ng-select>
+

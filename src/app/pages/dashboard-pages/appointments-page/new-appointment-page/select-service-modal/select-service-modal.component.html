@@ -1,0 +1,157 @@
+<div class="modal-header border-bottom pb-3">
+    <h5 class="modal-title text-center w-100" id="addQuestionLabel">Selección de servicio</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+<div class="modal-body " translate="no">
+    <form class="container mb-4 mt-2 " *ngIf="!loading" [formGroup]="serviceForm">
+        <div class="row mb-3">
+            <div class="col-12 col-md-8 ">
+                <div class="input-group input-group-merge input-group-borderless input-group-flush input-group-light w-100 mb-4" >
+                    <input 
+                        [formControl]="inputFilter"
+                        style="padding-right: 2.75rem !important; padding-left: 0.75rem !important;" 
+                        type="text" 
+                        class="form-control center" 
+                        id="inputGroupMergeSearch" 
+                        placeholder="Buscar servicio deseado"  
+                        aria-describedby="inputGroupMergeSearchlAddOn"
+                    >
+                    <div class="input-group-append input-group-text"  id="inputGroupMergeSearchlAddOn">
+                        <img src="assets/icons/icon-search.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4 ">
+                <app-select-sub-category-service 
+                    [category]="category" 
+                    (changeSubcategoriesServices)="FilterByCategory($event)"
+                    [placeholder]="'Filtrar por Especialidad'"
+                ></app-select-sub-category-service>
+            </div>
+        </div>
+
+        <!-- <div class="text-start my-2">
+            <h5 class="fw-600">Servicios ya agregados a la cita</h5>
+        </div>
+
+        <div *ngIf="servicesAppointment && servicesAppointment.length > 0">
+            <div class="card p-3" *ngFor="let service of servicesAppointment">
+                <label class="custom-control-label" >
+                    {{ service.name }}
+                </label>
+            </div>
+        </div> -->
+
+
+        <div class="text-start my-2">
+            <h5 class="fw-600">Puedes seleccionar uno o más servicios</h5>
+        </div>
+
+        <div *ngIf="!inputFilter.value && !idSubcategory">
+            <div class="card mb-3" *ngFor="let categoryService of servicesBySubcategory">
+                <div class="card-body" >
+                    <div class="text-start">
+                        <h5 class="fw-600">{{categoryService.name}} </h5>
+                    </div>
+                    <div class="row">
+                        <div class="custom-checkbox col-6 col-md-4 mb-2 cursor-pointer" style="padding-left: 36px !important;"  *ngFor="let service of categoryService.services">
+                            <input class="custom-control-input" type="checkbox" [value]="service._id"  [id]="'service1' + service._id"  (change)="selectService(service)" [checked]="servicesSelected | checkedService : service" [disabled]="service._id && servicesAppointment.includes(service._id) && !changeCurrentServices">
+                            <label class="custom-control-label" [for]="'service1' + service._id" >
+                                {{ service.name }}
+                            </label>
+                        </div>
+<!-- 
+                        <div class="card border-0 position-relative card-radio afther card-radio-custom ratioMeetingTool col-12 col-sm-6 col-md-4" *ngFor="let service of categoryService.services">
+                            <div class="ml-3">
+                                <span class="ratioMeetingTool_title ">{{service.name}}</span>
+                            </div>
+                            <div>
+                                <input formControlName="service" type="radio" class="form-check-input" name="service" [id]="'service'+service._id" [value]="service" >
+                                <label [for]="'service'+service._id"></label>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- servicios con filtros  -->
+        <div *ngIf="inputFilter.value || idSubcategory">
+            <div class="card mb-3" *ngFor="let serviceFilter of serviceFilters">
+                <div class="card-body" >
+                    <div class="text-start">
+                        <h5 class="fw-600">{{serviceFilter.name}} </h5>
+                    </div>
+                    <div class="row" >
+                        <div class="custom-checkbox col-6 col-md-4 mb-2 cursor-pointer" style="padding-left: 36px !important;" *ngFor="let service of serviceFilter.services">
+                            <input class="custom-control-input" type="checkbox" [value]="service._id"  [id]="'service2' + service._id" (change)="selectService(service)" [checked]="servicesSelected | checkedService : service" [disabled]="service._id && servicesAppointment.includes(service._id) && !changeCurrentServices">
+                            <label class="custom-control-label" [for]="'service2' + service._id" >
+                                {{ service.name }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- sin filtro  -->
+        <div class="card mb-3" *ngIf="!inputFilter.value && otherServices.length > 0">
+            <div class="card-body" >
+                <div class="text-start">
+                    <h5 class="fw-600">OTROS SERVICIOS</h5>
+                </div>
+
+                <div class="row">
+                   <div class="custom-checkbox col-6 col-md-4 mb-2 cursor-pointer" style="padding-left: 36px !important;" *ngFor="let service of otherServices">
+                        <input class="custom-control-input" type="checkbox" [value]="service._id"  [id]="'service3' + service._id" (change)="selectService(service)" [checked]="servicesSelected | checkedService : service" [disabled]="service._id && servicesAppointment.includes(service._id) && !changeCurrentServices">
+                        <label class="custom-control-label" [for]="'service3' + service._id" >
+                            {{ service.name }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+
+        <!-- aplicando filtro -->
+        <div class="card mb-3" *ngIf="inputFilter.value && otherServiceFilters.length > 0">
+            <div class="card-body" >
+                <div class="text-start">
+                     <h5 class="fw-600">OTROS SERVICIOS</h5>
+                </div>
+                <div class="row">
+                    <div class="custom-checkbox col-6 col-md-4 mb-2 cursor-pointer" style="padding-left: 36px !important;" *ngFor="let service of otherServiceFilters">
+                        <input class="custom-control-input" type="checkbox" [value]="service._id"  [id]="'service4' + service._id" (change)="selectService(service)" [checked]="servicesSelected | checkedService : service" [disabled]="service._id && servicesAppointment.includes(service._id) && !changeCurrentServices">
+                        <label class="custom-control-label" [for]="'service4' + service._id" >
+                            {{ service.name }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center"  *ngIf="inputFilter.value && otherServiceFilters.length == 0 && serviceFilters.length == 0">
+            <p class="text-danger">No se encontrarón resultados para <span style="color: #000; font-weight: 900;">"{{inputFilter.value}}"</span></p>
+        </div>
+
+
+    <ng-template *ngIf="loading">
+        <div class="d-flex justify-content-center">
+            <app-loading-table></app-loading-table>
+        </div>
+    </ng-template>
+</form>
+</div>
+
+<div class="modal-footer row">
+    <div class="col-12 d-flex justify-content-end">
+    <ng-content select="[backButton]"></ng-content>
+    <button [disabled]="servicesSelected.length === 0" (click)="setService()" class="btn btn-primary" style="width: 150px;">Aceptar</button>
+    </div>
+</div>

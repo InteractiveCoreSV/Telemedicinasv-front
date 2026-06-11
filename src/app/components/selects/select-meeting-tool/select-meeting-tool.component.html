@@ -1,0 +1,13 @@
+<ng-select
+[loading]="loading"
+[notFoundText]="'No hay resultados'"
+[(ngModel)]="meetingToolSelected" 
+(ngModelChange)="selectedmeetingTool()"
+ [placeholder]="'Seleccione plataforma de video'"
+ style="min-width: 200px;text-align: center;"
+
+>
+<ng-option *ngFor="let platform of meetingTool" [value]="platform._id">{{
+  platform.name
+}}</ng-option>
+</ng-select>

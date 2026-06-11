@@ -1,0 +1,132 @@
+﻿<div class="text-right m-3">
+  <a routerLink="/dashboard/medicos/nuevo-medico" class="btn btn-primary btn-200">+ Agregar</a>
+</div>
+
+<div class="row justify-content-end mb-2">
+  <div class="col-5  mt-2">
+      <div class=" px-2 col-sm-6 col-md-auto" >
+        <app-select-especialidad (changeEspecialidad)="filters.especialidad = $event; getMedicos()"></app-select-especialidad>
+      </div>
+    </div>
+</div>
+
+<div class="card-table">
+  <div class="table-responsive datatable-custom">
+      <table id="datatableusers"
+      class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+      data-hs-datatables-options='{
+             "columnDefs": [{
+                "targets": [0, 7],
+                "orderable": false
+              }],
+             "order": [],
+             "info": {
+               "totalQty": "#datatableWithPaginationInfoTotalQty"
+             },
+             "search": "#datatableSearch",
+             "entries": "#datatableEntries",
+             "pageLength": 15,
+             "isResponsive": false,
+             "isShowPaging": false,
+             "pagination": "datatablePagination"
+           }'>
+        <thead class="thead-light">
+            <tr>
+            <th >Nombre completo</th>
+            <th >Correo electrónico</th>
+            <th>Número de teléfono</th>
+            <th >Documento de identidad</th>
+            <th >Sucursal</th>
+            <th >Estado</th>
+            <th >Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+  
+          <ng-container *ngIf="!loading">
+            <ng-container *ngIf="medicos.length>0;else notResult">
+                <tr
+                *ngFor="let medico of medicos ">
+                <td class="py-3">
+                  <div class="d-flex flex-column">
+                      <span>{{medico.names}} {{medico.last_names}}</span>
+                      <span style="color: #4e4e4e;" *ngIf="medico.especialidad">{{medico.especialidad.name}}</span>
+                  </div>
+                </td>
+                <td class="py-3">{{medico.email}}</td>
+                <!-- <td class="py-3">{{medico.phone_number}}</td> -->
+                <td class="py-3">
+                  <p class="d-flex justify-content-center">
+                    <span class="mr-1">{{medico.countryCode}}</span> <input type="text" [mask]="medico.mask" class="viewInputFormatMask" disabled [(ngModel)]="medico.phone"  [ngModelOptions]="{standalone: true}">
+                  </p>
+                </td>
+
+                <td class="py-3">
+                  <input *ngIf="medico.typeDocument === 'DUI'" [(ngModel)]="medico.identityNumber" mask="00000000-0"  type="text" class="viewInputFormatMask" disabled>
+                  <input *ngIf="medico.typeDocument === 'Pasaporte' " [(ngModel)]="medico.passport"  type="text" class="viewInputFormatMask" disabled>
+                  <input *ngIf="medico.typeDocument === 'ID internacional'" [(ngModel)]="medico.idInternacional"  type="text" class="viewInputFormatMask" disabled>
+                  <span class="d-block">{{medico.typeDocument}}</span>
+                </td>
+
+                <td class="py-3">{{medico.subsidiary?.name}}</td>
+
+                <td class="py-3" [innerHTML]="medico.status | spanStatus"></td>
+
+                <td>
+                  <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+                    <button class="btn dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                      Opciones
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu>
+                      <li><a class="dropdown-item cursor-pointer" (click)="openModalNewHorarioForDoctor(medico)">Horario</a></li>
+                      <li><a class="dropdown-item cursor-pointer" (click)="changeStatusMedico(medico._id?medico._id:'',medico.status)">{{medico.status?'Desactivar':'Activar'}}</a></li>
+                      <li><a class="dropdown-item cursor-pointer" [routerLink]="'/dashboard/medicos/editar-medico'" [state]="{medico}">Editar</a></li>
+                      <li><a class="dropdown-item cursor-pointer" (click)="deleteMedico(medico._id?medico._id:'',medico.status)">Eliminar</a></li>
+  
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+  
+          <ng-template #notResult>
+            <tr>
+              <td colspan="5" class="text-center pt-5">
+                <img width="150" src="/assets/not_results.svg" alt="No hay resultados">
+                <p class="my-2">No hay resultados</p>
+              </td>
+            </tr>
+          </ng-template>
+  
+  
+          <ng-container *ngIf="loading">
+            <tr>
+              <td colspan="5" class="text-center pt-5">
+                <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+  
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between px-3 table-footer">
+        <div class="d-flex align-items-center">
+          <span class="table-footer-text">
+            Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + medicos.length : medicos.length}} - 
+            de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+        </div>
+
+        <nav aria-label="Page navigation">
+          <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+            (pageChange)="(page=$event || 1);(getMedicos())" [collectionSize]="paginationDetails.totalDocs || 0"
+            [pageSize]="paginationDetails.limit || 0">
+          </ngb-pagination>
+        </nav>
+      </div>
+  </div>
+    
+</div>
+  

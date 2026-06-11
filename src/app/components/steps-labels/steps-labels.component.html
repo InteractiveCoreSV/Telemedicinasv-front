@@ -1,0 +1,24 @@
+<ul *ngIf="!encuesta"
+  class="js-step-progress step step-sm step-icon-sm step-item-between mb-7 mx-0 px-2">
+  <li class="step-item" *ngFor="let label of labels;let i = index" [class]="i<=currentStep?'active focus':''">
+    <a class="step-content-wrapper"><span class="step-icon step-icon-soft-dark">{{i+1}}</span>
+      <div class="step-content"><span class="step-title">{{label.label}}</span></div>
+      <!-- <div class="step-content"><span class="step-title"><span>{{label.number}}</span> {{label.label}}</span></div> -->
+
+    </a>
+  </li>
+</ul>
+
+<ul
+*ngIf="encuesta"
+  class="js-step-progress step step-encuesta step-sm step-icon-sm step-item-between my-4 mx-0 px-2 px-md-4">
+ <li class="step-item p-0"
+    *ngFor="let label of labelsEncuesta; let i = index"
+    [class.active]="i <= currentStep"
+    [ngClass]="{ 'ultimo': i === labelsEncuesta.length - 1 }"
+  >
+    <a class="step-content-wrapper">
+      <span class="step-icon encuesta"></span>
+    </a>
+  </li>
+</ul>

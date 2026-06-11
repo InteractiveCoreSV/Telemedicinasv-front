@@ -1,0 +1,48 @@
+<div class="page-header">
+  <div class="row align-items-center justify-content-between">
+    <div class="col-md-auto mb-2 mb-sm-0">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-no-gutter">
+          <ng-container *ngFor="let breadcrumb of (breadcrumbs$ | async); last as isLast">
+          <li class="breadcrumb-item cursor-pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" [routerLink]="breadcrumb.label.url">
+            <a *ngIf="!isLast" class="breadcrumb-link">{{breadcrumb.label.title}}</a>
+            <ng-container *ngIf="isLast">{{breadcrumb.label.title}}</ng-container>
+          </li>
+          </ng-container>
+        </ol>
+      </nav>
+
+      <ng-container *ngIf="(pageTitle$ |async) as pageHeader">
+        <div class="d-flex flex-column flex-sm-row">
+          <div>
+            <h1 class="page-header-title">{{pageHeader.title}}</h1>
+            <p class="text-black-50" *ngIf="pageHeader.subtitle">{{pageHeader.subtitle}}</p>
+            <a style="max-width: 85px;" (click)="location.back()"  class="me-3 cursor-pointer d-none d-lg-flex align-items-center"><i class="tio-arrow-backward mt-1 mr-2"></i>Regresar</a>
+          </div>
+          <div>
+            <ng-content select="[buttonActionDash]"></ng-content>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+
+    <div class="col-md-auto">
+      <ng-container *ngxPermissionsOnly="'medico'">
+        <div class="d-flex align-items-center" *ngIf="userInfo?.statusMedico "  [innerHTML]="userInfo?.statusMedico | parseStatusMedico "></div>
+      </ng-container>
+      <div *ngxPermissionsOnly="['admin','sac','patient']" >
+        <a 
+          class="btn btn-sm btn-primary"
+          type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"
+        >
+          Status de Médicos
+        </a>
+      </div>
+
+      <ng-content select="[buttonAction]"></ng-content>
+    </div>
+  </div>
+</div>
+
+<app-medicos-in-line-lateral *ngxPermissionsOnly="['admin','sac','patient','medico']"></app-medicos-in-line-lateral>

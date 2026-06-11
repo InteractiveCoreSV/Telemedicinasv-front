@@ -1,0 +1,365 @@
+<div class="modal-header border-bottom pb-3">
+  <h5 class="modal-title text-center w-100" id="addQuestionLabel">Selección de fecha y hora</h5>
+  <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+  </button>
+</div>
+
+<div class="modal-body" translate="no">
+  <form [formGroup]="formDate">
+      <div class="row">
+        <div class="col-12 col-lg-5 text-center p-2">
+          <h6 class="fw-600">1.Selecciona la fecha</h6>
+          <ng-container *ngIf="!loadingCalendar;else loadingCalendarTempla">
+            <owl-date-time-inline
+            [startAt]="openCalendarIn"
+            id="calendar-client"
+            [(ngModel)]="dateSelected"
+            (ngModelChange)="setDateSelected()"
+            [ngModelOptions]="{standalone:true}"
+            (monthSelected)="selectMonth($event)"
+            [owlDateTimeFilter]="filterDates.bind(this)"
+            [min]="currentDate"
+            [max]="maxDate"
+            [pickerType]="'calendar'"
+            ></owl-date-time-inline>
+          </ng-container>
+    
+          <ng-template #loadingCalendarTempla>
+            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            </div>
+          </ng-template>
+    
+          <div *ngIf="formSubmited && getControl('date')?.invalid" class="invalid-feedback d-block mt-2">
+            Selecciona una fecha
+          </div>
+
+        </div>
+    
+        <div class="col-12 col-lg-7 text-center p-2">
+          <h6 class="fw-600">2. Selecciona la  hora disponible</h6>
+    
+         <ng-container *ngIf="!loadingHours;else loadingHoursTempla">
+          <ng-container *ngIf="showHours;else selectDates">
+            <!-- PARA EL LUNES -->
+            <ng-container *ngIf="daySelected == 'Monday'">
+              <div class="d-flex flex-column align-items-center">
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la mañana</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursMorningMonday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourMorningMonday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off">
+                        <label class="btn btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+      
+                      <ng-template #invalidHourMorningMonday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la tarde</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursAfternoonMonday">
+                        <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourAfternoonMonday">
+                          <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off">
+                          <label class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-container>
+      
+                        <ng-template #invalidHourAfternoonMonday>
+                          <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off" disabled>
+                          <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!-- END PARA EL LUNES -->
+
+            <!-- PARA EL MARTES -->
+            <ng-container *ngIf="daySelected == 'Tuesday'">
+              <div class="d-flex flex-column align-items-center">
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la mañana</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursMorningTuesday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourMorningTuesday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off">
+                        <label class="btn btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+      
+                      <ng-template #invalidHourMorningTuesday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la tarde</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursAfternoonTuesday">
+                        <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourAfternoonTuesday">
+                          <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off">
+                          <label class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-container>
+      
+                        <ng-template #invalidHourAfternoonTuesday>
+                          <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off" disabled>
+                          <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!-- END PARA EL MARTES -->
+
+            <!-- PARA EL MIERCOLES -->
+            <ng-container *ngIf="daySelected == 'Wednesday'">
+              <div class="d-flex flex-column align-items-center">
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la mañana</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursMorningWednesday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourMorningWednesday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off">
+                        <label class="btn btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+      
+                      <ng-template #invalidHourMorningWednesday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la tarde</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursAfternoonWednesday">
+                        <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourAfternoonWednesday">
+                          <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off">
+                          <label class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-container>
+      
+                        <ng-template #invalidHourAfternoonWednesday>
+                          <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off" disabled>
+                          <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!-- END PARA EL MIERCOLES -->
+
+            <!-- PARA EL JUEVES -->
+            <ng-container *ngIf="daySelected == 'Thursday'">
+              <div class="d-flex flex-column align-items-center">
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la mañana</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursMorninThursday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourMorningThursday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off">
+                        <label class="btn btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+      
+                      <ng-template #invalidHourMorningThursday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la tarde</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursAfternoonThursday">
+                        <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourAfternoonThursday">
+                          <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off">
+                          <label class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-container>
+      
+                        <ng-template #invalidHourAfternoonThursday>
+                          <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off" disabled>
+                          <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!-- END PARA EL JUEVES -->
+
+            <!-- PARA EL VIERNES -->
+            <ng-container *ngIf="daySelected == 'Friday'">
+              <div class="d-flex flex-column align-items-center">
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la mañana</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursMorningFriday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourMorningFriday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off">
+                        <label class="btn btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+      
+                      <ng-template #invalidHourMorningFriday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Disponibilidad por la tarde</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursAfternoonFriday">
+                        <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourAfternoonFriday">
+                          <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off">
+                          <label class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-container>
+      
+                        <ng-template #invalidHourAfternoonFriday>
+                          <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off" disabled>
+                          <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                        </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!-- END PARA EL VIERNES -->
+
+           <!-- PARA EL SABADO -->
+            <ng-container *ngIf="daySelected == 'Saturday'">
+              <div class="d-flex flex-column align-items-center">
+    
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Por la mañana</span>
+                  <div class="row " >
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursMorningSaturday;">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourMorningSaturday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off">
+                        <label class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+    
+                      <ng-template #invalidHourMorningSaturday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Por la tarde</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursAfternoonSaturday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourAfternoonSaturday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off">
+                        <label class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+    
+                      <ng-template #invalidHourAfternoonSaturday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!-- END PARA EL SABADO -->
+
+            <!-- PARA EL DOMINGO -->
+            <ng-container *ngIf="daySelected == 'Sunday'">
+              <div class="d-flex flex-column align-items-center">
+    
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Por la mañana</span>
+                  <div class="row " *ngIf="hoursMorningSunday.length>0;else nothoursMorningSunday">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursMorningSunday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourMorningSunday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off">
+                        <label class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+    
+                      <ng-template #invalidHourMorningSunday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'morning'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'morning'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="my-4 d-inline-block w-100" style="max-width: 550px;">
+                  <span class="fw-600 text-start d-block">Por la tarde</span>
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 col-md-4   p-2" *ngFor="let hour of hoursAfternoonSunday">
+                      <ng-container *ngIf="!invalidHours.includes(hour._id || '');else invalidHourAfternoonSunday">
+                        <input formControlName="hour" [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off">
+                        <label class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                      </ng-container>
+    
+                      <ng-template #invalidHourAfternoonSunday>
+                        <input [value]="hour" type="radio" class="btn-check" name="hour" [id]="'afternoon'+hour._id" autocomplete="off" disabled>
+                        <label [ngClass]="{'active': invalidHoursAdmin.includes(hour._id || '')}" class="btn  btn-for-hour" [for]="'afternoon'+hour._id">{{hour.hours}}</label>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+              
+              <ng-template #nothoursMorningSunday>
+                <div class="row">
+                  <div class="col-12">
+                    <h4>Lo sentimos, no tenemos horarios para este día</h4>
+                  </div>
+                </div>
+              </ng-template>
+    
+            </ng-container>
+            <!-- END PARA EL DOMINGO -->
+
+          </ng-container>
+         </ng-container>
+    
+          <ng-template #selectDates>
+            <img style="width: 85%;" src="../assets/calendar.svg" alt="Selecciona una fecha">
+            <h6 class="mt-2">Selecciona un día para ver los horarios disponibles</h6>
+          </ng-template>
+    
+          <ng-template #loadingHoursTempla>
+            <div class="spinner-border mt-3" style="width: 3rem; height: 3rem;" role="status">
+              <!-- <span class="visually-hidden">Loading...</span> -->
+            </div>
+          </ng-template>
+    
+          <div *ngIf="formSubmited && getControl('hour')?.invalid" class="invalid-feedback d-block mt-2">
+            Selecciona una hora
+          </div>
+        </div>
+      </div>
+    </form>
+</div>
+
+<div class="modal-footer row ">
+  <div class="col-12 d-flex justify-content-end">
+  <ng-content select="[backButton]"></ng-content>
+  <button [disabled]="formDate.invalid" (click)="setDateAndHour()" class="btn  btn-primary" style="width: 150px;">Aceptar</button>
+  </div>
+</div>

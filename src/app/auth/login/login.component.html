@@ -1,0 +1,77 @@
+
+
+<!-- ========== MAIN CONTENT ========== -->
+<main id="content" role="main" class="flex-grow-1 width-auth">
+  <!-- Form -->
+  <div class="container-fluid">
+    <div class="row ">
+      <div class="col-lg-6 col-xl-6 d-none d-lg-flex justify-content-center align-items-center min-vh-lg-100 position-relative bg-dark bg-cover" style="background-image: url(/assets/images/auth/login.png); left: -34px; background-repeat: no-repeat;background-size: cover;">
+        <div class="flex-grow-1 p-5">
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-lg-6 col-xl-6 d-flex justify-content-center align-items-center min-vh-100 mx-auto">
+        <div class="flex-grow-1 mx-auto" style="max-width: 28rem;">
+          <!-- Heading -->
+          <div class="text-center mb-5 mb-md-7">
+            <a class="navbar-brand d-flex justify-content-center mb-5" aria-label="Telemedicina Analiza El Salvador" routerLink="/auth">
+              <img  src="/assets/logos/telemedicina.png" alt="Telemedicina Analiza El Salvador" width="162">
+            </a>
+            <h1 class="h2 title-welcome">¡Bienvenido de nuevo!</h1>
+            
+          </div>
+          <!-- End Heading -->
+          <!-- Form -->
+          <form [formGroup]="loginForm">
+
+            <div class="mb-4">
+              <label class="form-label label-auth" for="signupModalFormLoginEmail">Correo electrónico o Nombre de usuario</label>
+              <input
+                [class]="loginForm.get('emailOrUserName')?.invalid && formSubmited?'is-invalid':''"
+                formControlName="emailOrUserName"
+                name="emailOrUserName"
+                aria-label="E-mail"
+                class="form-control  form-input-auth"
+              />
+              <span *ngIf="loginForm.get('emailOrUserName')?.invalid && formSubmited" class="invalid-feedback d-block">{{getEmailErrorMessage()}}</span>
+            </div>
+            <!-- End Form -->
+
+            <!-- Form -->
+            <div class="mb-4">
+              <label class="form-label label-auth" for="signupModalFormLoginPassword">Contraseña</label>
+              <div class="input-group input-group-merge">
+                <input formControlName="password" [class]="loginForm.get('password')?.invalid && formSubmited?'is-invalid':''" [type]="showPassword?'text':'password'" class="form-control form-input-auth" name="password">
+                <a (click)="showPassword = !showPassword" class="input-group-append input-group-text">
+                  <i class="fas fa-eye" *ngIf="showPassword"></i>
+                  <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
+                </a>
+              </div>
+              <a class="form-label-link recovery-password" routerLink="/auth/recovery-password">¿Olvidaste la contraseña?</a>
+
+
+              <span *ngIf="loginForm.get('password')?.invalid && formSubmited" class="invalid-feedback d-block">{{getPasswordErrorMessage()}}</span>
+            </div>
+
+
+            <!-- End Form -->
+
+            <div class="d-grid mb-3">
+              <button (click)="login()" type="button" class="btn btn-primary btn-inicio-cierre-secion" >Iniciar sesión</button>
+            </div>
+
+            <div class="text-center">
+              <p style="color: #000; font-size: 15px !important;">¿Aun no tienes cuenta? <a class="link"  routerLink="/auth/register">Regístrate aquí</a></p>
+              <p>¿Tú cuenta aun no ha sido validada? <a class="link"  routerLink="/auth/resend-verification-email">Validar correo</a></p>
+            </div>
+          </form>
+          <!-- End Form -->
+        </div>
+      </div>
+      <!-- End Col -->
+    </div>
+    <!-- End Row -->
+  </div>
+  <!-- End Form -->
+</main>

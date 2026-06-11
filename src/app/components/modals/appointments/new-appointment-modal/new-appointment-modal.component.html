@@ -1,0 +1,16 @@
+
+
+<div class="modal-header border-bottom pb-3">
+  <h4 class="modal-title">Nueva cita médica</h4>
+  <button type="button" class="close  btn-icon" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <!-- <div class="col-12 col-lg-3  ">
+    </div> -->
+    <app-new-appointment-page (createUser)="registerUser = $event"></app-new-appointment-page>
+</div>
+
+
+

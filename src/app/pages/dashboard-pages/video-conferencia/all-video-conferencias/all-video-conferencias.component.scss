@@ -1,0 +1,28 @@
+.btn-create {
+    width: 198px;
+    height: 40px;
+    border-radius: 5px ;
+    border: none;
+    background-color: rgba(46, 127, 255, 1);
+    color: rgba(255, 255, 255, 1);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 25px;
+
+}
+
+.img {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: rgba(46, 127, 255, 1) !important;
+    border-color: rgba(46, 127, 255, 1) !important;
+}
+
+.herramientas {
+    height: 65px;
+    border-bottom: 2px solid rgba(245, 246, 250, 1);
+    align-items: center;
+}

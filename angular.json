@@ -1,0 +1,182 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "tele-med-front-el-salvador": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "allowedCommonJsDependencies": [
+              "dayjs",
+              "sweetalert2"
+            ],
+            "outputPath": "dist/tele-med-front-el-salvador",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/_redirects"
+            ],
+            "styles": [
+              "src/styles.scss",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/assets/vendor/icon-set/style.css",
+              "src/assets/vendor/select2/dist/css/select2.min.css",
+              "src/assets/vendor/chart.js/dist/Chart.min.css",
+              "src/assets/vendor/daterangepicker/daterangepicker.css",
+              "src/assets/vendor/@yaireo/tagify/dist/tagify.css",
+              "src/assets/vendor/quill/dist/quill.snow.css",
+              "src/assets/vendor/leaflet/dist/leaflet.css",
+              "src/assets/vendor/flatpickr/dist/flatpickr.min.css",
+              "src/assets/vendor/fullcalendar/main.min.css",
+              "src/assets/css/theme.min.css"
+            ],
+            "scripts": [
+              "src/assets/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "src/assets/vendor/jquery/dist/jquery.min.js",
+              "src/assets/vendor/jquery-migrate/dist/jquery-migrate.min.js",
+              "src/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "src/assets/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside.min.js",
+              "src/assets/vendor/hs-unfold/dist/hs-unfold.min.js",
+              "src/assets/vendor/hs-form-search/dist/hs-form-search.min.js",
+              "src/assets/vendor/hs-toggle-password/dist/js/hs-toggle-password.js",
+              "src/assets/vendor/hs-file-attach/dist/hs-file-attach.min.js",
+              "src/assets/vendor/hs-transform-tabs-to-btn/dist/hs-transform-tabs-to-btn.min.js",
+              "src/assets/vendor/hs-step-form/dist/hs-step-form.min.js",
+              "src/assets/vendor/jquery-mask-plugin/dist/jquery.mask.min.js",
+              "src/assets/vendor/select2/dist/js/select2.full.min.js",
+              "src/assets/vendor/quill/dist/quill.min.js",
+              "src/assets/vendor/hs-counter/dist/hs-counter.min.js",
+              "src/assets/vendor/appear/dist/appear.min.js",
+              "src/assets/vendor/datatables/media/js/jquery.dataTables.min.js",
+              "src/assets/vendor/datatables.net.extensions/select/select.min.js",
+              "src/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js",
+              "src/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js",
+              "src/assets/vendor/jszip/dist/jszip.min.js",
+              "src/assets/vendor/pdfmake/build/pdfmake.min.js",
+              "src/assets/vendor/pdfmake/build/vfs_fonts.js",
+              "src/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js",
+              "src/assets/vendor/datatables.net-buttons/js/buttons.print.min.js",
+              "src/assets/vendor/datatables.net-buttons/js/buttons.colVis.min.js",
+              "src/assets/vendor/jquery-validation/dist/jquery.validate.min.js",
+              "src/assets/vendor/hs-add-field/dist/hs-add-field.min.js",
+              "src/assets/vendor/hs-sticky-block/dist/hs-sticky-block.min.js",
+              "src/assets/vendor/hs-nav-scroller/dist/hs-nav-scroller.min.js",
+              "src/assets/vendor/pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js",
+              "src/assets/vendor/hs-scrollspy/dist/hs-scrollspy.min.js",
+              "src/assets/vendor/hs-toggle-switch/dist/hs-toggle-switch.min.js",
+              "src/assets/vendor/clipboard/dist/clipboard.min.js",
+              "src/assets/vendor/daterangepicker/moment.min.js",
+              "src/assets/vendor/flatpickr/dist/flatpickr.min.js",
+              "src/assets/vendor/daterangepicker/daterangepicker.js",
+              "src/assets/vendor/jvectormap/jquery-jvectormap-2.0.3.min.js",
+              "src/assets/vendor/jvectormap/tests/assets/jquery-jvectormap-world-mill-en.js",
+              "src/assets/vendor/@yaireo/tagify/dist/tagify.min.js",
+              "src/assets/vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js",
+              "src/assets/vendor/leaflet/dist/leaflet.js",
+              "src/assets/vendor/circles.js/circles.min.js",
+              "src/assets/vendor/sortablejs/dist/sortable.umd.js",
+              "src/assets/js/theme.min.js",
+              "src/assets/js/theme-custom.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "50mb",
+                  "maximumError": "50mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "50mb",
+                  "maximumError": "50mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": { "minify": true, "inlineCritical": false },
+                "fonts": false
+              }
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "tele-med-front-el-salvador:build:production"
+            },
+            "development": {
+              "browserTarget": "tele-med-front-el-salvador:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "tele-med-front-el-salvador:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": "66319be1-2a59-406e-a22f-77f468562b18"
+  }
+}

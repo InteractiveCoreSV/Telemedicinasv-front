@@ -1,0 +1,98 @@
+<div class="text-right m-3">
+    <a (click)="openModalNewCategory()" class="btn btn-primary btn-200">+ Agregar</a>
+  </div>
+  
+  <div class="card-table">
+    <div class="table-responsive datatable-custom">
+        <table id="datatableusers"
+        class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+        data-hs-datatables-options='{
+               "columnDefs": [{
+                  "targets": [0, 7],
+                  "orderable": false
+                }],
+               "order": [],
+               "info": {
+                 "totalQty": "#datatableWithPaginationInfoTotalQty"
+               },
+               "search": "#datatableSearch",
+               "entries": "#datatableEntries",
+               "pageLength": 15,
+               "isResponsive": false,
+               "isShowPaging": false,
+               "pagination": "datatablePagination"
+             }'>
+          <thead class="thead-light">
+              <tr>
+              <th >Categoría</th>
+              <th class=" text-center">Estado</th>
+              <th class=" text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+    
+            <ng-container *ngIf="!loading">
+              <ng-container *ngIf="categoriesServices && categoriesServices.length>0;else notResult">
+                <tr
+                *ngFor="let categorieService of categoriesServices ">
+
+                    <td class="py-3">{{categorieService.name}}</td>
+
+                    <td class="py-3 text-center" [innerHTML]="categorieService.status | spanStatus"></td>
+    
+                    <td class="text-center">
+                        <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+                            <button class="btn dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                            Opciones
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu>
+                              <li><a class="dropdown-item cursor-pointer" (click)="openModalNewCategory(categorieService)">Editar</a></li>
+                              <li><a class="dropdown-item cursor-pointer" (click)="changeStatus(categorieService._id?categorieService._id:'',categorieService.status)">{{categorieService.status?'Desactivar':'Activar'}}</a></li>
+                              <li><a class="dropdown-item cursor-pointer" (click)="deleteCategorieService(categorieService._id?categorieService._id:'')">Eliminar</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+    
+            <ng-template #notResult>
+              <tr>
+                <td colspan="5" class="text-center pt-5">
+                  <img width="150" src="/assets/not_results.svg" alt="No hay resultados">
+                  <p class="my-2">No hay resultados</p>
+                </td>
+              </tr>
+            </ng-template>
+    
+    
+            <ng-container *ngIf="loading">
+              <tr>
+                <td colspan="5" class="text-center pt-5">
+                  <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+    
+          </tbody>
+        </table>
+  
+        <div class="d-flex justify-content-between px-3 table-footer" *ngIf="categoriesServices && categoriesServices.length > 0">
+          <div class="d-flex align-items-center">
+            <span class="table-footer-text">
+              Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + categoriesServices.length : categoriesServices.length}} - 
+              de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+          </div>
+  
+          <nav aria-label="Page navigation">
+            <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+              (pageChange)="(page=$event || 1);(getcategoriesServices())" [collectionSize]="paginationDetails.totalDocs || 0"
+              [pageSize]="paginationDetails.limit || 0">
+            </ngb-pagination>
+          </nav>
+        </div>
+    </div>
+      
+  </div>
+    

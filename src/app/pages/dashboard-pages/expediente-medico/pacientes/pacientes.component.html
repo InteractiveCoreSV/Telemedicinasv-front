@@ -1,0 +1,89 @@
+ <!-- List Group -->
+
+
+  <div class="row h-100 align-items-start mb-3 mx-auto" style=" max-width: 600px;">
+    <div class="col-12 " >
+      <div class="">
+        <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet p-0 m-0">Buscar Paciente</label>
+        <app-searchs-users (userSelected)="setUser($event)" [role]="'patient'"></app-searchs-users> 
+      </div>
+    </div>
+  </div>
+
+
+ <ng-container *ngIf="!loading">
+  <ul class="list-group">
+    <!-- Item -->
+    <li class="list-group-item" *ngFor="let paciente of pacientes">
+      <div class="row align-items-center">
+        <div class="col-auto">
+            <img
+            class="avatar  avatar-4x3" 
+                appBrokenImagen
+                *ngIf="paciente?.imageProfile"
+                [src]="paciente?.imageProfile"
+                [alt]="paciente?.names + ' ' + paciente?.last_names"
+            />
+            <span
+                *ngIf="!paciente?.imageProfile"
+                class="avatar-initials"
+            >
+                {{ paciente?.names | slice:0:1}}
+                {{ paciente?.last_names | slice:0:1}}
+            </span>
+        </div>
+
+        <div class="col">
+          <h5 class="mb-0">
+            <a class="text-dark" >{{paciente.names}} {{paciente.last_names}}</a>
+          </h5>
+          <ul class="list-inline list-separator small text-body">
+            <li class="list-inline-item"><i class="tio-online nav-icon" style="font-size: 14px;"></i> {{paciente.email}}</li>
+          </ul>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-auto">
+          <!-- Dropdown -->
+          <div class="btn-group " >
+            <a class="btn btn-outline-primary" type="button" [routerLink]="['/dashboard/expedientes/detalle-expediente', paciente._id]">
+                Ir al expediente
+            </a>
+           
+          </div>
+          <!-- End Dropdown -->
+        </div>
+      </div>
+      <!-- End Row -->
+    </li>
+    <!-- End Item -->
+  </ul>
+
+ </ng-container>
+
+  <ng-container *ngIf="loading">
+    <div class="w-100   text-center pt-5">
+      <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+      </div>
+    </div>
+</ng-container>
+
+  <div class="d-flex justify-content-between px-3 table-footer">
+    <div class="d-flex align-items-center">
+      <span class="table-footer-text">
+        Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + pacientes.length : pacientes.length}} - 
+        de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+    </div>
+
+    <nav aria-label="Page navigation">
+      <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+        (pageChange)="(page=$event || 1);(getUsers())" [collectionSize]="paginationDetails.totalDocs || 0"
+        [pageSize]="paginationDetails.limit || 0"
+        [maxSize]="10"
+        >
+      </ngb-pagination>
+    </nav>
+  </div>
+
+
+  <!-- End List Group -->

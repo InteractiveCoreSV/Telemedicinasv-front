@@ -1,0 +1,72 @@
+.fullcalendar-custom .fc-event-title{
+  color: #000 !important;
+}
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-selected{
+  background-color: var(--bs-primary) !important;
+}
+
+.dates-valid-sucess .owl-dt-calendar-cell:not(.owl-dt-calendar-cell-disabled):not(.owl-dt-calendar-cell-active) span{
+  background-color: var(--bs-success) !important;
+  color: white !important;
+}
+
+.no-click-more-link .fc-daygrid-more-link{
+  pointer-events: none;
+  cursor: pointer !important;
+}
+
+.fc-daygrid-more-link{
+  width: 100%;
+}
+
+.dot-reserved-event .fc-daygrid-event-dot{
+  --fc-event-border-color:  rgba(149, 193, 31, 1) !important;
+  /* border: #000000 !important; */
+}
+
+.dot-complete-event .fc-daygrid-event-dot{
+  --fc-event-border-color: rgba(46, 74, 118, 1) !important;
+  /* border: #000000 !important; */
+}
+
+.dot-refuse-event .fc-daygrid-event-dot{
+  --fc-event-border-color: rgba(234, 72, 80, 1) !important;
+  /* border: #000000 !important; */
+}
+
+.dot-inProgress-event .fc-daygrid-event-dot{
+  --fc-event-border-color: rgb(150, 220, 232) !important;
+  /* border: #000000 !important; */
+}
+
+.dot-pending_payment .fc-daygrid-event-dot{
+  --fc-event-border-color: rgb(143, 143, 143) !important;
+  /* border: #000000 !important; */
+}
+
+
+.dot-confirmed-event .fc-daygrid-event-dot{
+  --fc-event-border-color: rgb(58, 116, 211) !important;
+  /* border: #000000 !important; */
+}
+
+.dot-refuse-event .fc-daygrid-event-dot{
+  --fc-event-border-color: rgba(255, 77, 79, 1) !important;
+  /* border: #000000 !important; */
+}
+
+.dot-pending-event .fc-daygrid-event-dot{
+  --fc-event-border-color: rgb(232, 150, 151) !important;
+  /* border: #000000 !important; */
+}
+
+.dot-completed-event .fc-daygrid-event-dot{
+  --fc-event-border-color: rgb(46, 74, 118) !important
+  /* border: #000000 !important; */
+}
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-today:not(.owl-dt-calendar-cell-selected) {
+    background-color: #2e4976 !important;
+    color: #fff !important;
+}

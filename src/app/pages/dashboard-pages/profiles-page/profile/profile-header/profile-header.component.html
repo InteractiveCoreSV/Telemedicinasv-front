@@ -1,0 +1,167 @@
+<!-- Profile Cover -->
+<!-- <div class="profile-cover">
+  <div class="profile-cover-img-wrapper">
+    <img
+      appBrokenImagen
+      id="profileCoverImg"
+      class="profile-cover-img"
+      [src]="
+        bannerTemp
+          ? bannerTemp
+          : bannerProfile != 'null'
+          ? bannerProfile
+          : './assets/img/1920x400/img1.jpg'
+      "
+      alt="Image Description"
+    />
+
+    <div class="profile-cover-content profile-cover-btn">
+      <div class="custom-file-btn">
+        <input
+          type="file"
+          inputFile
+          #inputIMGb
+          (imgFile)="bannerFile = $event"
+          (imgTemp)="bannerTemp = $event"
+          fileAttach
+          class="custom-file-btn-input"
+          id="profileCoverUplaoder"
+          data-hs-file-attach-options='{
+                  "textTarget": "#profileCoverImg",
+                  "mode": "image",
+                  "targetAttr": "src",
+                  "allowTypes": [".png", ".jpeg", ".jpg"]
+               }'
+        />
+        <label
+          class="custom-file-btn-label btn btn-sm btn-white"
+          for="profileCoverUplaoder"
+        >
+          <i class="tio-add-photo"></i>
+          <span class="d-none d-sm-inline-block ml-1"
+            >Actualiza tu portada</span
+          >
+        </label>
+      </div>
+    </div>
+    <div class="bannerProfilebtn">
+      <button
+        type="button"
+        *ngIf="bannerTemp ? true : false"
+        class="btn btn-light"
+        (click)="bannerTemp = null"
+      >
+        <i style="color: #e2265e" class="fas fa-times"></i>
+      </button>
+      <button
+        type="button"
+        *ngIf="bannerTemp ? true : false"
+        (click)="saveBanner()"
+        class="btn btn-light"
+      >
+        <i style="color: green" class="fas fa-check"></i>
+      </button>
+    </div>
+  </div>
+</div> -->
+<!-- End Profile Cover -->
+
+<!-- Profile Header -->
+<div class="text-center mt-10 pt-3 mb-3">
+  <!-- Avatar -->
+  <label
+    class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar"
+    for="avatarUploader"
+    style="border: 1px solid #2e4a76 !important;"
+  >
+    <img
+    *ngIf="imgTemp || perfilPhoto"
+      appBrokenImagen
+      id="avatarImg"
+      class="avatar-img"
+      [src]="perfilPhoto ? perfilPhoto : imgTemp"
+      alt="Image Description"
+    />  
+    
+    <span
+      *ngIf="!imgTemp && !perfilPhoto"
+      class="avatar-initials"
+    >
+      {{ userInfo?.names | slice:0:1}}
+      {{ userInfo?.last_names | slice:0:1}}
+    </span>
+
+    <input
+      type="file"
+      #inputIMG
+      inputFile
+      (imgFile)="imgFile = $event"
+      (imgTemp)="imgTemp = $event"
+      fileAttach
+      class="avatar-uploader-input"
+      id="avatarUploader"
+      data-hs-file-attach-options='{
+              "textTarget": "#avatarImg",
+              "mode": "image",
+              "targetAttr": "src",
+              "allowTypes": [".png", ".jpeg", ".jpg"]
+           }'
+    />
+    <span class="avatar-uploader-trigger">
+      <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
+    </span>
+  </label>
+  <div class="buttonSaveIMG">
+    <button
+      type="button"
+      *ngIf="imgTemp ? true : false"
+      class="btn btn-light"
+      (click)="imgTemp = null"
+    >
+      <i style="color: #e2265e" class="fas fa-times"></i>
+    </button>
+    <button
+      type="button"
+      *ngIf="imgTemp ? true : false"
+      class="btn btn-light"
+      (click)="inputIMG.click()"
+    >
+      <i style="color: #4c3365" class="fas fa-images"></i>
+    </button>
+    <button
+      type="button"
+      *ngIf="imgTemp ? true : false"
+      (click)="savePhoto()"
+      class="btn btn-light"
+    >
+      <i style="color: green" class="fas fa-check"></i>
+    </button>
+  </div>
+  <!-- End Avatar -->
+
+  <h1 class="page-header-title"> {{ userInfo?.names }} {{ userInfo?.last_names }}</h1>
+
+  <!-- List -->
+  <ul class="list-inline list-inline-m-1">
+    <!-- <li class="list-inline-item">
+      <i class="tio-city mr-1"></i>
+      <span>NOMBRE DE CLIENTE</span>
+    </li> -->
+
+    <!-- <li class="list-inline-item">
+      <i class="tio-poi-outlined mr-1"></i>
+      <a >San Salvador,</a>
+      <a >San Salvador</a>
+    </li> -->
+
+    <li class="list-inline-item">
+      <i class="tio-date-range mr-1"></i>
+      <span>Creado en  <span>{{userInfo?.createdAt | date:'MMMM yyyy' : 'es' }}</span></span>
+    </li>
+  </ul>
+  <!-- End List -->
+</div>
+<!-- End Profile Header -->
+
+
+   

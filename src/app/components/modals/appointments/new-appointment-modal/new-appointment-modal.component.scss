@@ -1,0 +1,46 @@
+.div-date{
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  label{
+    margin-bottom: 0;
+  }
+  input{
+    max-width: 7rem;
+  }
+}
+
+.priority-div{
+  display: flex;
+  align-items: flex-end;
+}
+
+.priority-button{
+  font-size: 11px;
+  padding: 3px;
+  min-height: 2.6rem;
+}
+
+.number-of-label-selected{
+  top: 2px !important;
+}
+
+.dropdown-toggle:not(.dropdown-toggle-empty)::after {
+  margin-left: 0.3125rem;
+  right: 7px;
+  position: absolute;
+}
+
+
+@media (min-width: 768px){
+  .col-md-4.div-date{
+      max-width: 34% !important;
+      flex: 0 0 34% !important;
+  }
+
+  .col-md-2.div-data-check-all{
+    max-width: 14.4% !important;
+    flex: 0 0 14.4% !important;
+    padding-left: 0px;
+  }
+}

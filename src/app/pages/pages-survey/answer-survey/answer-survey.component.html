@@ -1,0 +1,141 @@
+
+<div class="general-container">
+    <div class="header-survey">
+        <img  src="assets/images/encuesta/logo-company.png" alt="">
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center mt-4 flex-column px-2" style="height: 100%;" >
+        <div class="container-date mb-2 px-4" *ngIf="appointment">
+            <p class="text-date mb-0">Fecha de cita: {{appointment.dateAppointment | date:'EEEE, MMMM d, y' | titlecase}}</p>
+        </div>
+
+        <div class="card" style="background-color: rgba(255, 255, 255, 1);">
+            <div class="card-header" style="padding: 0px; height: 145px;">
+             <img *ngIf="survey" class="w-100 img-survey" [src]="survey.banner.location" alt="">
+            </div>
+
+            <!-- <div class="d-flex justify-content-end p-3" *ngIf="extraordinariasCount > 0">
+            <span><span style="font-weight: 900; color: #000;">Total de citas extraordinarias</span>: <b>{{extraordinariasCount}}</b></span>
+            </div> -->
+
+            <div class="card-body px-3 py-0 pb-4" >
+                <ng-container *ngIf="!loading ; else cargando">
+                    <div class="px-3 px-md-5 d-flex align-items-center flex-column pt-4" style="min-height: 190px;" *ngIf="!initSurvey ">
+                        <div class="flex mb-4 mt-4">
+                            <img class="mx-2" src="assets/images/encuesta/icon-smile.png" alt="">
+                            <img class="mx-2" src="assets/images/encuesta/icon-neutral.png" alt="">
+                            <img class="mx-2" src="assets/images/encuesta/icon-sad.png" alt="">
+                        </div>
+
+                        <ng-container *ngIf="appointment ; else notAppointment">
+
+                            <ng-container *ngIf="!completeSurveyAppointment ; else complete">
+                                <h3 class="title-encuesta">{{survey.title}}</h3>
+                                <p class="description-encuesta mb-4">{{survey.subtitle}}</p>
+
+                                <button (click)="nextStepper()" class="btn-init-encuesta mt-6 ">Completar encuesta</button>
+                            </ng-container>
+
+                             <ng-template #complete>
+                                <h3 class="title-encuesta">Encuesta Completada.</h3>
+                                <p class="description-encuesta mb-6">Ya has respondido la encuesta referente a esta cita.</p>
+                            </ng-template>
+                        </ng-container>
+
+                        <ng-template #notAppointment>
+                            <h3 class="title-encuesta">Lo sentimos, esta encuesta no puede ser completada</h3>
+                            <p class="description-encuesta mb-6">Cita no disponible</p>
+                        </ng-template>
+
+                    </div>
+                </ng-container>
+
+                <ng-template #cargando>
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                        </div>
+                    </div>
+                </ng-template>
+
+
+                <ng-container *ngIf="initSurvey && !endSurvey">
+                    <app-steps-labels
+                    class="mt-4"
+                    [encuesta]="true"
+                    [labelsEncuesta]="labels"
+                    [textColorClass]="'text-primary'"
+                    [currentStep]="currentSlide"
+                    ></app-steps-labels>
+
+                    <ng-stepper class="stepper-no-header stepper-mt-0 mb-0 pb-0 stepper-survey" style="margin-top: -45px;" #cdkStepper [linear]="false" *ngIf="!loading" (selectionChange)="setCurrentSlider($event)">
+                    
+                    <cdk-step [optional]="false" *ngFor="let pregunta of survey.questions; let indexPregunta = index">
+                        <ng-template cdkStepLabel></ng-template>
+
+                        <div class="py-2" >
+                            <h3 class="question">
+                                {{pregunta.question}}
+                                <button 
+                                *ngIf="pregunta.description"
+                                type="button" 
+                                class="btn btn-info ml-2" 
+                                [ngbTooltip]="pregunta.description" 
+                                triggers="click:blur"
+                                >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="#009042" d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11t-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"/></svg>
+                                </button>
+                            </h3>
+
+                            <div class="d-flex align-items-end  mt-4" *ngIf="pregunta.answer && pregunta.answer.type === 'Entrada de texto'">
+                                <textarea [(ngModel)]="pregunta.answer.enterText" class="form-control mr-1 w-100" placeholder="Ingrese su repuesta" name="entradaTextor" id="entradaTextor" rows="5"></textarea>
+                            </div>
+
+                            <div class="px-0 mt-4" *ngIf="pregunta.answer?.type === 'Selección'">
+                                <ul class="style-list-survey px-0 mx-0 flex-column flex-sm-row">
+                                    <li  *ngFor="let respuesta of pregunta.answer?.options; let idexRespuesta = index" class="option-answer">
+                                    <input 
+                                        [(ngModel)]="respuesta.select" 
+                                        (click)="selectAnswer(indexPregunta,idexRespuesta)"
+                                        class="checkbox-encuesta mt-0 mr-2" 
+                                        type="checkbox" 
+                                        id="flexCheckDefault" 
+                                    >
+                                    <span class="answer">{{respuesta.option}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end ">
+                            <button (click)="indexPregunta === 0 ? prevViewSurvey() : prevStepper()" backButton class="btn mr-2 btn-secundary me-1 btn-150">Regresar</button>
+                            <button (click)="indexPregunta === (survey.questions.length - 1) ? completeSurvey(pregunta) : nextStepperValidAnwer(pregunta)"  class="btn btn-primary btn-next">{{indexPregunta === (survey.questions.length - 1) ? 'Enviar encuesta' : 'Siguiente'}} </button>
+                        </div>
+                    </cdk-step>
+                    
+                    </ng-stepper> 
+                </ng-container>
+
+                    <ng-container *ngIf="endSurvey">
+                    <div class="px-5 d-flex align-items-center flex-column" >
+
+                        <h3 class="title-agradecimiento-encuesta mt-4">{{survey.titleAgradecimiento}}</h3>
+                        <p class="description-agradecimiento-encuesta">{{survey.subtitleAgradecimiento}}</p>
+
+                        <div class="flex my-4 justify-content-center">
+                         <img class="mx-2" src="assets/images/encuesta/complete.png" alt="">
+                        </div>
+
+
+                        <a routerLink="dashboard" class="btn-init-encuesta mt-6 ">Cerrar</a>
+
+                    </div>
+
+
+
+                </ng-container>
+
+            </div>
+
+        </div>
+    </div>
+</div>

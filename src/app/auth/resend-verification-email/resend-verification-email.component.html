@@ -1,0 +1,55 @@
+<app-header-verify-email></app-header-verify-email>
+
+
+<section class="PT-2">
+  <div class="container h-100 d-flex px-0 px-sm-4">
+      <div class="row justify-content-center align-items-center m-auto">
+          <div class="col-12">
+              <div class="bg-mode p-3 shadow rounded-3 overflow-hidden">
+                  <div class="row g-0" *ngIf="sendEmail === false">
+                      <!-- Vector Image -->
+      
+                      <!-- Information -->
+                      <div class="col-lg- order-1">
+                          <div class="p-4 ">
+                              <!-- Logo -->
+
+                              <h4 class="h5 mb-4">¿No recibiste ningún correo electrónico de validación al momento de registrarte?</h4>
+                              <div class=" py-2 mt-4">
+                                <form form class=" needs-validation" novalidate>
+                                  <div class="mb-3">
+                                    <label class="form-label" for="recover-email">Ingrese su dirección de correo electrónico para enviarle un correo electrónico de validación.</label>
+                                    <input [formControl]="emailForm" class="form-control" type="email" id="recover-email" required>
+                                    <span *ngIf="emailForm.invalid && submited" class="invalid-feedback d-block">{{getEmailErrorMessage()}}</span>
+                                  </div>
+                                  <button class="btn btn-primary" (click)="send()" type="button">send</button>
+                                </form>
+                              </div>
+                              <!-- Form END -->
+                          </div>		
+                      </div>
+                  </div>
+
+                  <div class="p-4" *ngIf="sendEmail">
+                      <h2>El correo electrónico ha sido enviado</h2>
+                      <p>Revise su bandeja de entrada para obtener instrucciones sobre cómo validar su correo electrónico.</p>
+                  
+                      <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                          <img style="margin: 30px; height: 154px;" src="../../../assets/sendMessage.svg" alt="">
+                          <div style="width: 100%; height: 45px;" class="d-grid mb-3">
+                          <button routerLink="/auth" type="button"  class="btn btn-primary btn-lg d-flex justify-content-center align-items-center">Iniciar sesion</button>
+                          </div>
+                  
+                          <div class="text-center">
+                          <p>¿No recibiste un correo electrónico? <a class="link cursor-pointer" (click)="sendEmail = false">Enviar de nuevo</a></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+

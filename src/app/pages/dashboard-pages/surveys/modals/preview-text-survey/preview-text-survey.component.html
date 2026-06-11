@@ -1,0 +1,44 @@
+<div class="modal-header" style="padding: 0px; max-height: 145px;">
+  <img class="w-100" [src]="banner.location" alt="">
+</div>
+
+<div class="modal-body px-3" >
+  <ng-container *ngIf="textAgradecimiento">
+      <div class="px-5 d-flex align-items-center flex-column" >
+
+        <h3 class="title-agradecimiento-encuesta mt-4">{{title ? title : 'Texto Principal'}}</h3>
+        <p class="description-agradecimiento-encuesta">{{subtitle ? subtitle : 'Texto secundario'}}</p>
+
+        <div class="flex mb-4 mt-3 justify-content-center">
+          <img class="mx-2" src="assets/images/encuesta/complete.png" alt="">
+        </div>
+
+      </div>
+
+
+      <div class="w-100 d-flex justify-content-center my-3">
+        <button class="btn btn-primary btn-150" (click)="ngbActiveModal.close()">Cerrar</button>
+      </div>
+  </ng-container>
+
+
+  <ng-container *ngIf="!textAgradecimiento">
+    <div class="px-5 d-flex align-items-center flex-column" >
+      <div class="flex mb-4 mt-5">
+        <img class="mx-2" src="assets/images/encuesta/icon-smile.png" alt="">
+        <img class="mx-2" src="assets/images/encuesta/icon-neutral.png" alt="">
+        <img class="mx-2" src="assets/images/encuesta/icon-sad.png" alt="">
+      </div>
+
+      <h3 class="title-encuesta">{{title ? title : 'Texto Principal'}}</h3>
+      <p class="description-encuesta">{{subtitle ? subtitle : 'Texto secundario'}}</p>
+
+    </div>
+
+
+    <div class="w-100 d-flex justify-content-center mt-5">
+      <button class="btn btn-primary w-auto" (click)="ngbActiveModal.close()">Completar encuesta</button>
+    </div>
+  </ng-container>
+ 
+</div>

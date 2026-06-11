@@ -1,0 +1,67 @@
+
+
+<div class="d-flex justify-content-center align-items-center">
+      <div class="card card-custom" style="width: 704px; max-width: 704px;">
+        <div class="card-header">
+          <h3 class="card-header-title">Completa el siguiente formulario</h3>
+        </div>
+        <form [formGroup]="videoConferenciaForm"  (ngSubmit)="videoConferenciaToEdit?editVideoConferencia():createVideoConferencia()">
+          <div class="card-body pt-2 pt-md-5 pt-lg-10 pb-2 pb-lg-5 px-2 px-md-5 px-lg-10">
+
+              <div class="row" >
+                <div class="col-12">
+                  <div class="form-group d-flex">
+                    <app-dropzone 
+                      *ngIf="!videoConferenciaToEdit"
+                      [btn]="false" 
+                      [label]="'150*150 pixels'" 
+                      [max_height]="'95px'" 
+                      [max_width]="'95px'"
+                      [dimensionState]="true"
+                      [dimensionesImg]="dimensiones" 
+                      [files]="imgs" 
+                      [maxFile]="1" 
+                      [accept]="'image/*'" 
+                      (filesOutput)="imgs=$event"
+                      [logo]="true"
+                    ></app-dropzone>
+
+                    <div style="max-width: 95px; max-height: 95px;" class="my-2" *ngIf="videoConferenciaToEdit">
+                      <img style="width: 100%; object-fit: contain;" *ngIf="videoConferenciaToEdit" [src]="videoConferenciaToEdit.img.location" alt="">
+                      <button type="button" (click)="changeimg()" class="btn btn-sm btn-block btn-primary mt-1 w-100">Cambiar imagen</button>
+                    </div>
+
+                    <div class="ml-3">
+                      <h3 class="title-logo">Logo de plataforma o herramienta</h3>
+                      <!-- <p class="sub-title-logo">lorm ipsum lorem</p> -->
+                    </div>
+                  </div>
+                </div>
+                <!-- START ROW -->
+                <div class="col-12 ">
+                  <div class="form-group">
+                    <input formControlName="name" [class]="formSubmited && videoConferenciaForm.get('names')?.invalid?'is-invalid':''" type="text" class="form-control center" placeholder="Nombre de la herramienta">
+                    <div *ngIf="formSubmited && videoConferenciaForm.get('name')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+                  </div>
+                </div>
+                <!-- END ROW -->
+                <!-- START ROW -->
+                <div class="col-12 ">
+                  <div class="form-group">
+                    <textarea formControlName="description" class="form-control center" rows="3" placeholder="Descripción e la herramienta"></textarea>
+                    <div *ngIf="formSubmited && videoConferenciaForm.get('description')?.invalid" class="invalid-feedback">La descripción es requerida</div>
+                  </div>
+                </div>
+
+              </div>
+
+          </div>
+
+               
+          <div class="card-footer w-100 text-end" style="border: none;">
+            <button type="submit" class="btn btn-primary btn-200" >{{videoConferenciaToEdit?'Editar':'Agregar'}}</button>
+          </div>
+        </form>
+    </div>
+  </div>
+  

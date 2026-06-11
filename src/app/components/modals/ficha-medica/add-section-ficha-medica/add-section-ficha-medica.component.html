@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Sección para ficha médica</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class=" w-100 row justify-content-center" >
+
+        <div class="col-12  mb-3">
+            <label class="form-label" >Nombre de la sección</label>
+            <input
+                [(ngModel)]="newSectionName"
+                type="text" 
+                placeholder="Nombre"
+                class="form-control "
+            />
+
+            <div *ngIf="newSectionSubmit && !newSectionName" class="invalid-feedback d-block">
+                Requerido para continuar
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="w-100 text-end">
+        <button type="submit" class="btn  btn-primary btn-150" (click)="saveCampo()">
+            Agregar
+        </button>
+    </div>
+</div>
+
+
+

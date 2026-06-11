@@ -1,0 +1,151 @@
+<div class="row mb-3">
+    <div class="col-auto m-0 p-0 mr-2 input-group input-group-merge input-group-borderless input-group-flush input-group-light mb-2 mb-md-0 input-search_container" >
+        <input 
+          style="padding-right: 2rem !important; padding-left: 0.75rem !important;" 
+          type="text" 
+          class="input-search center" 
+          id="inputGroupMergeSearch" 
+          placeholder="Buscar nombre, n° identidad, correo, teléfono"  
+          aria-describedby="inputGroupMergeSearchlAddOn"
+          [(ngModel)]="filters.userFilter"
+          (input)="getForSearch()"
+        >
+        <div class="input-group-append input-group-text" style="right: 0px !important; top: 0px !important;"  id="inputGroupMergeSearchlAddOn">
+          <img src="assets/icons/icon-search.png" alt="">
+        </div>
+    </div>
+
+    <div class="col-auto m-0 p-0 mr-2 d-flex mb-2 filter-calendar">
+      <button
+        [rangesSelect]="'day'"
+        [daterangepicker]="'predefined'"
+        [rangeDate]="filters.rangeDates"
+        #datePicker
+        class="btn btn-current-date dropdown-toggle filterDate d-flex justify-content-center "
+        style="width: 100% !important; min-width: 223px !important; height: 48px !important; background-color: rgba(223, 223, 223, 0.15) !important;"
+      >
+        <i class="tio-date-range"></i>
+        <span #predefinedPreview class="ml-1"></span>
+      </button>
+      <button
+        class="btn btn-ghost-secondary  p-2"
+        *ngIf="btnCancelSearchByDates"
+        (click)="searchWithoutDates()"
+      >
+        <i class="tio-clear icon-botton"></i>
+      </button>
+    </div>
+
+    <div class="col-auto m-0 p-0 mr-2 mb-2">
+      <app-select-subsidiary 
+        [class]="'select-filter'" 
+        [placeholder]="'Sucursal'" 
+        (subsidiarySelectedEv)="filters.subsidiary = $event?._id; getAnsweredSurvey()"
+      ></app-select-subsidiary>
+    </div>
+
+    <div class="col-auto m-0 p-0 mr-2 mb-2 select-filter">
+      <app-select-medico 
+        [class]="'select-filter'" 
+        [label]="'Médico'"  
+        (changeEmployee)="filters.medico = $event; getAnsweredSurvey()"
+      ></app-select-medico>
+    </div>
+    
+    <div class="col-auto d-flex justify-content-end">
+      <button class="btn btn-ghost-secondary p-0 m-0" (click)="filters = {};searchWithoutDates()">Limpiar filtros</button>
+    </div>
+  </div>
+
+
+<div class="card-table">
+
+  <div class="table-responsive datatable-custom">
+      <table id="datatableusers"
+      class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+      data-hs-datatables-options='{
+             "columnDefs": [{
+                "targets": [0, 7],
+                "orderable": false
+              }],
+             "order": [],
+             "info": {
+               "totalQty": "#datatableWithPaginationInfoTotalQty"
+             },
+             "search": "#datatableSearch",
+             "entries": "#datatableEntries",
+             "pageLength": 15,
+             "isResponsive": false,
+             "isShowPaging": false,
+             "pagination": "datatablePagination"
+           }'>
+        <thead class="thead-light">
+          <tr>
+            <th scope="col"># de Encuesta</th>
+            <th scope="col">Nombre de Paciente</th>
+            <th scope="col">Correo Electronico</th>
+            <th scope="col">Médico</th>
+            <th scope="col">Sucursal</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="!loading;else loading_templ">
+            <ng-container *ngIf="(answerSurveys).length>0;else not_results">
+              <tr *ngFor="let survey of answerSurveys;let i =index">
+                <td >#{{ survey.surveyNumber     }}</td>
+
+                <td>{{survey.user ? survey.user.names : 'Paciente no encontrado'}} {{survey.user ? survey.user.last_names : ''}}</td>
+
+                <td>{{survey.user ? survey.user.email : 'Paciente no encontrado'}}</td>
+
+                <td>{{survey.appointment?.medico ? survey.appointment?.medico?.names : 'Médico no encontrado'}} {{survey.appointment?.medico ? survey.appointment?.medico?.last_names : ''}}</td>
+
+                <td>{{survey.appointment?.subsidiary?.name}}</td>
+
+                <td >
+                  <div class="btn-group ">
+                    <button type="button" class="btn btn-detail " (click)="viewDetailSurvey(survey)" >
+                      Ver Detalle
+                    </button>
+                  </div>
+                </td>
+            </tr>
+
+            </ng-container>
+          </ng-container>
+          <ng-template #loading_templ>
+            <tr>
+              <td colspan="8">
+                <app-loading-table></app-loading-table>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template #not_results>
+            <tr>
+              <td colspan="8">
+                <app-not-results-table></app-not-results-table>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between px-3 table-footer">
+        <div class="d-flex align-items-center">
+          <span class="table-footer-text">
+            Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page -1 )* paginationDetails.limit ) + answerSurveys.length : answerSurveys.length}} - 
+            de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+        </div>
+
+        <nav aria-label="Page navigation">
+          <ngb-pagination *ngIf="paginationDetails && paginationDetails.totalPages > 1" class="d-flex mt-3"
+            (pageChange)="(page=$event || 1);(getAnsweredSurvey())" [collectionSize]="paginationDetails.totalDocs || 0"
+            [pageSize]="paginationDetails.limit || 0">
+          </ngb-pagination>
+        </nav>
+      </div>
+  </div>
+    
+</div>

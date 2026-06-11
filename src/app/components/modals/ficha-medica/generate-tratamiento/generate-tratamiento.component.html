@@ -1,0 +1,134 @@
+﻿<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Tratamiento médico</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body" style="overflow: auto;">
+    <div class=" row mx-0" >
+        <div class="col-12  mb-3">
+            <label class="form-label" >Nombre para el tratamiento</label>
+            <input
+                [(ngModel)]="nameDoc"
+                type="text" 
+                placeholder="Nombre"
+                class="form-control "
+                [disabled]="edit"
+            />
+
+            <div *ngIf="submit && !nameDoc" class="invalid-feedback d-block">
+                Requerido para continuar
+            </div>
+        </div>
+
+        <div class="w-100 d-flex justify-content-end mb-2 " *ngxPermissionsOnly="'admin'">
+            <button *ngIf="edit" class="btn btn-primary " style="width: 160px !important;" (click)="changeMedico()">Cambiar médico</button>
+        </div>
+
+        <div id="pdfContent" class="row container-pdf  mx-0 mb-2" >
+
+            <div class="col-12 d-flex justify-content-between align-items-center mb-8 mt-5">
+                <div class="d-flex flex-column">
+                    <span class="text-header-pdf">Tratamiento</span>
+                    <span>{{date | date : 'EEEE, MMMM d, y hh:mm a'}}</span>
+                </div>
+                <div class="d-flex justify-content-end align-items-center">
+                    <!-- <div class="d-flex flex-column mr-1">
+                        <span class="text-header-pdf">Analiza</span>
+                        <span class="text-header-pdf-2">Telemedicina</span>
+                    </div> -->
+                    <div>
+                        <img style="width: 200px;" src="assets/logos/telemedicina.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2 col-9" *ngIf="paciente.underAge">
+                <label class="form-label label-auth mb-0" for="date">Nombre del paciente (Menor de edad)</label>
+                <p class="m-0 p-0">{{paciente.nameUnderAge}}</p>
+              </div>
+
+              <div class="mb-2 col-3" *ngIf="paciente.underAge">
+                <label class="form-label label-auth mb-0" for="date">Fecha de nacimiento</label>
+                <p class="m-0 p-0">{{paciente.birthdateUnderAge | date:'MMMM d, y'|titlecase}}</p>
+              </div>
+
+            <div class="mb-2 col-9" >
+                <label class="form-label label-auth mb-0" for="date">{{paciente.underAge ? 'Adulto responsable' : 'Nombre del paciente'}}</label>
+                <p class="m-0 p-0">{{paciente.name}}</p>
+            </div>
+
+            <div class="mb-2 col-3" >
+                <label class="form-label label-auth mb-0" for="date">Edad</label>
+                <p class="m-0 p-0">{{paciente.age}}</p>
+            </div>
+
+            <div class="mb-2 col-12" >
+                <label class="form-label label-auth mb-0" for="date">Sucursal médica</label>
+                <p class="m-0 p-0">{{subsidiary}}</p>
+            </div>
+
+            <div class="col-12 mb-3 mt-4">
+                <label class="form-label label-auth">Descripción</label>
+                <textarea [(ngModel)]="description" placeholder="Ingrese la descripción del tratamiento" class="form-control" rows="10" [disabled]="edit"></textarea>
+                <div *ngIf="submit && !description" class="invalid-feedback d-block">
+                    Requerido para continuar
+                </div>
+            </div>
+
+            <div class="col-6 d-flex justify-content-center flex-column mt-8">
+                <div class="d-flex justify-content-center">
+                  <img style="max-height: 140px;" [src]="sello" alt="">
+                </div>
+                <label class="text-center mt-1">Sello</label>
+              </div>
+  
+              <div class="col-6 d-flex justify-content-center flex-column mt-8">
+                <div class="d-flex justify-content-center">
+                  <img style="max-height: 140px;" [src]="firma" alt="">
+                </div>
+                <label class="text-center mt-1">Firma</label>
+              </div>
+  
+              <div class="col-12 mt-2 mb-8 d-flex justify-content-center flex-column" *ngIf="!edit">
+                  <h4 class="text-center mb-1">{{medico.names}} {{medico.last_names}}</h4>
+                    <div class="d-flex justify-content-center mb-2">
+                        <span class="mr-1 text-center"style="color: #000">{{medico.countryCode}}</span> <input style="color: #000; width: 83px;" type="text" [mask]="medico.mask" class="viewInputFormatMask" disabled [(ngModel)]="medico.phone"  [ngModelOptions]="{standalone: true}">
+                    </div>
+                  <label class="text-center">Médico</label>
+              </div>
+
+                
+              <div class="col-12 mt-2 mb-8 d-flex justify-content-center flex-column" *ngIf="edit">
+                  <h4 class="text-center mb-1">{{medicoName}} </h4>
+                  <label class="text-center">Médico</label>
+              </div>
+            
+            <div class="col-12 d-flex justify-content-between mt-8 mb-8">
+                <div>
+                    <img style="width: 140px;" src="assets/logos/telemedicina.png" alt="">
+                </div>
+
+                <div>
+                    <span class="text-footer">Analiza Telemedicina El Salvador</span>
+                </div>
+            </div>
+          </div>
+    </div>
+
+
+    <div class="w-100 text-end">
+        <button type="button" class="btn  btn-primary btn-200" (click)="generarPDF()" *ngIf="!edit">
+            Generar Tratamiento
+        </button>
+        <button type="button" class="btn  btn-primary btn-200" (click)="close()" *ngIf="edit">
+            Cerrar
+        </button>
+    </div>
+</div>
+
+
+

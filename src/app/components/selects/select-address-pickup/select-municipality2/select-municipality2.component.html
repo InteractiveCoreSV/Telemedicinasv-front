@@ -1,0 +1,4 @@
+<ng-select [appendTo]="appendTo" [notFoundText]="'No hay resultados'" [(ngModel)]="municipalitySelected" (ngModelChange)="selectedMunicipality()" [placeholder]="'Municipio'">
+  <ng-option *ngFor="let municipality of municipiosFilteres" [value]="municipality">{{municipality}}</ng-option>
+</ng-select>
+

@@ -1,0 +1,4 @@
+<ng-select [(ngModel)]="addressSelected" (ngModelChange)="selectedService()" [appendTo]="appendTo" [notFoundText]="'No hay servicios'" [placeholder]="''">
+  <ng-option *ngFor="let address of addresses;let i = index" [value]="i">{{address.address}}, {{address.municipality}}, {{address.department}}</ng-option>
+</ng-select>
+

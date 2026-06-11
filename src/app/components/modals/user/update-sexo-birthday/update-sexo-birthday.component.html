@@ -1,0 +1,108 @@
+﻿<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Términos y condiciones</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close({accepted:false})">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body mx-auto" style="padding: 2rem !important;">
+    <form [formGroup]="registerForm">
+        <div class="mb-3">
+            <label class="form-label label-auth" for="dateBirthday">Fecha de nacimiento</label>
+            <div class="d-flex align-items-center position-relative">
+            <input
+                placeholder="DD/MM/YYYY"
+                type="text"
+                mask="00/00/0000"
+                class="form-control dateEnter"
+                [(ngModel)]="dateBirthday"
+                [ngModelOptions]="{standalone: true}"
+                (change)="changeDateEnter()"
+            >
+            <input
+                placeholder="DD/MM/YYYY"
+                formControlName="dateBirthday"
+                [class]="formSubmited && registerForm.get('dateBirthday')?.invalid ? 'is-invalid' : ''"
+                [owlDateTime]="dt1"
+                class="form-control dateCalendar"
+                (ngModelChange)="changeDateCalendar()"
+            >
+            <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
+                <i class="fa fa-calendar" style="height: 100%; font-size: 25px;"></i>
+            </span>
+            <owl-date-time [pickerType]="'calendar'" #dt1 ></owl-date-time>
+            
+            </div>
+            <span
+                *ngIf="registerForm.get('dateBirthday')?.invalid && formSubmited"
+                class="invalid-feedback d-block"
+                >{{ getErrordateBirthdayMessage() }}</span
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label label-auth" for="sexo">Sexo</label>
+                <div class="d-flex">
+                    <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                    <input 
+                        class="custom-control-input" 
+                        type="radio" 
+                        value="M"  
+                        id="M" 
+                        name="sexo"
+                        [(ngModel)]="sexo"  
+                        [ngModelOptions]="{standalone: true}">
+                    <label class="custom-control-label" for="M">
+                        Masculino
+                    </label>
+                    </div>
+
+                    <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                    <input 
+                        class="custom-control-input" 
+                        type="radio" 
+                        value="F"  
+                        id="F" 
+                        name="sexo"
+                        [(ngModel)]="sexo"  
+                        [ngModelOptions]="{standalone: true}">
+                    <label class="custom-control-label" for="F">
+                        Femenino
+                    </label>
+                    </div>
+                </div>
+            <span
+                *ngIf="registerForm.get('sexo')?.invalid && formSubmited"
+                class="invalid-feedback d-block"
+                >Seleccione el sexo</span
+            >
+        </div>
+
+        
+        <div class="mb-3" *ngIf="!identityNumber" >
+          <label class="form-label label-auth" for="identityNumber">Documento de identidad (DUI)</label>
+          
+          <div class="input-group d-flex justify-content-center justify-content-md-start">
+            <input
+                formControlName="identityNumber"
+                [class]=" registerForm.get('identityNumber')?.invalid && formSubmited ? 'is-invalid' : ''"
+                mask="00000000-0" 
+                type="text"
+                name="identityNumber"
+                aria-label="RNP"
+                placeholder="Número de identidad"
+                class="form-control form-input-auth"
+              />
+          </div>
+            <span
+              *ngIf="registerForm.get('identityNumber')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >El documento de indentidad es requerido</span
+            >
+        </div>
+
+
+        <div class="d-grid mb-3">
+            <button (click)="register()" type="button" class="btn btn-primary btn-inicio-cierre-secion btn-sm">Actuaizar</button>
+        </div>
+    </form>
+</div>

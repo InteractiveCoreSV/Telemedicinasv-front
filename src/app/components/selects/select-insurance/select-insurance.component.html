@@ -1,0 +1,30 @@
+<!-- <ng-select
+*ngIf="!manualSearch"
+[loading]="loading"
+[items]="insures"
+[notFoundText]="'No hay resultados'"
+[(ngModel)]="insuranceSelected"
+(ngModelChange)="selectedInsurance()"
+(keydown.enter)="keydownInDropdown($event)"
+bindLabel="name"
+bindValue="_id"
+appendTo="body"
+(search)="setSearch($event)"
+
+>
+  <ng-template ng-option-tmp let-item="item">
+    {{item.name}} <span class="badge rounded-pill" [class]="item.status?'bg-success':'bg-danger'">{{item.status?'Habilitado':'Deshabilitado'}}</span>
+</ng-template>
+</ng-select> -->
+
+<ng-select
+  [(ngModel)]="insuranceSelected"
+  (ngModelChange)="selectedInsurance()"
+  [appendTo]="''"
+  [notFoundText]="'No hay aseguradoras disponibles'"
+  [placeholder]="'Seleccione la aseguradora'"
+>
+  <ng-option *ngFor="let aseguradora of insures" [value]="aseguradora._id">
+    {{aseguradora.name}}
+  </ng-option>
+</ng-select>

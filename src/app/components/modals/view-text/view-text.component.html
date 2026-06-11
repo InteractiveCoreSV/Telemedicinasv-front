@@ -1,0 +1,17 @@
+<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title"></h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close({accepted:false})">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body mx-auto" style="padding: 2rem !important;">
+    <h3 class=" mb-2 question">
+        {{title}}
+    </h3>
+   <div class="card p-2 mb-3 " >
+        <div class="mx-2 ">
+            <p class="p-0 m-0">{{text}}</p>
+        </div>
+   </div>
+
+</div>

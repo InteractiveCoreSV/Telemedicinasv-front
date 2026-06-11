@@ -1,0 +1,72 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="addQuestionLabel">Agregar Respuesta</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="form">
+        <div class="container mb-4 mt-2 row" >
+
+
+            <div class="col-12  mb-3">
+                <label class="form-label" >Tipo de componente</label>
+                <ng-select class="unidades" formControlName="type" [placeholder]="'Seleccionar componente'" style="text-align: center;" (ngModelChange)="selectTypeComponent()">
+                    <ng-option  *ngFor="let option of ['Entrada de texto','Selección']" [value]="option">
+                        {{option}}
+                    </ng-option>
+                </ng-select>
+
+                <div *ngIf="formSubmited && getControl('type')?.invalid" class="invalid-feedback d-block">
+                    Requerido para continuar
+                </div>
+            </div>
+
+            <ng-container *ngIf="form.value.type">
+                <ng-container *ngIf="form.value.type === 'Selección'">
+                    <div class="col-12  mb-3">
+                        <label class="form-label" for="options">Opciones de respuesta</label>
+        
+                        <div formArrayName="options">
+                          <div *ngFor="let options of options.controls; let i = index" [formGroupName]="i" class="row mb-1">
+                            <div class="row col-10">
+                                <input class="form-control col-9" formControlName="option" placeholder="Opción {{i + 1}}" />
+                                <input class="form-control col-3" *ngIf="isForDoctor" formControlName="points" placeholder="Puntos" />
+                            </div>
+                            <a class="cursor-pointer ml-1 col-2" (click)="removeOptions(i)"><i class="fas fa-trash"></i></a>
+                          </div>
+                        </div>
+                    
+                        <div class="d-flex justify-content-end w-100">
+                            <button class="btn btn-outline-primary" type="button" (click)="addOptions('')">Agregar opción de respuesta</button>
+                        </div>
+                    </div>
+
+                </ng-container>
+
+                <ng-container *ngIf="form.value.type === 'Entrada de texto'">
+                    <div class="col-12  mb-3">
+                        <div class="custom-control custom-switch">
+                                <input formControlName="required" type="checkbox" class="custom-control-input" id="statusSwitch">
+                                <label class="custom-control-label" for="statusSwitch">Marcar campo como obligatorio</label>
+                        </div>        
+                    </div>
+
+                </ng-container>
+                
+            </ng-container>
+        </div>
+    </form>
+
+    <div class="w-100 text-end">
+        <button type="submit" class="btn  btn-primary btn-150" (click)="saveAnswer()">
+            Aceptar
+        </button>
+    </div>
+</div>
+
+
+

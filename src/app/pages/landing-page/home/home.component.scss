@@ -1,0 +1,380 @@
+.section-start {
+    max-height: 532px;
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(180deg, #061637 0%, #42506C 100%);
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0px auto;
+}
+
+.title_principal {
+    padding-top: 72px;
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 45px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    display: block;
+    color: rgba(255, 255, 255, 1);   
+}
+
+ul {
+    list-style: none;
+}
+
+ul li {
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 35px;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+}
+
+.section-2 {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 161px;
+}
+
+.section-2-number {
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 45px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: rgba(46, 74, 118, 1);
+}
+
+.section-2-letter {
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: rgba(46, 74, 118, 1);
+}
+
+.section-3 {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 161px;
+    background-color: rgba(189, 26, 27, 1);
+}
+
+.text-section-3 {
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+    max-width: 382px    ;
+}
+
+.btn-section-3 {
+    width: 166px;
+    min-width: 115px;
+    height: 52px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 1);
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 15px !important;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(46, 74, 118, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+//SECTION 4
+.section-4-font {
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 45px;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.section-4-title {
+    color: rgba(46, 74, 118, 1);    
+    text-align: center;
+    width: auto !important;
+}
+
+.section-4-title-resaltado {
+    background-color: rgba(46, 74, 118, 1);
+    color: #fff !important;
+    width: 456px;
+    height: 78px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.card-number {
+    width: 150px;
+    height: 150px;
+    border-radius: 50px;
+    background-color: rgba(189, 26, 27, 1);
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-number span{
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 60px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);    
+}
+
+.section-4-info {
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: rgba(46, 74, 118, 1);
+}
+
+//SECTION 5
+.img-section-5-6  {
+    max-width: 426px;
+    max-height: 419px;
+}
+
+.section-5 {
+    height: 472px;
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(180deg, #2E4A76 0%, #465572 100%);
+    display: flex;
+    align-items: end;
+}
+
+.section-5-title {
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 45px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+}
+
+.section-5-title span {
+    font-family: Inter;
+    font-weight: 700;
+}
+
+.section-5-description {
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+}
+
+//SECTION 6
+.section-6 {
+    height: 450px;
+    width: 100%;
+    overflow: hidden;
+    background-color: rgba(234, 72, 80, 1); 
+    display: flex;
+    align-items: end;
+}
+
+.section-6-title {
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 43px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+}
+
+.section-6-description {
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 35px;
+    line-height: 100%;
+    letter-spacing: 0%;    
+    color: rgba(255, 255, 255, 1);
+}
+
+.btn-section-5 {
+    width: 288px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    border: 3px solid rgba(255, 255, 255, 1);
+    background-color: transparent;
+    color: #fff;
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.section-6_1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+@media (max-width:399px) {
+    .section-4-font {
+        font-size: 24px !important;
+    }
+
+    .section-5-title {
+        font-size: 30px !important;
+    }
+
+    .section-5-description { 
+        font-size: 16px !important;
+    }
+}
+
+@media (max-width:685px) {
+    .section-3 {
+        flex-direction: column;
+    }
+
+    .text-section-3 {
+        text-align: center;    
+    }
+}
+
+@media (max-width:768px) {
+    .section-start {
+        max-height: 100%;
+    }
+    
+    .title_principal {
+        padding-top: 30px;
+        font-size: 30px;
+    }
+    
+    ul li {
+        font-size: 16px;
+        line-height: 12px;
+    }
+
+    .img-first {
+        margin-bottom: -15px;
+        margin-top: -70px;
+    }
+
+    .section-2 {
+        justify-content: center;
+        flex-direction: column;
+    }
+}
+
+@media (max-width:992px) {
+    // -------------------
+    .section-2-number {
+        font-size: 30px;
+    }
+    
+    .section-2-letter {
+        font-size: 15px;
+    }
+
+    // --------------------------
+    .section-3 {
+        justify-content: center;
+    }
+    
+    .text-section-3 {
+        font-size: 20px;
+    }
+    
+    .btn-section-3 {
+        font-size: 14px;
+    }
+
+    // -----------------------------------
+    .section-4-font {
+        font-size: 33px;
+    }
+    
+    .section-4-title-resaltado {
+        width: auto;
+        height: 50px;
+    }
+
+    .card-number {
+        width: 100px;
+        height: 100px;
+    }
+
+    .card-number span{
+        font-size: 45px;
+    }
+
+    .section-4-info {
+        font-size: 20px;
+    }
+
+    //SECTION 5
+    .section-5 {
+        height: 100%;
+    }
+
+    .img-section-5-6-section {
+        align-items: end;
+    }
+
+    .img-section-5-6  {
+        max-width: 370px;
+        max-height: 360px;
+    }
+
+    .section-5-title {
+        font-size: 38px;
+    }
+
+    .section-5-description { 
+        font-size: 25px;
+    }
+
+    //SECTION 6
+    .section-6 {
+        height: 100%;
+    }
+
+    .section-6-title {
+        font-size: 35px;
+    }
+
+    .section-6-description {
+        font-size: 22px;
+    }
+
+    .btn-section-5 {
+        width: 241px;
+        height: 55px;
+        font-size: 23px;
+    }
+}

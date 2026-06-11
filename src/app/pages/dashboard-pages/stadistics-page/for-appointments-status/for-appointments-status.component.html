@@ -1,0 +1,169 @@
+
+    <!-- Card -->
+    <div class="card h-100" style="box-shadow: #2E4A76 0px 3px 8px;">
+      <div class="d-flex justify-content-end my-2">
+        <button type="button" class="btn btn-sm btn-ghost-primary mr-2 "(click)="exportToExcel()">
+          Descargar Excel <i class="fas fa-file-download"></i>
+        </button>
+      </div>
+
+      <h4 class="fw-custom px-3 py-1 custom-title-statistics text-center">Citas según estado</h4>
+
+      <!-- Header -->
+      <div class="card-header pt-0" *ngIf="!rangeDates?.from">
+        <div class="row align-items-sm-center mb-1">
+          <div class="col-12 mb-2">
+            <div class="row">
+
+              <div class="col-12  d-flex ">
+                <ul class="nav nav-segment" id="expensesTab" role="tablist">
+                  <li class="nav-item" data-toggle="chart-bar" data-datasets="thisWeek" data-trigger="click"
+                    (click)="selectInfoForYear('month')" data-action="toggle">
+                    <a class="nav-link active" href="javascript:;" data-toggle="tab">Por mes</a>
+                  </li>
+                  <li class="nav-item" data-toggle="chart-bar" data-datasets="lastWeek" data-trigger="click"
+                    (click)="selectInfoForYear('year')" data-action="toggle">
+                    <a class="nav-link" href="javascript:;" data-toggle="tab">Por año</a>
+                  </li>
+                  <li class="nav-item" data-toggle="chart-bar" data-datasets="lastWeek" data-trigger="click"
+                   (click)="selectInfoForYear('day')" data-action="toggle">
+                  <a class="nav-link" href="javascript:;" data-toggle="tab">Por semana</a>
+                </li>
+                <li class="nav-item" data-toggle="chart-bar" data-datasets="range" data-trigger="click"
+                    (click)="selectInfoForYear('range')" data-action="toggle">
+                    <a class="nav-link " href="javascript:;" data-toggle="tab">Por rango</a>
+                </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mb-2 mb-lg-0" *ngIf="forYear ==='month' || forYear ==='year'">
+            <div class="d-flex align-items-center">
+              <button (click)="todayBtn()" type="button" class="btn btn-white mr-3">Fecha actual</button>
+
+              <button (click)="prevBtn()" type="button"
+                class="btn btn-icon btn-sm btn-ghost-secondary btn-no-focus rounded-circle mr-1" tooltip="Mes anterior"
+                title="Mes Anterior">
+                <i class="tio-chevron-left"></i>
+              </button>
+              <button (click)="nextBtn()" type="button"
+                class="btn btn-icon btn-sm btn-ghost-secondary btn-no-focus rounded-circle ml-1" tooltip="Siguiente mes"
+                title="Siguiente mes">
+                <i class="tio-chevron-right"></i>
+              </button>
+
+              <div class="ml-3">
+                <h4 class="h3 mb-0 text-capitalize" *ngIf="forYear != 'year'">{{currentMonthDate | date:'MMMM yyyy' : 'es' }}</h4>
+                <h4 class="h3 mb-0 text-capitalize" *ngIf="forYear == 'year'">{{currentYearDate }}</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 mb-2" *ngIf="forYear === 'day'">
+            <div class="row">
+  
+              <div class="col-12 d-flex justify-content-center align-items-center">
+                <ul class="nav nav-segment" id="expensesTab2" role="tablist">
+                  <li class="nav-item" data-toggle="chart-bar" data-datasets="lastWeek" data-trigger="click"
+                    (click)="setDataGraficaPorSemana(semana)" data-action="toggle" *ngFor="let semana of semanasDelMes; let i = index">
+                    <a class="nav-link " [ngClass]="{'active':i == 0}" href="javascript:;" data-toggle="tab">Semana{{i + 1}}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex " *ngIf="forYear === 'range'" >
+            <button
+              [rangesSelect]="'day'"
+              [daterangepicker]="'predefined'"
+              [rangeDate]="filters.rangeDates"
+              [allTime]="false"
+              #datePicker
+              class="btn btn-current-date dropdown-toggle filterDate d-flex justify-content-center "
+              style="width: 100% !important; min-width: 200px !important; background-color: #f5f5f5 !important;"
+            >
+              <i class="tio-date-range"></i>
+              <span #predefinedPreview class="ml-1"></span>
+            </button>
+            <button
+              class="btn btn-ghost-secondary  p-2"
+              *ngIf="btnCancelSearchByDates"
+              (click)="searchWithoutDates(); selectInfoForYear('month')"
+            >
+              <i class="tio-clear icon-botton"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- End Header -->
+
+      <!-- TOTAL DE CITAS POR ESTADO -->
+      <div class="row mx-2 pb-4 ">
+        <ng-container *ngIf="!loadGraficAppointmentsForStatus">
+          <div class="col-6 col-sm-4 col-md-4 col-lg-2_5 col-xl-2   my-2 px-2 my-md-1 px-md-1"
+            *ngFor="let quoteStatus of citasByStatus">
+            <a>
+              <div class="card text-center" [style]="'border-bottom: 5px solid'+ (quoteStatus.data.color)" style="border-radius: 0.25rem !important; height: 100%;">
+                <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
+                  <h4 class="card-title">{{ quoteStatus.data.name }}</h4>
+                  <span [style.color]="(quoteStatus.data.color)" style="font-size: medium;">{{quoteStatus.count}}</span>
+                  <!-- <button class="btn btn-sm btn-primary" *ngIf="quoteStatus.data.name === 'Citas extraordinarias'" (click)="viewAppointmnet('extraordinarias')">Ver Citas</button>
+                  <button class="btn btn-sm btn-primary" *ngIf="quoteStatus.data.name === 'Citas reprogramadas'" (click)="viewAppointmnet('reprogramadas')">Ver Citas</button> -->
+                </div>
+              </div>
+            </a>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- <div class="row mx-2 pb-4 ">
+        <ng-container *ngIf="!loadGraficAppointmentsForStatus">
+          <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-3   my-2 px-2 my-md-1 px-md-1"
+            *ngFor="let quoteStatus of citasByStatusRefused">
+            <a *ngIf="!isClient || quoteStatus.data.name === 'Rechazadas / Canceladas' ">
+              <div class="card text-center" [style]="'border-bottom: 5px solid'+ (quoteStatus.data.color)" style="border-radius: 0.25rem !important; height: 100%;">
+                <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
+                  <h4 class="card-title">{{ quoteStatus.data.name }}</h4>
+                  <span [style.color]="(quoteStatus.data.color)" style="font-size: medium;">{{quoteStatus.count}}</span>
+                  <button class="btn btn-sm btn-primary" *ngIf="quoteStatus.data.name === 'Canceladas 24H antes'" (click)="viewAppointmnet('forCanceled')">Ver Citas</button>
+                </div>
+              </div>
+            </a>
+          </div>
+        </ng-container>
+      </div> -->
+      
+      <!-- End Stats -->
+
+      <!-- Body -->
+      <div class="card-body grafica_lineal">
+        <!-- Bar Chart -->
+        <ng-container *ngIf="!loadGraficAppointmentsForStatus">
+
+          <ng-container *ngIf="!loadGraficAppointmentsForStatus">
+            <div class="chartjs-custom " *ngIf="appointments.length>0;else not_results">
+              <div style="height: 20rem;">
+                <!-- <app-line-chart [datasets]="dataBar" [labels]="labelsBar"></app-line-chart> -->
+                <app-bar-chart [datasets]="dataBar" [labels]="labelsBar"></app-bar-chart>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #not_results>
+            <app-not-results-table [title]="'para mostrar en la gráfica'"></app-not-results-table>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngIf="loadGraficAppointmentsForStatus">
+          <div colspan="6" class="text-center pt-5">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- End Bar Chart -->
+      </div>
+      <!-- End Body -->
+    </div>
+    <!-- End Card -->

@@ -1,0 +1,7 @@
+<ng-select [(ngModel)]="categorySelected" (ngModelChange)="selectedcategory()" [appendTo]="appendTo" [notFoundText]="'No hay categorias'" [placeholder]="'Seleccione la clasificación'">
+    <ng-option *ngFor="let category of categories" [value]="category">
+        {{category}}
+    </ng-option>
+  </ng-select>
+  
+  

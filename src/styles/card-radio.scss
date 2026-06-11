@@ -1,0 +1,202 @@
+.card.card-radio label{
+  position: absolute;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+}
+
+.card-radio input[type="radio"] {
+  display: none;
+}
+
+.card-radio input[type="radio"] + label:before {
+  content: "";
+  display: inline-block;
+  border: 1px solid var(--bs-primary);;
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.card-radio label{
+  padding: .5rem !important;
+  cursor: pointer;
+}
+
+.card-radio input[type="radio"]:checked + label:before {
+  content: "\2610";
+  background-color: #0063ff;
+  color: #fff;
+  border-color: var(--bs-primary);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-radio input[type="radio"]:focus + label:before {
+  outline: 2px solid var(--bs-primary);
+}
+
+.card-radio input[type="radio"]:checked + label{
+  border: 2px solid var(--bs-primary);
+  border-radius: .3125rem !important;;
+}
+
+.card-radio-custom {
+  display: flex;
+  height: 36px;
+  justify-content: center;
+  align-items: center;
+}
+
+.ratioMeetingTool {
+  width: 183px;
+  height: 43px;
+  border-radius: 3px;
+  border: 1px solid rgba(212, 212, 212, 1);
+  background-color: rgba(246, 246, 246, 1);
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+}
+
+.ratioTypeAppoinment {
+  width: 237px;
+  height: 148px;
+  border-radius: 3px;
+  border: 1px solid rgba(212, 212, 212, 1);
+  background-color: rgba(246, 246, 246, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.ratioMeetingTool_title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 0px;
+  text-align: left;
+  color: #000 !important;
+}
+
+.img {
+  height: 20px;
+  width: 20px;
+}
+
+.img-type-appointment {
+  height: 25px;
+  width: 25px;
+}
+
+.label-new-appointmet {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 25px;
+}
+
+.ratioMeetingTool-background{
+  background-color: #0063ff;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  border-radius: 3px;
+  display: none;
+  right: 20px;
+  display: none;
+}
+
+.card-radio input[type="radio"] + label::before {
+  width: 13px !important;
+  height: 13px !important;
+  border-radius: 3px !important;
+  border: 1px solid rgba(189, 189, 189, 1) !important;
+}
+
+.ratioTypeAppoinment-background{
+  background-color: #0063ff;
+  width: 16px;
+  height: 17px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  border-radius: 3px;
+  display: none;
+}
+
+.card-radio input[type="radio"]:checked + label::before {
+  border: 1px solid rgba(189, 189, 189, 1) !important;
+}
+
+.card-radio input[type="radio"]:checked + label .ratioTypeAppoinment-background {   
+   display: flex;
+}
+
+.card-radio input[type="radio"]:checked + label .ratioMeetingTool-background{ 
+  display: flex;
+}
+
+.card-radio input[type="radio"]:checked + label {
+  border: 1px solid rgba(0, 99, 255, 1) !important;
+}
+
+.card-radio label {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.ratioTypeAppoinment label {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-right: 10px;
+}
+
+.ratioTypeAppoinment input[type="radio"] + label::before {
+  width: 20px !important;
+  height: 21px !important;
+  margin: 20px !important;
+  font-size: 21px !important;
+}
+
+
+.container-ratio-type-appointment {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 60%;
+  align-items: center;
+}
+
+.card-radio.afther input[type="radio"] + label, .card-radio.afther input[type="radio"]:checked + label {
+  border: none !important;
+  flex-direction: row-reverse;
+}
+
+.card-radio.afther input[type="radio"] + label:before {
+  content: "" !important;
+  border-radius: 50% !important;
+}
+
+.card-radio.afther input[type="radio"]:checked + label:before {
+
+  background-color: #2E4A76 !important;
+}
+
+.afther {
+  box-shadow: none !important;
+}

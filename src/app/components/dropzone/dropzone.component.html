@@ -1,0 +1,27 @@
+<ngx-dropzone [multiple]="multiple" [accept]="accept" #dropzone (change)="onSelect($event)" class="flex-wrap" [style.height]="max_height?max_height:'180px'" [style.width]="max_width?max_width:''">
+	<ngx-dropzone-label>{{label}}</ngx-dropzone-label>
+    <ng-container *ngIf="logo">
+      <ngx-dropzone-image-preview  
+        class="preview-logo-dropzone"
+        ngProjectAs="ngx-dropzone-preview" 
+        *ngFor="let f of files" [file]="f" 
+        (removed)="onRemove(f)" 
+        [removable]="true"
+        (click)="getImagePreview(f)"   
+      >
+      </ngx-dropzone-image-preview>
+    </ng-container>
+
+    <ng-container *ngIf="!logo">
+      <ngx-dropzone-image-preview  
+        ngProjectAs="ngx-dropzone-preview" 
+        *ngFor="let f of files" [file]="f" 
+        (removed)="onRemove(f)" 
+        [removable]="true"
+        (click)="getImagePreview(f)"   
+      >
+      </ngx-dropzone-image-preview>
+    </ng-container>
+</ngx-dropzone>
+<button *ngIf="btn" type="button" [disabled]="files.length>=maxFile" (click)="dropzone.showFileSelector()" class="btn btn-sm btn-block btn-primary mt-2 w-100">Add file</button>
+

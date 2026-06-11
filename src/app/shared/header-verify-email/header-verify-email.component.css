@@ -1,0 +1,15 @@
+.navbar-brand {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+}
+
+.logo {
+    width: 75px !important;
+    height: 75px !important;
+}
+
+.auth {
+    display: flex;
+    align-items: center;
+
+}

@@ -1,0 +1,83 @@
+.title-register {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 18.15px;
+    color: rgba(46, 74, 118, 1);
+}
+
+
+.countryCode{
+    max-width: 6rem;
+  }
+  
+  .dropdown-menu.show{
+    max-height: 16rem;
+    overflow-y: auto;
+  }
+  
+  .selected{
+    background-color: rgba(10, 90, 248, 0.1);
+  }
+  
+  .input-group input.input-phone{
+    border-left: none !important;
+    box-shadow: none;
+  }
+  
+  .btn-primary{
+    min-width: 270px;
+  }
+  
+  /* -------------------- */
+  input.password{
+    border-radius: 0.3125rem !important;
+  }
+  
+  .back-to-role{
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+
+  .input-group-merge{
+    border-radius: .3123rem !important;
+  }
+
+  .dropdown .dropdown-toggle:after {
+    display: none !important;
+  }
+
+  .btn-medico {
+    display: flex;
+    justify-content: space-between;
+    width: 200px !important;
+    min-width: 180px !important;
+    background-color: rgb(29, 112, 183);
+    color: #ffff;
+    border-radius: 15px;
+    box-shadow: rgb(17, 79, 133) 0px 2px 0px 0px;
+  }
+
+  .container-icon {
+    background-color: #fff;
+    min-width: 45px;
+    min-height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dateEnter {
+    position: relative;
+    z-index: 5;
+  
+  }
+  
+  .dateCalendar {
+    position: absolute;
+    z-index: 2;
+    width: auto !important;
+  
+  }
+  

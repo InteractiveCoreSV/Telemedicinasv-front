@@ -1,0 +1,61 @@
+.title {
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 20px;
+    letter-spacing: 0%;
+    color: rgba(0, 0, 0, 1);
+    text-align: center;
+    width: 100%;
+}
+
+.subtitle {
+    color: rgba(110, 105, 105, 1);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0%;
+    text-align: center;
+    width: 100%;
+}
+
+.btn {
+    width: 252px;
+    height: 50px;
+    border-radius: 5px;
+    background: rgba(46, 74, 118, 1) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn:hover {
+    background: rgba(46, 74, 118, 0.788) !important;
+    color: #fff !important;
+}
+
+.card {
+    border: 1px solid rgba(46, 74, 118, 1) !important;
+    border-radius: 5px !important;
+}
+
+.card-title {
+    line-height: 15px;
+}
+
+.content-card-medico {
+    font-size: 12px;
+    line-height: 15px;
+}
+
+.constent-heart {
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    color: red;
+    z-index: 1000;
+}
+
+.btn-favoritos {
+    height: 37px;
+    width: auto;
+}

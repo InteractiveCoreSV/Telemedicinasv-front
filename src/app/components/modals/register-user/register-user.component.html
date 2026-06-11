@@ -1,0 +1,451 @@
+﻿<div class="modal-header border-bottom pb-3">
+    <h4 class="modal-title">Nuevo paciente</h4>
+    <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close({reload:true})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <!-- Form -->
+      <form [formGroup]="registerForm">
+        <!-- End Form -->
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="names">Nombre</label>
+          <input
+            formControlName="names"
+            [class]=" registerForm.get('names')?.invalid && formSubmited? 'is-invalid' : '' "
+            type="text"
+            name="names"
+            aria-label="Nombre"
+            placeholder="Escribe tu nombre"
+            class="form-control form-input-auth"
+          />
+          <span
+            *ngIf="registerForm.get('names')?.invalid && formSubmited"
+            class="invalid-feedback d-block"
+            >{{ getErrorNamesMessage() }}</span
+          >
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="last_names">Apellido</label>
+          <input
+              formControlName="last_names"
+              [class]=" registerForm.get('last_names')?.invalid && formSubmited ? 'is-invalid' : '' "
+              type="text"
+              name="last_names"
+              aria-label="Apellido"
+              placeholder="Escribe tu apellido"
+              class="form-control form-input-auth"
+            />
+            <span
+              *ngIf="registerForm.get('last_names')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >{{ getErrorLastNamesMessage() }}</span
+            >
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="dateBirthday">Fecha de nacimiento</label>
+          <div class="d-flex align-items-center position-relative">
+            <input
+              placeholder="DD/MM/YYYY"
+              type="text"
+              mask="00/00/0000"
+              class="form-control dateEnter"
+              [(ngModel)]="dateBirthday"
+              [ngModelOptions]="{standalone: true}"
+              (change)="changeDateEnter()"
+            >
+            <input
+                placeholder="DD/MM/YYYY"
+                formControlName="dateBirthday"
+                [class]="formSubmited && registerForm.get('dateBirthday')?.invalid ? 'is-invalid' : ''"
+                [owlDateTime]="dt1"
+                class="form-control dateCalendar"
+                (ngModelChange)="changeDateCalendar()"
+            >
+            <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
+                <i class="fa fa-calendar" style="height: 100%; font-size: 25px;"></i>
+            </span>
+            <owl-date-time [pickerType]="'calendar'" #dt1 ></owl-date-time>
+          
+           </div>
+            <span
+              *ngIf="registerForm.get('dateBirthday')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >{{ getErrordateBirthdayMessage() }}</span
+            >
+        </div>
+
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="sexo">Sexo</label>
+                <div class="d-flex">
+                  <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                    <input 
+                      class="custom-control-input" 
+                      type="radio" 
+                      value="M"  
+                      id="M" 
+                      name="sexo"
+                      [(ngModel)]="sexo"  
+                      [ngModelOptions]="{standalone: true}">
+                    <label class="custom-control-label" for="M">
+                      Masculino
+                    </label>
+                  </div>
+
+                  <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+                    <input 
+                      class="custom-control-input" 
+                      type="radio" 
+                      value="F"  
+                      id="F" 
+                      name="sexo"
+                      [(ngModel)]="sexo"  
+                      [ngModelOptions]="{standalone: true}">
+                    <label class="custom-control-label" for="F">
+                      Femenino
+                    </label>
+                  </div>
+                </div>
+            <span
+              *ngIf="registerForm.get('sexo')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >Seleccione el sexo</span
+            >
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="email">Correo Electrónico</label>
+          <input
+            formControlName="email"
+            [class]=" registerForm.get('email')?.invalid && formSubmited  ? 'is-invalid'  : '' "
+            type="email"
+            name="email"
+            aria-label="E-mail"
+            placeholder="¿Cual es tu correo electrónico"
+            class="form-control form-input-auth"
+          />
+          <span
+            *ngIf="registerForm.get('email')?.invalid && formSubmited"
+            class="invalid-feedback d-block"
+            >{{ getErrorEmailMessage() }}</span
+          >
+        </div>
+
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="email">Nombre de usuario</label>
+            <div class="form-group">
+              <input formControlName="userName" [class]="formSubmited && registerForm.get('userName')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre del usuario">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="password">Contraseña</label>
+          <div class="input-group input-group-merge">
+            <input placeholder="Contraseña" formControlName="password" [class]="registerForm.get('password')?.invalid && formSubmited?'is-invalid':''" [type]="showPassword?'text':'password'" class="form-control form-input-auth" name="password" autocomplete="new-password">
+            <a (click)="showPassword = !showPassword" class="input-group-append input-group-text">
+              <i class="fas fa-eye" *ngIf="showPassword"></i>
+              <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
+            </a>
+          </div>
+          <app-password-strength
+            [passwordToCheck]="registerForm.get('password')?.value"
+            (passwordStrength)="onPasswordStrengthChanged($event)"
+          ></app-password-strength>
+          <span *ngIf="registerForm.get('password')?.invalid && formSubmited" class="invalid-feedback d-block">{{getErrorPasswordMessage()}}</span>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="confirmPassword">Confirmar contraseña</label>
+          <div class="input-group input-group-merge">
+            <input placeholder="Contraseña" formControlName="confirmPassword" [class]="registerForm.get('confirmPassword')?.invalid && formSubmited?'is-invalid':''" [type]="showPasswordConfirm?'text':'password'" class="form-control form-input-auth" name="password">
+            <a (click)="showPasswordConfirm  = !showPasswordConfirm" class="input-group-append input-group-text">
+              <i class="fas fa-eye" *ngIf="showPasswordConfirm"></i>
+              <i class="fas fa-eye-slash" *ngIf="!showPasswordConfirm"></i>
+            </a>
+          </div>
+
+          <span *ngIf="registerForm.get('confirmPassword')?.invalid && formSubmited" class="invalid-feedback d-block">{{getErrorConfirmPasswordMessage()}}</span>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label label-auth" for="identityNumber">Documento de identidad</label>
+          
+          <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+            <div ngbDropdown class="d-inline-block custom-dropdawn" container="body" >
+                <button
+                type="button"
+                class="btn p-2"
+                style="
+                    background-color: #f6f6f6; 
+                    height: 100%;
+                    border:1px solid #E4E4E4 !important;
+                    border-right: none !important;
+                "
+                (click)="isOpenDropdown = !isOpenDropdown"
+                id="changeCountryCode"
+                ngbDropdownToggle
+                [class]="
+                    formSubmited && getControl('typeDocument')?.invalid
+                    ? 'is-invalid'
+                    : ''
+                "
+                >
+                {{ getControl("typeDocument")?.value }}
+                <i
+                    class="fas ml-2"
+                    [ngClass]="{
+                    'fa-chevron-up': isOpenDropdown,
+                    'fa-chevron-down': !isOpenDropdown
+                    }"
+                ></i>
+                </button>
+                <div ngbDropdownMenu>
+                <ng-container *ngFor="let item of typesDocuments">
+                    <button
+                    ngbDropdownItem
+                    [ngClass]="{
+                        selected: item === getControl('typeDocument')?.value
+                    }"
+                    (click)="
+                        updateTypeDocument(item)
+                    "
+                    >
+                    {{ item }}
+                    </button>
+                </ng-container>
+                </div>
+            </div>
+            <input
+                *ngIf="getControl('typeDocument')?.value === 'DUI'" 
+                formControlName="identityNumber"
+                [class]=" registerForm.get('identityNumber')?.invalid && formSubmited ? 'is-invalid' : ''"
+                mask="00000000-0" 
+                type="text"
+                name="identityNumber"
+                aria-label="RNP"
+                placeholder="Número de identidad"
+                class="form-control form-input-auth"
+              />
+
+            <input 
+              *ngIf="getControl('typeDocument')?.value === 'Pasaporte'"
+              formControlName="passport"
+              [class]="
+              registerForm.get('passport')?.invalid && formSubmited
+                  ? 'is-invalid'
+                  : ''
+              "
+              type="text"
+              name="passport"
+              [placeholder]="'Pasaporte'"
+              class="form-control" 
+            />
+
+            <input 
+              *ngIf="getControl('typeDocument')?.value === 'ID internacional'"
+              formControlName="idInternacional"
+              [class]="
+              registerForm.get('idInternacional')?.invalid && formSubmited
+                  ? 'is-invalid'
+                  : ''
+              "
+              type="text"
+              name="idInternacional"
+              [placeholder]="'ID Internacional'"
+              class="form-control" 
+            />
+          </div>
+            <span
+              *ngIf="registerForm.get('identityNumber')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >{{ getErroridentityNumberMessage() }}</span
+            >
+            <span
+              *ngIf="registerForm.get('passport')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >El pasaporte es requerido</span
+            >
+            <span
+              *ngIf="registerForm.get('idInternacional')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >El ID internacional es requerido</span
+            >
+        </div>
+
+        <div class="mb-3" id="inputPhone" style="display: flex;">
+          <div style="width: 100%;">
+            <label class="form-label label-auth" for="phone">Teléfono</label>
+
+            <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+              <div ngbDropdown class="d-inline-block" container="body">
+                <button
+                  type="button"
+                  class="btn pr-0"
+                  style="
+                    background-color: #f6f6f6; 
+                    height: 100%;
+                    border:1px solid #E4E4E4 !important;
+                    border-right: none !important;
+                  "
+                  (click)="isOpenDropdown = !isOpenDropdown"
+                  id="changeCountryCode"
+                  ngbDropdownToggle
+                  [class]="
+                    formSubmited && getControl('countryCode')?.invalid
+                      ? 'is-invalid'
+                      : ''
+                  "
+                >
+                  {{ getControl("COICode")?.value }}
+                  <i
+                    class="fas ml-2"
+                    [ngClass]="{
+                      'fa-chevron-up': isOpenDropdown,
+                      'fa-chevron-down': !isOpenDropdown
+                    }"
+                  ></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <ng-container *ngFor="let item of countries">
+                    <button
+                      ngbDropdownItem
+                      [ngClass]="{
+                        selected: item.name === getControl('country')?.value
+                      }"
+                      (click)="
+                        getControl('countryCode')?.setValue(item.countryCode);
+                        getControl('country')?.setValue(item.name);
+                        getControl('COICode')?.setValue(item.COICode);
+                        getControl('mask')?.setValue(item.mask)
+                      "
+                    >
+                      {{ item.name }}
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+              <input
+                type="text"
+                id="phone"
+                placeholder="9587-6543"
+                class="form-control input-phone pl-1"
+                formControlName="phone"
+                [class]="
+                  formSubmited && getControl('phone')?.invalid
+                    ? 'is-invalid d-block'
+                    : ''
+                "
+                [allowNegativeNumbers]="false"
+                [mask]="getControl('mask')?.value"
+                [prefix]="getControl('countryCode')?.value + ' '"
+                style=" padding-left: 1rem !important;"
+              />
+              <span
+                *ngIf="registerForm.get('phone')?.invalid && formSubmited"
+                class="invalid-feedback d-block"
+                >{{ getErrorPhoneMessage() }}
+              </span>
+            </div>
+          
+          </div>
+        </div>
+
+        <!-- START ROW -->  
+        <div class="mb-3">
+          <label class="form-label label-auth">Nombre del contacto de emergencia</label>
+          <div class="form-group">
+            <input formControlName="nameEmergency" [class]="formSubmited && registerForm.get('nameEmergency')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre de contacto de emergencia">
+            <div *ngIf="formSubmited && registerForm.get('nameEmergency')?.invalid" class="invalid-feedback">Este campo es requerido</div>
+          </div>
+        </div>
+        <!-- END ROW -->
+
+        <div class="mb-3">
+          <label class="form-label label-auth">Número del contacto de emergencia</label>
+          <div class="input-group d-flex justify-content-center justify-content-md-start">
+            <div ngbDropdown class="d-inline-block" container="body">
+              <button
+                type="button"
+                class="btn pr-0"
+                style="
+                  background-color: #f6f6f6; 
+                  height: 100%;
+                  border:1px solid #E4E4E4 !important;
+                  border-right: none !important;
+                "
+                (click)="isOpenDropdown = !isOpenDropdown"
+                id="changecountryCodeEmergency"
+                ngbDropdownToggle
+                [class]="
+                  formSubmited && getControl('countryCodeEmergency')?.invalid
+                    ? 'is-invalid'
+                    : ''
+                "
+              >
+                {{ getControl("COICodeEmergency")?.value }}
+                <i
+                  class="fas ml-2"
+                  [ngClass]="{
+                    'fa-chevron-up': isOpenDropdown,
+                    'fa-chevron-down': !isOpenDropdown
+                  }"
+                ></i>
+              </button>
+              <div ngbDropdownMenu>
+                <ng-container *ngFor="let item of countries">
+                  <button
+                    ngbDropdownItem
+                    [ngClass]="{
+                      selected: item.name === getControl('countryEmergency')?.value
+                    }"
+                    (click)="
+                      getControl('countryCodeEmergency')?.setValue(item.countryCode);
+                      getControl('countryEmergency')?.setValue(item.name);
+                      getControl('COICodeEmergency')?.setValue(item.COICode);
+                      getControl('maskEmergency')?.setValue(item.mask)
+                    "
+                  >
+                    {{ item.name }}
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+            <input
+              type="text"
+              id="phone"
+              placeholder="9587-6543"
+              class="form-control input-phone pl-1"
+              formControlName="phoneEmergency"
+              [class]="
+                formSubmited && getControl('phoneEmergency')?.invalid
+                  ? 'is-invalid d-block'
+                  : ''
+              "
+              [allowNegativeNumbers]="false"
+              [mask]="getControl('maskEmergency')?.value"
+              [prefix]="getControl('countryCodeEmergency')?.value + ' '"
+              style=" padding-left: 1rem !important;"
+            />
+            <span
+              *ngIf="registerForm.get('phoneEmergency')?.invalid && formSubmited"
+              class="invalid-feedback d-block"
+              >Este campo es requerido
+            </span>
+          </div>
+        </div>
+          
+
+        <div class="d-flex mb-3 justify-content-center">
+            <button (click)="cancelar()" type="button" class="btn btn-primary2 btn-sm mr-2 btn-150">Cancelar</button>
+            <button (click)="register()" type="button" class="btn btn-primary btn-sm btn-150">Regístrar usuario</button>
+        </div>
+      </form>
+</div>
+  

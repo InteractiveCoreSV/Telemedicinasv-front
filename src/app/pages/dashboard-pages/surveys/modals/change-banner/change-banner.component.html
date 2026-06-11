@@ -1,0 +1,78 @@
+<div class="modal-header" style="padding: 0px; max-height: 145px;">
+  <img
+    class="w-100" 
+    appBrokenImagen
+    [src]="bannerTemp ? bannerTemp : banner.location "
+    alt=""
+   >
+</div>
+
+<div class="modal-body px-3" >
+  <div class="px-5 d-flex align-items-center flex-column" >
+    <h3 class="title-encuesta">Sección para actualizar baner de encuesta</h3>
+    <p class="description-encuesta">Tamaño recomendado para la imagen: 550 x 143 px</p>
+
+        <input
+        type="file"
+        accept=".png, .jpeg, .jpg"
+        #inputIMG
+        inputFile
+        (imgFile)="bannerFile = $event"
+        (imgTemp)="bannerTemp = $event"
+        fileAttach
+        class="avatar-uploader-input"
+        id="avatarUploader"
+        data-hs-file-attach-options='{
+            "textTarget": "#avatarImg",
+            "mode": "image",
+            "targetAttr": "src",
+            "allowTypes": [".png", ".jpeg", ".jpg"]
+        }'
+        />
+
+     <button
+        type="button"
+        *ngIf="!bannerTemp"
+        class="btn btn-light"
+        (click)="inputIMG.click()"
+        >
+        <i style="color: #4c3365" class="fas fa-images"></i> Cambiar baner
+    </button>
+
+    <div class="buttonSaveIMG">
+        <button
+            type="button"
+            *ngIf="bannerTemp ? true : false"
+            class="btn btn-light"
+            (click)="bannerTemp = null"
+        >
+         <i style="color: #e2265e" class="fas fa-times"></i> Cancelar
+        </button>
+
+        <button
+            type="button"
+            *ngIf="bannerTemp ? true : false"
+            class="btn btn-light"
+            (click)="inputIMG.click()"
+        >
+            <i style="color: #4c3365" class="fas fa-images"></i> Cambiar
+        </button>
+
+        <button
+            type="button"
+            *ngIf="bannerTemp ? true : false"
+            (click)="saveBanner()"
+            class="btn btn-light"
+        >
+            <i style="color: green" class="fas fa-check"></i> Aceptar
+        </button> 
+    </div>
+
+  </div>
+
+
+  <div class="w-100 d-flex justify-content-center mt-5">
+    <button class="btn btn-primary btn-150" (click)="ngbActiveModal.close({banner:banner})">Cerrar</button>
+  </div>
+ 
+</div>

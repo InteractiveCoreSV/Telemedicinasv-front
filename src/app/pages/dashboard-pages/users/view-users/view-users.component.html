@@ -1,0 +1,187 @@
+﻿
+<div style="position: sticky; top: 86px;">
+  <div class="row">
+    <div class="col-12">
+      <div class="accordion" >
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" 
+             (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+             <i class="fa-solid fa-sliders mr-2" style="margin-top: 3px;"></i> Filtros
+          </button>
+          </h2>
+          <div class="accordion-collapse" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+            <div class="accordion-body">
+              <div class="row">
+                <div class="col-12 col-md-6" *ngxPermissionsOnly="'admin'">
+                  <label class="form-control-label">Por rol:</label>
+                  <app-select-role (roleChange)="filters.role=$event"></app-select-role>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-control-label">Por nombre ó apellido:</label>
+                  <input [(ngModel)]="filters.search" type="text" class="form-control">
+                </div>
+
+                <div class="col-12 col-md-6 mt-4">
+                  <label class="form-control-label">Por Email:</label>
+                  <input [(ngModel)]="filters.email" type="text" class="form-control">
+                </div>
+
+                <div class="col-12 col-md-6 mt-4">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-150" (click)="(page=1);(getUsers())">Aplicar</button>
+                    <button class="btn btn-secondary btn-150 ml-2" (click)="clearFilters()">Quitar filtros</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="col-12 d-flex mt-2 align-items-center">
+    <span>Total de clientes registrados: </span>
+    <h4 class="h3 mb-0 text-capitalize ml-2" > {{clientsCount }} -- {{users.length}}</h4>
+  </div> -->
+
+  <div class="row mx-2 pb-4 mt-2 ">
+    <ng-container >
+      <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-3   my-2 px-2 my-md-1 px-md-1"
+        *ngFor="let quoteStatus of countUsers">
+        <a>
+          <div class="card text-center" [style]="'border-bottom: 5px solid'+ (quoteStatus.color)" style="border-radius: 0.25rem !important; height: 100%;">
+            <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
+              <h4 class="card-title">{{ quoteStatus.name }}</h4>
+              <span [style.color]="(quoteStatus.color)" style="font-size: medium;">{{quoteStatus.count}}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </ng-container>
+   
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-primary w-auto mb-2" (click)="exportToExcel()">Exportar Pacientes</button>
+  </div>
+
+  <div class="card-table">
+    <div class="table-responsive datatable-custom">
+      <table id="datatableusers"
+      class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle mb-0 pb-0"
+      data-hs-datatables-options='{
+             "columnDefs": [{
+                "targets": [0, 7],
+                "orderable": false
+              }],
+             "order": [],
+             "info": {
+               "totalQty": "#datatableWithPaginationInfoTotalQty"
+             },
+             "search": "#datatableSearch",
+             "entries": "#datatableEntries",
+             "pageLength": 15,
+             "isResponsive": false,
+             "isShowPaging": false,
+             "pagination": "datatablePagination"
+           }'>
+        <thead class="thead-light">
+          <tr>
+            <th style="font-size: 1rem; font-weight: 900; color: #000;">Nombre completo</th>
+            <th style="font-size: 1rem; font-weight: 900; color: #000;">Email</th>
+            <!-- <th>Número de teléfono</th> -->
+            <th style="font-size: 1rem; font-weight: 900; color: #000;">Roles</th>
+            <th style="font-size: 1rem; font-weight: 900; color: #000;">Documento de identidad</th>
+            <th style="font-size: 1rem; font-weight: 900; color: #000;">Estado</th>
+            <th style="font-size: 1rem; font-weight: 900; color: #000;">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <ng-container *ngIf="!loading">
+            <ng-container *ngIf="users.length>0;else notResult">
+                <tr
+                *ngFor="let user of users ">
+                <td class="py-3">{{user.names}} {{user.last_names}}</td>
+                <td class="py-3">{{user.email}}</td>
+                <!-- <td class="py-3">{{user.phone_number}}</td> -->
+                <td class="py-3">
+                  <ul class="p-0">
+                    <li *ngFor="let role of user.roles">{{role.nameEs}}</li>
+                  </ul>
+                </td>
+                <td class="py-3">                  
+                  <input *ngIf="user.typeDocument === 'DUI'" [(ngModel)]="user.identityNumber" mask="00000000-0"  type="text" class="viewInputFormatMask" disabled>
+                  <input *ngIf="user.typeDocument === 'Pasaporte' " [(ngModel)]="user.passport"  type="text" class="viewInputFormatMask" disabled>
+                  <input *ngIf="user.typeDocument === 'ID internacional'" [(ngModel)]="user.idInternacional"  type="text" class="viewInputFormatMask" disabled>
+                  <span class="d-block">{{user.typeDocument}}</span>               
+                </td>
+                <td  class="py-3">
+                  <span class="badge rounded-pill" [class]="user.status?'bg-success':'bg-danger'">{{user.status?'Activo':'Desactivado'}}</span>
+                </td>
+                <td>
+                  <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" ngbDropdownAnchor (focus)="myDrop.open()">
+                    Opciones
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu>
+                      <li *ngxPermissionsOnly="'admin'"><a class="dropdown-item cursor-pointer" (click)="changeStatusUser(user._id?user._id:'',user.status)">{{user.status?'Desactivar':'Activar'}}</a></li>
+                      <li><a class="dropdown-item cursor-pointer" [routerLink]="'/dashboard/usuarios/editar-usuario'" [state]="{user}">Editar</a></li>
+                      <li *ngxPermissionsOnly="'admin'"><a class="dropdown-item cursor-pointer" (click)="deleteUser(user._id?user._id:'',user.status)">Eliminar</a></li>
+
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #notResult>
+            <tr>
+              <td colspan="6" class="text-center pt-5">
+                <img width="150" src="/assets/not_results.svg" alt="No hay resultados">
+                <p class="my-2">No hay resultados</p>
+              </td>
+            </tr>
+          </ng-template>
+
+
+          <ng-container *ngIf="loading">
+            <tr>
+              <td colspan="6" class="text-center pt-5">
+                <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between px-3 table-footer">
+    <div class="d-flex align-items-center">
+      <span class="table-footer-text">
+        Mostrando: {{paginationDetails && paginationDetails.page > 1 ? ((paginationDetails.page - 1) * (paginationDetails.limit )) + users.length : users.length}} - 
+        de {{paginationDetails && paginationDetails.totalDocs ? paginationDetails.totalDocs : 0}}</span>
+    </div>
+
+    <nav aria-label="Page navigation">
+      <ngb-pagination *ngIf="(paginationDetails?.totalDocs || 0) > 0" 
+        class="d-flex mt-3"
+        (pageChange)="(page=$event || 1);(getUsers())"
+        [collectionSize]="paginationDetails.totalDocs || 0"
+        [pageSize]="paginationDetails.limit || 0"
+        [maxSize]="10" 
+        [rotate]="true" 
+        [ellipses]="true" 
+        [boundaryLinks]="true"> 
+      </ngb-pagination>
+    </nav>
+
+  </div>
+</div>

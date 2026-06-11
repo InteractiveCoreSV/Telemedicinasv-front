@@ -1,0 +1,41 @@
+<app-steps-labels
+[labels]="labels"
+[textColorClass]="'text-primary'"
+[currentStep]="currentSlide"
+></app-steps-labels>
+
+<ng-stepper class="stepper-no-header stepper-mt-0 mb-0 pb-0" style="margin-top: -30px;" #cdkStepper [linear]="false" *ngIf="showStepper" (selectionChange)="setCurrentSlider($event)">
+  <cdk-step [stepControl]="step.form" [optional]="false">
+    <ng-template cdkStepLabel></ng-template>
+
+    <app-form-new-appointment #step (nextStepper)="nextStepper()"> 
+      <button (click)="closeModal()" backButton class="btn mr-2 btn-cancel btn-150 me-1">Cancelar</button>
+    </app-form-new-appointment>
+  </cdk-step>
+
+  <cdk-step [stepControl]="step1.form1" [optional]="false">
+    <ng-template cdkStepLabel></ng-template>
+
+    <app-form1-new-appointment #step1 (nextStepper)="nextStepper()"> 
+      <button (click)="prevStepper()" backButton class="btn mr-2 btn-primary2 me-1 btn-150">Regresar</button>
+    </app-form1-new-appointment>
+  </cdk-step>
+
+
+  <cdk-step [stepControl]="step3.form3" [optional]="false">
+    <ng-template cdkStepLabel></ng-template>
+
+    <app-form3-new-appointment #step3 (nextStepper)="nextStepper()">
+      <button (click)="prevStepper()" backButton class="btn mr-2 btn-primary2 me-1">Regresar</button>
+    </app-form3-new-appointment>
+  </cdk-step>
+
+  <cdk-step [optional]="true">
+    <ng-template cdkStepLabel></ng-template>
+
+    <app-form4-new-appointment #step4 (nextStepper)="nextStepper()">
+      <button (click)="prevStepper()" backButton class="btn mr-2 btn-primary2 me-1">Regresar</button>
+    </app-form4-new-appointment>
+  </cdk-step>
+
+</ng-stepper>

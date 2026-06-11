@@ -1,0 +1,22 @@
+.profile-header {
+    display: flex !important;
+    justify-content: space-between;
+    width: 56px;
+    height: 45px;
+    border-radius: 5px !important;
+    background: rgba(240, 240, 240, 0.25) !important;
+    margin-left: 15px;
+}
+  
+.avatar-initials {
+    background: rgb(234, 72, 80);
+    color: #fff;
+    height: 37px;
+    width: 38px;
+}
+
+@media (min-width:500px){
+    .profile-header {
+        width: 92px;
+    }
+}

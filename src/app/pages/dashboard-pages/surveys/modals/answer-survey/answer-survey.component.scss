@@ -1,0 +1,118 @@
+.title-encuesta {
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 25px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #241E4A
+}
+
+.description-encuesta {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #241E4A;
+    max-width: 350px;
+}
+
+.title-agradecimiento-encuesta{
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 25px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: rgba(29, 112, 183, 1);
+}
+
+.description-agradecimiento-encuesta {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: rgba(29, 112, 183, 1);
+}
+
+.question {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    letter-spacing: 0%;
+    color: #000000;
+}
+
+.answer {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #000000;
+}
+
+.option-answer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkbox-encuesta {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-next {
+    width: 129px;
+    height: 41px;
+    border-radius: 5px;
+}
+
+.btn-init-encuesta {
+   width: 212px;
+    height: 41px;
+    border-radius: 5px;
+    background-color: rgba(29, 112, 183, 1);
+    color: #fff;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 100%;
+    text-align: center;
+    border: none;
+}
+
+
+.checkbox-encuesta {
+    -webkit-appearance: none;
+    min-width: 18px;
+    height: 18px;
+    border: 2px solid #000;
+    background-color: transparent;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+}
+
+.checkbox-encuesta:checked {
+    background-color: rgba(29, 112, 183, 1); /* morado/jodo */
+    border-color: rgba(29, 112, 183, 1);
+}
+
+.checkbox-encuesta:checked::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.btn-info {
+    width: auto;
+    border: none;
+    background-color: transparent;
+    padding: 1px;
+}

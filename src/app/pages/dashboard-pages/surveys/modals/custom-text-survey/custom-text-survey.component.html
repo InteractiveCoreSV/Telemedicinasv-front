@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <h5 class="modal-title w-100 text-center" id="addQuestionLabel">Mensaje de {{textAgradecimiento ? 'agradecimiento' : 'inicio'}}</h5>
+    <button type="button" class="btn btn-sm p-0 close " (click)="ngbActiveModal.close()">          
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="form">
+        <div class=" w-100 row justify-content-center" >
+
+            <div class="col-12  mb-3">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label" >Escribe texto principal</label>
+                    <a class="view-reference" (click)="openPreviewModal()">ver referencia</a>
+                </div>
+                <input
+                    formControlName="title"
+                    type="text" 
+                    placeholder="Escribe el texto principal"
+                    class="form-control text-center"
+                />
+            </div>
+
+            <div class="col-12  mb-3">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label" >Escribe el texto secundario</label>
+                    <a class="view-reference" (click)="openPreviewModal()">ver referencia</a>
+                </div>
+                <input
+                    formControlName="subtitle"
+                    type="text" 
+                    placeholder="Escribe el subtítulo "
+                    class="form-control text-center"
+                />
+            </div>
+
+        </div>
+    </form>
+
+    <div class="w-100 text-end">
+        <button type="submit" class="btn  mr-2" (click)="ngbActiveModal.close()">
+            Cancelar
+        </button>
+        <button type="submit" class="btn  btn-primary btn-150" (click)="saveCampo()">
+            Aceptar
+        </button>
+    </div>
+</div>
+
+
+

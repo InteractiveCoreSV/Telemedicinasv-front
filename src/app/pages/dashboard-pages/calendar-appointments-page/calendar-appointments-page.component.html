@@ -1,0 +1,82 @@
+<div class="row  mb-2">
+
+  <div class="col-12 mb-2 mb-lg-0 d-flex flex-column flex-md-row">
+    <div class="d-flex align-items-center mr-0 mr-md-3 mb-2 mb-md-0">
+      <button (click)="todayBtn()" type="button" class="btn btn-current-date  mr-2 p-1" >Fecha Actual</button>
+
+      <button (click)="prevMonthBtn()" type="button" class="btn btn-icon btn-sm btn-arrows btn-no-focus rounded-circle mr-1" tooltip="Mes anterior" title="Mes Anterior" [hideDelay]="0">
+        <i class="tio-chevron-left" style="color: #fff !important; font-size: 20px !important;"></i>
+      </button>
+      <button (click)="nextMonthBtn()" type="button" class="btn btn-icon btn-sm btn-arrows btn-no-focus rounded-circle ml-1" tooltip="Siguiente mes" title="Siguiente mes" [hideDelay]="0">
+        <i class="tio-chevron-right" style="color: #fff !important; font-size: 20px !important;"></i>
+      </button>
+
+      <div class="ml-3">
+        <h4 class="h3 mb-0 text-capitalize" style="font-size: 14px !important;">{{currentTitle}}</h4>
+      </div>
+    </div>
+
+    <div class=" input-group input-group-merge input-group-borderless input-group-flush input-group-light mb-2" *ngxPermissionsExcept="['patient']">
+        <input 
+          style="padding-right: 2rem !important; padding-left: 0.75rem !important;" 
+          type="text" 
+          class="form-control center" 
+          id="inputGroupMergeSearch" 
+          placeholder="Buscar Nombre, N° identidad, Email, teléfono"  
+          aria-describedby="inputGroupMergeSearchlAddOn"
+          [(ngModel)]="filters.userFilter"
+          (input)="getForSearch()"
+        >
+        <div class="input-group-append input-group-text" style="right: 8px !important;"  id="inputGroupMergeSearchlAddOn">
+          <img src="assets/icons/icon-search.png" alt="">
+        </div>
+      </div>
+  </div>
+
+  <div class="col-12">
+    <div class="d-flex justify-content-end align-items-center row">
+      
+      <div class="col-12 col-sm-6 col-md-4 mb-2 mb-lg-0">
+        <app-select-category-services (changecategoriesServices)="filters.typeAppoinment = $event; getAllAppointmentsByMonth(true)"></app-select-category-services>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4 " *ngxPermissionsExcept="['patient','medico']">
+        <app-select-medico (changeEmployee)="filters.medico = $event; getAllAppointmentsByMonth(true)"></app-select-medico>
+      </div>
+      
+      <div class="col-12 col-sm-6 col-md-4 mt-2" *ngxPermissionsExcept="['patient','medico']">
+        <app-select-especialidad (changeEspecialidad)="filters.especialidad = $event; getAllAppointmentsByMonth(true)"></app-select-especialidad>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 my-2 d-flex flex-column flex-sm-row ">
+    <a class="status-container cursor-pointer" [ngClass]="{'active':filters.status === 'Pending'}" (click)="filters.status = 'Pending'; getAllAppointmentsByMonth(true)">
+      <span class="pending"></span> <span>Pendiente</span>
+    </a>
+
+    <a class="status-container cursor-pointer" [ngClass]="{'active':filters.status === 'Reserved'}" (click)="filters.status = 'Reserved'; getAllAppointmentsByMonth(true)">
+      <span class="reserved"></span> <span>Reservada</span>
+    </a>
+
+    <a class="status-container cursor-pointer" [ngClass]="{'active':filters.status === 'Confirmed'}" (click)="filters.status = 'Confirmed'; getAllAppointmentsByMonth(true)">
+      <span class="confirmed"></span> <span>Confirmada</span>
+    </a>
+
+    <a class="status-container cursor-pointer" [ngClass]="{'active':filters.status === 'InProgress'}" (click)="filters.status = 'InProgress'; getAllAppointmentsByMonth(true)">
+      <span class="inProgress"></span> <span>En Consulta</span>
+    </a>
+  
+    <a  class="status-container cursor-pointer" [ngClass]="{'active':filters.status === 'Completed'}" (click)="filters.status = 'Completed'; getAllAppointmentsByMonth(true)">
+      <span class="completed"></span> <span>Completada</span>
+    </a>
+  
+    <a class="status-container cursor-pointer" [ngClass]="{'active':filters.status === 'Refuse'}" (click)="filters.status = 'Refuse'; getAllAppointmentsByMonth(true)">
+      <span class="refused"></span> <span>Cancelada</span>
+    </a>
+  </div>
+</div>
+
+<div class="no-click-more-link"><full-calendar #calendar [options]="calendarOptions" class="fullcalendar-custom notranslate"></full-calendar></div>
