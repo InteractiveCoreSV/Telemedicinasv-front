@@ -150,13 +150,13 @@
                 <a class="cursor-pointer" *ngIf="appointment.documentAppointment" (click)="openModalViewDocument(appointment.documentAppointment.location, appointment.documentAppointment.key)">{{appointment.documentAppointment.key}}</a>
               </p>
 
-              <p class="mb-2">        
+              <!-- <p class="mb-2">        
                 <span class="title mr-2">Metodo de pago:</span> {{appointment.typePayment | parseTypePayment : appointment.status}}
-              </p>
+              </p> -->
 
 
               <p class="mb-2">        
-                <span class="title mr-2">Total pagado:</span> <span style="color: rgba(0, 144, 66, 1);"><strong>L </strong> {{appointment.total}}</span>
+                <span class="title mr-2">Total pagado:</span> <span style="color: rgba(0, 144, 66, 1);"><strong>$ </strong> {{appointment.total}}</span>
               </p>
             
             

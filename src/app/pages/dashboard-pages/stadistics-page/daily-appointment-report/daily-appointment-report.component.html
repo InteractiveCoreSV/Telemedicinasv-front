@@ -42,7 +42,7 @@
                 <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
                   <h4 class="card-title">Citas Completadas</h4>
                   <span style="font-size: medium; color: #2E4A76;">Cantidad: {{appointments && appointments.totalAppointmentsCompleted ? appointments.totalAppointmentsCompleted : 0}}</span>
-                  <span style="font-size: medium; color: #2E4A76;">Total: <strong>L </strong> {{appointments && appointments.totalSalesCompleted ? appointments.totalSalesCompleted : 0}}</span>
+                  <span style="font-size: medium; color: #2E4A76;">Total: <strong>$ </strong> {{appointments && appointments.totalSalesCompleted ? appointments.totalSalesCompleted : 0}}</span>
                 </div>
               </div>
             </a>
@@ -54,7 +54,7 @@
                 <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
                   <h4 class="card-title">Citas Canceladas</h4>
                   <span style="font-size: medium; color: #ea4850;">Cantidad: {{appointments && appointments.totalAppointmentsRefuse ? appointments.totalAppointmentsRefuse : 0}}</span>
-                  <span style="font-size: medium; color: #ea4850;">Total: <strong>L </strong> {{appointments && appointments.totalSalesRefuse ? appointments.totalSalesRefuse : 0}}</span>
+                  <span style="font-size: medium; color: #ea4850;">Total: <strong>$ </strong> {{appointments && appointments.totalSalesRefuse ? appointments.totalSalesRefuse : 0}}</span>
                 </div>
               </div>
             </a>
@@ -62,10 +62,9 @@
         </ng-container>
 
         <ng-container *ngIf="loading">
-            <div  class="w-100 text-center pt-5">
-              <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-              </div>
-            </div>
-          </ng-container>
+          <div class="col-12">
+            <app-loading-table [rows]="4"></app-loading-table>
+          </div>
+        </ng-container>
       </div>
     </div>

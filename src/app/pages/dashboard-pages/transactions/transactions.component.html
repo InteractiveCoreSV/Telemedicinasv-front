@@ -9,7 +9,7 @@
           type="text" 
           class="form-control center" 
           id="inputGroupMergeSearch" 
-          placeholder="Buscar nombre, monto, #cita, RRN"  
+          placeholder="Buscar nombre, monto, #cita"  
           aria-describedby="inputGroupMergeSearchlAddOn"
           [(ngModel)]="filters.search"
           (ngModelChange)="getForSearch($event)"
@@ -42,9 +42,9 @@
       </button>
     </div>
 
-    <div class="col-12 col-sm-auto mb-2">
+    <!-- <div class="col-12 col-sm-auto mb-2">
       <app-select-type-paymment (typePaymentSelectedEv)="filters.typePayment = $event; getTransactions()"></app-select-type-paymment>
-    </div>
+    </div> -->
 
     <div class="col-12 col-sm-auto mb-2">
       <div class="text-right">
@@ -79,10 +79,10 @@
         <thead class="thead-light">
           <tr>
             <th>Paciente</th>
-            <th>Método de pago</th>
+            <!-- <th>Método de pago</th> -->
             <th>Monto</th>
             <th>Fecha de transacción</th>
-            <th>RRN</th>
+            <!-- <th>RRN</th> -->
             <th>Nro. Cita</th>
             <!-- <th>Citas</th> -->
           </tr>
@@ -99,10 +99,10 @@
                 *ngFor="let tran of trans"
               >
                 <td class="py-3">{{tran.appointmentID && tran.appointmentID.user ? tran.appointmentID.user.names : 'Paciente no encontrado'}} {{tran.appointmentID?.user?.last_names}}</td>
-                <td class="py-3">{{tran.appointmentID?.typePayment | parseTypePayment : 'Completed'}}</td>
+                <!-- <td class="py-3">{{tran.appointmentID?.typePayment | parseTypePayment : 'Completed'}}</td> -->
                 <td class="py-3">$ {{tran.data.TotalAmount}}</td>
                 <td class="py-3">{{tran.createdAt | date : 'EEEE, MMMM d, y' | titlecase}}</td>
-                <td class="py-3">{{tran.data.RRN ? tran.data.RRN : ''}}</td>
+                <!-- <td class="py-3">{{tran.data.RRN ? tran.data.RRN : ''}}</td> -->
                 <td class="py-3">
                   #{{tran.appointmentID?.appointmentNumber}}
                   <!-- <ul>
@@ -133,12 +133,8 @@
           </ng-template>
           <ng-container *ngIf="loading">
             <tr>
-              <td colspan="6" class="text-center pt-5">
-                <div
-                  class="spinner-grow"
-                  style="width: 3rem; height: 3rem"
-                  role="status"
-                ></div>
+              <td colspan="6">
+                <app-loading-table></app-loading-table>
               </td>
             </tr>
           </ng-container>

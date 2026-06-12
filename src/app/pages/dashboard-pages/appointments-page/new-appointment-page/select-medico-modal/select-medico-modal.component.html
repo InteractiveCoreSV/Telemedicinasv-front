@@ -8,6 +8,9 @@
 </div>
 
 <div class="modal-body">
+    <ng-container *ngIf="loading">
+      <app-loading-table variant="spinner"></app-loading-table>
+    </ng-container>
     <form class="container mb-4 mt-2 " *ngIf="!loading" [formGroup]="medicoForm">
         <div class="row border-bottom">
             <div class="col-12">
@@ -115,11 +118,6 @@
             <p class="text-danger">No se encontrarón médicos para esta especialidad</p>
         </div>
 
-        <ng-template *ngIf="loading">
-            <div class="d-flex justify-content-center">
-                <app-loading-table></app-loading-table>
-            </div>
-        </ng-template>
     </form>
 </div>
 

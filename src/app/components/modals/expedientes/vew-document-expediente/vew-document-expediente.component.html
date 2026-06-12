@@ -21,9 +21,7 @@
         <label style="color: #000;" class="m-0 p-0">Documento:</label>
 
         <div *ngIf="loading" class="doc-loading">
-            <div class="spinner-border text-primary" role="status">
-                <span class="sr-only">Cargando...</span>
-            </div>
+            <app-loading-table [rows]="3"></app-loading-table>
             <p class="mt-2 mb-0 text-muted">Cargando documento...</p>
         </div>
 

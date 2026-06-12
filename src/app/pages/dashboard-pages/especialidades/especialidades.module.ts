@@ -7,6 +7,7 @@ import { NewEspecialidadComponent } from './modals/new-especialidad/new-especial
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     PipesModule,
     NgbPaginationModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponentsModule,
   ]
 })
 export class EspecialidadesModule { }

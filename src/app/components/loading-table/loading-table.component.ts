@@ -1,16 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-loading-table',
   templateUrl: './loading-table.component.html',
-  styles: [
-  ]
+  styleUrls: ['./loading-table.component.scss']
 })
-export class LoadingTableComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class LoadingTableComponent {
+  @Input() rows = 6;
+  @Input() variant: 'table' | 'spinner' = 'table';
+  get rowsArr(): null[] { return Array(this.rows).fill(null); }
 }

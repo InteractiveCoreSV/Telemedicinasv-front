@@ -108,11 +108,14 @@
                 <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
                   <h4 class="card-title">{{ quoteStatus.data.name }}</h4>
                   <span [style.color]="(quoteStatus.data.color)" style="font-size: medium;">{{quoteStatus.count}}</span>
-                  <!-- <button class="btn btn-sm btn-primary" *ngIf="quoteStatus.data.name === 'Citas extraordinarias'" (click)="viewAppointmnet('extraordinarias')">Ver Citas</button>
-                  <button class="btn btn-sm btn-primary" *ngIf="quoteStatus.data.name === 'Citas reprogramadas'" (click)="viewAppointmnet('reprogramadas')">Ver Citas</button> -->
                 </div>
               </div>
             </a>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="loadGraficAppointmentsForStatus">
+          <div class="col-12">
+            <app-loading-table [rows]="3"></app-loading-table>
           </div>
         </ng-container>
       </div>
@@ -156,10 +159,7 @@
         </ng-container>
 
         <ng-container *ngIf="loadGraficAppointmentsForStatus">
-          <div colspan="6" class="text-center pt-5">
-            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-            </div>
-          </div>
+          <app-loading-table [rows]="4"></app-loading-table>
         </ng-container>
 
         <!-- End Bar Chart -->

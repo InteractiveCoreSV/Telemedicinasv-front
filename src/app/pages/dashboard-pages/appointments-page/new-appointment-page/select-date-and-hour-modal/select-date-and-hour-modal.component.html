@@ -28,8 +28,7 @@
           </ng-container>
     
           <ng-template #loadingCalendarTempla>
-            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            </div>
+            <app-loading-table variant="spinner"></app-loading-table>
           </ng-template>
     
           <div *ngIf="formSubmited && getControl('date')?.invalid" class="invalid-feedback d-block mt-2">
@@ -344,9 +343,7 @@
           </ng-template>
     
           <ng-template #loadingHoursTempla>
-            <div class="spinner-border mt-3" style="width: 3rem; height: 3rem;" role="status">
-              <!-- <span class="visually-hidden">Loading...</span> -->
-            </div>
+            <app-loading-table variant="spinner"></app-loading-table>
           </ng-template>
     
           <div *ngIf="formSubmited && getControl('hour')?.invalid" class="invalid-feedback d-block mt-2">

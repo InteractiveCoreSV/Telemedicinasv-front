@@ -222,9 +222,9 @@
                   <a class="cursor-pointer" *ngIf="appointment.documentAppointment" (click)="openModalViewDocument(appointment.documentAppointment.location, appointment.documentAppointment.key)">{{appointment.documentAppointment.key}}</a>
                 </p>
 
-                <p class="mb-2">        
+                <!-- <p class="mb-2">        
                   <span class="title mr-2">Metodo de pago:</span> {{appointment.typePayment | parseTypePayment : appointment.status}}
-                </p>
+                </p> -->
 
                 
                 <p class="mb-2 d-flex flex-column" *ngIf="appointment.typePayment === 'transferencia' && appointment.imgComprobante.location">        

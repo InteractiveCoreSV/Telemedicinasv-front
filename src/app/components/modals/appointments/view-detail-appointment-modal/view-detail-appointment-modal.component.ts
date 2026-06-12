@@ -485,9 +485,9 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       pdf.setFont("helvetica", "normal");
 
       // Primera línea: títulos
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Metodo de pago:`, campoXPosition, yPos);
-      pdf.text(`Total pagado:`, campoXPosition + 90, yPos);
+      // pdf.setTextColor(0, 0, 0);
+      // pdf.text(`Metodo de pago:`, campoXPosition, yPos);
+      // pdf.text(`Total pagado:`, campoXPosition + 90, yPos);
 
       // Segunda línea: valores
       yPos += lineSpacing;

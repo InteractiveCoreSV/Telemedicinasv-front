@@ -8,6 +8,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CategoriesComponent } from './categories/categories.component';
 import { SubCategoriesComponent } from './sub-categories/sub-categories.component';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { SubCategoriesComponent } from './sub-categories/sub-categories.componen
     PipesModule,
     NgbPaginationModule,
     NgbModule,
+    ComponentsModule,
   ]
 })
 export class ServicesModule { }

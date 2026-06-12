@@ -8,6 +8,9 @@
 </div>
 
 <div class="modal-body " translate="no">
+    <ng-container *ngIf="loading">
+      <app-loading-table variant="spinner"></app-loading-table>
+    </ng-container>
     <form class="container mb-4 mt-2 " *ngIf="!loading" [formGroup]="serviceForm">
         <div class="row mb-3">
             <div class="col-12 col-md-8 ">
@@ -141,11 +144,6 @@
         </div>
 
 
-    <ng-template *ngIf="loading">
-        <div class="d-flex justify-content-center">
-            <app-loading-table></app-loading-table>
-        </div>
-    </ng-template>
 </form>
 </div>
 

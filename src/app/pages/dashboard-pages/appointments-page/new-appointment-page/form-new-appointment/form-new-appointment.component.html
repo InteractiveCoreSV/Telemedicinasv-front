@@ -18,11 +18,8 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="loading">
-                    <div class="d-flex justify-content-center">
-                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                        </div>
-                    </div>
-                  </ng-container>
+                  <app-loading-table variant="spinner"></app-loading-table>
+                </ng-container>
             </div>
 
             <div *ngIf="formSubmited && getControl('typeAppoinment')?.invalid" class="invalid-feedback d-block mt-2">

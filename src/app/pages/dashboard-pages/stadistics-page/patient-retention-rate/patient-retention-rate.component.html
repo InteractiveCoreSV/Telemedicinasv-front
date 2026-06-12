@@ -82,10 +82,7 @@
   
 
         <ng-container *ngIf="loadGraficUsers">
-          <div colspan="6" class="text-center pt-5">
-            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-            </div>
-          </div>
+          <app-loading-table [rows]="4"></app-loading-table>
         </ng-container>
 
         <!-- End Bar Chart -->
