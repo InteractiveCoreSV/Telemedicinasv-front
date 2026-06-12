@@ -6,11 +6,11 @@ export const environment = {
   production: false,
   portalUrl:'http://localhost:4200',
 
-  // urlApi: 'http://localhost:3001/api',
-  // urlApiPure:'http://localhost:3001',
+  urlApi: 'http://localhost:3001/api',
+  urlApiPure:'http://localhost:3001',
 
-  urlApi: 'https://api-telemedicina.interactivecore.app/api',
-  urlApiPure:'https://api-telemedicina.interactivecore.app/',
+  // urlApi: 'https://api-telemedicina.interactivecore.app/api',
+  // urlApiPure:'https://api-telemedicina.interactivecore.app/',
 
   //   urlApi: 'https://telemedicina-analiza-afec02c1d3df.herokuapp.com/api',
   // urlApiPure: 'https://telemedicina-analiza-afec02c1d3df.herokuapp.com',
