@@ -4,9 +4,9 @@
 
         <div class="col-12 h-100 mt-3">
             <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet mb-5">Seleccion tipo de Cita</label>
-            <div class="d-flex w-100 justify-content-center align-items-center">
+            <div class="d-flex flex-wrap w-100 justify-content-center align-items-center">
                 <ng-container *ngIf="!loading">
-                    <div class="card ratioTypeAppoinment border-0 position-relative card-radio card-radio-custom  mx-2" *ngFor="let category of categoriesServices">
+                    <div class="card ratioTypeAppoinment border-0 position-relative card-radio" *ngFor="let category of categoriesServices">
                         <div class="container-ratio-type-appointment mt-3">
                             <img class="img-type-appointment" [src]="category.photo.location" [alt]="category.name+'-icon'"> 
                             <span class="ratioMeetingTool_title">{{category.name}}</span>

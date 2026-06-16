@@ -2,4 +2,17 @@
     width: 237px;
     height: 148px;
     border-radius: 3px;
+    margin: 8px;
+}
+
+.img-type-appointment {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+}
+
+.ratioTypeAppoinment .ratioMeetingTool_title {
+    line-height: 1.3;
+    text-align: center;
+    word-break: break-word;
 }
