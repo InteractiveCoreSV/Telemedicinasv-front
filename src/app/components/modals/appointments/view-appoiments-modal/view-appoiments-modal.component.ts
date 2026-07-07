@@ -197,7 +197,7 @@ export class ViewAppoimentsModalComponent implements OnInit {
       const modal = this.ngbModal.open(PayAppointmentComponent,{centered:true});    
       modal.componentInstance.status = appointment.status;
       modal.componentInstance.appointmentId = appointment._id;
-      modal.componentInstance.virtual = appointment.typeAppoinment.online;
+      modal.componentInstance.virtual = appointment.typeAppoinment?.online;
       modal.componentInstance.total = appointment.total;
 
       modal.result.then((result)=>{

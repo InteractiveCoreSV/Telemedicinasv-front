@@ -80,7 +80,7 @@ export class Form5NewAppointmentComponent implements OnInit, AfterViewInit, OnDe
     this.subs.add(
       form.valueChanges.subscribe({
         next: ((value) => {
-          this.virtual = value.typeAppoinment.online
+          this.virtual = value.typeAppoinment?.online
         })
       })
     );

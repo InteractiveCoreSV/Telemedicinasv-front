@@ -104,7 +104,7 @@
                 <div *ngIf="appointment.urgency" class="mb-2 d-flex" [innerHTML]="appointment.urgency | parseUrgency"></div>
 
                 <p class="mb-2">        
-                  <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment.name}}
+                  <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment?.name ?? 'Dato no encontrado'}}
                 </p>
 
                 <div class="mb-2">
@@ -167,11 +167,11 @@
 
               <div class="col-12 col-md-6 border-radius">
                 <div class="mb-2" *ngIf="appointment && appointment.subsidiary">
-                  <p  class="mb-0">        
-                    <span class="title mr-2">Sucursal:</span> {{appointment.subsidiary.name}}
+                  <p  class="mb-0">
+                    <span class="title mr-2">Sucursal:</span> {{appointment.subsidiary.name ?? 'Dato no encontrado'}}
                   </p>
-                  <p class="mb-0">{{appointment.subsidiary.address.address}}{{appointment.subsidiary.address.aditionalInfo ? ', '+appointment.subsidiary.address.aditionalInfo : ''}}</p>
-                  <p class="mb-0">{{appointment.subsidiary.address.department}}, {{appointment.subsidiary.address.municipality}}</p>
+                  <p class="mb-0">{{appointment.subsidiary.address?.address ?? 'Dato no encontrado'}}{{appointment.subsidiary.address?.aditionalInfo ? ', '+appointment.subsidiary.address.aditionalInfo : ''}}</p>
+                  <p class="mb-0">{{appointment.subsidiary.address?.department ?? 'Dato no encontrado'}}, {{appointment.subsidiary.address?.municipality ?? 'Dato no encontrado'}}</p>
                 </div>
 
                 <p class="mb-2" *ngIf="appointment.meetingTool">        
@@ -198,12 +198,12 @@
                   <span class="title mr-2">Médico:</span> 
                   <div class="d-flex flex-column " style="margin-top: 2.7px;">
                     <span>{{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}}  {{appointment.medico ? appointment.medico.last_names : ''}}</span>
-                    <span *ngIf="appointment.medico.especialidad " style="color: #4e4e4e;" >{{ appointment.medico.especialidad.name }}</span>
+                    <span *ngIf="appointment.medico?.especialidad" style="color: #4e4e4e;" >{{ appointment.medico.especialidad.name ?? 'Dato no encontrado' }}</span>
                   </div>
                 </div>
 
-                <p class="mb-2">        
-                  <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour.hours}}
+                <p class="mb-2">
+                  <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour?.hours ?? 'Dato no encontrado'}}
                 </p>
 
                 <p class="mb-2">        
@@ -211,8 +211,8 @@
                 </p>
 
                 <ng-container >
-                    <p class="mb-2" *ngIf="appointment.referencedAppointment">        
-                    <span class="title mr-2">Cita referida por parte de la clinica:</span> {{appointment.referencedSubsidiary.name}}
+                    <p class="mb-2" *ngIf="appointment.referencedAppointment">
+                    <span class="title mr-2">Cita referida por parte de la clinica:</span> {{appointment.referencedSubsidiary?.name ?? 'Dato no encontrado'}}
                   </p>
                 </ng-container>
 
@@ -227,7 +227,7 @@
                 </p> -->
 
                 
-                <p class="mb-2 d-flex flex-column" *ngIf="appointment.typePayment === 'transferencia' && appointment.imgComprobante.location">        
+                <p class="mb-2 d-flex flex-column" *ngIf="appointment.typePayment === 'transferencia' && appointment.imgComprobante?.location">
                   <span class="title mr-2">Comprobante de pago:</span> 
                   <img class="cursor-pointer" (click)="viewAtt(appointment.imgComprobante.location)" [src]="appointment.imgComprobante.location" alt="" style="max-width: 300px; border: 1px solid #2e4a76; border-radius: 8px;">
                 </p>

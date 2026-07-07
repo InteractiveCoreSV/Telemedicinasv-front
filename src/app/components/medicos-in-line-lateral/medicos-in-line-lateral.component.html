@@ -28,7 +28,7 @@
         </div>
 
         
-        <div class="" *ngIf="this.appointmeRemision &&( !this.appointmeRemision.typeAppoinment.online || newVirtual)">
+        <div class="" *ngIf="this.appointmeRemision &&( !this.appointmeRemision.typeAppoinment?.online || newVirtual)">
           <h5 class="form-label text-primary fw-600 px-2 mb-2">Tipo de cita inmediata</h5>
             <div class="d-flex flex-column flex-md-row w-100 justify-content-center align-items-center">
                 <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2 mb-1">

@@ -154,7 +154,7 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       const modal = this.ngbModal.open(PayAppointmentComponent,{centered:true});
       modal.componentInstance.status = this.appointment.status;
       modal.componentInstance.appointmentId = this.appointment._id;
-      modal.componentInstance.virtual = this.appointment.typeAppoinment.online;
+      modal.componentInstance.virtual = this.appointment.typeAppoinment?.online;
       modal.componentInstance.total = this.appointment.total;
 
       modal.result.then((result)=>{
@@ -626,7 +626,7 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
 
           total:this.appointment.total,
 
-          status: this.appointment.typeAppoinment.online === true ? 'Pending' : 'Reserved',
+          status: this.appointment.typeAppoinment?.online === true ? 'Pending' : 'Reserved',
 
     
           reprogramada:true,

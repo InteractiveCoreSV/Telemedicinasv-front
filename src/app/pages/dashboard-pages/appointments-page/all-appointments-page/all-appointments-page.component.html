@@ -167,7 +167,7 @@
                 <div class="d-flex flex-column">
                   <div [innerHTML]="appointment.status | parseStatusName"></div>
                   <div *ngIf="appointment.dateAndHourCancel && appointment.status === 'Refuse'">
-                    {{appointment.dateAndHourCancel.fechaActual | calcDateCancel : appointment.dateAppointment : appointment.dateAndHourCancel.horaMilitar : appointment.hour.order}}
+                    {{appointment.dateAndHourCancel.fechaActual | calcDateCancel : appointment.dateAppointment : appointment.dateAndHourCancel.horaMilitar : appointment.hour?.order}}
                   </div>
                 </div>
               </td>

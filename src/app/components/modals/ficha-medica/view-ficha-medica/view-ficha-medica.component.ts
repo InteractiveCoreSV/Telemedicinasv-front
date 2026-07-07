@@ -32,6 +32,17 @@ export class ViewFichaMedicaComponent {
   ngOnInit() {   
   }
 
+  isDui(typeDocument: string): boolean {
+    return typeDocument !== 'Pasaporte' && typeDocument !== 'ID internacional';
+  }
+
+  formatPhoneNumber(phone: string | number): string {
+    if (!phone) return '';
+    const digits = phone.toString().replace(/\D/g, '');
+    const localNumber = digits.length > 8 ? digits.slice(-8) : digits;
+    return `+503 ${localNumber}`;
+  }
+
   openModalViewDocument(url:string,key:string){
     const modal = this.ngbModal.open(ViewDocumentComponent,{centered:true,size:'xl',scrollable:true});
     modal.componentInstance.url = url

@@ -61,28 +61,28 @@
                     <div class="mb-2 col-12 col-sm-6" >
                         <label class="form-label label-auth mb-0" for="date">Teléfono</label>
                         <p class="m-0 p-0">
-                           {{fichaMedica.infoGeneral.phone}}
+                           {{formatPhoneNumber(fichaMedica.infoGeneral.phone)}}
                         </p>
                     </div>
 
                     <div class="mb-2 col-12 col-sm-6" >
-                        <label class="form-label label-auth mb-0" for="date">{{fichaMedica.infoGeneral.typeDocument ?? 'DUI'}}</label>
+                        <label class="form-label label-auth mb-0" for="date">{{isDui(fichaMedica.infoGeneral.typeDocument) ? 'DUI' : fichaMedica.infoGeneral.typeDocument}}</label>
                         <p class="m-0 p-0">
-                            <input 
-                                *ngIf="!fichaMedica.infoGeneral.typeDocument || fichaMedica.infoGeneral.typeDocument === 'DUI'"
-                                type="text" 
-                                mask="00000000-0" 
-                                class="viewInputFormatMask" 
+                            <input
+                                *ngIf="isDui(fichaMedica.infoGeneral.typeDocument)"
+                                type="text"
+                                mask="00000000-0"
+                                class="viewInputFormatMask"
                                 disabled
-                                [(ngModel)]="fichaMedica.infoGeneral.identityNumber"  
+                                [(ngModel)]="fichaMedica.infoGeneral.identityNumber"
                                 [ngModelOptions]="{standalone: true}"
                             >
-                            <input 
-                                *ngIf="fichaMedica.infoGeneral.typeDocument && fichaMedica.infoGeneral.typeDocument !== 'DUI'"
-                                type="text" 
-                                class="viewInputFormatMask" 
+                            <input
+                                *ngIf="!isDui(fichaMedica.infoGeneral.typeDocument)"
+                                type="text"
+                                class="viewInputFormatMask"
                                 disabled
-                                [(ngModel)]="fichaMedica.infoGeneral.identityNumber"  
+                                [(ngModel)]="fichaMedica.infoGeneral.identityNumber"
                                 [ngModelOptions]="{standalone: true}"
                             >
                         </p>

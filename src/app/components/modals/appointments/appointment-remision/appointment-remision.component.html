@@ -53,7 +53,7 @@
               <!-- <div *ngIf="appointment.urgency" class="mb-2 d-flex" [innerHTML]="appointment.urgency | parseUrgency"></div> -->
 
               <p class="mb-2">        
-                <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment.name}}
+                <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment?.name ?? 'Dato no encontrado'}}
               </p>
 
               <div class="mb-2">
@@ -137,7 +137,7 @@
               </p>
 
               <p class="mb-2">        
-                <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour.hours}}
+                <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour?.hours ?? 'Dato no encontrado'}}
               </p>
 
               <p class="mb-2">        

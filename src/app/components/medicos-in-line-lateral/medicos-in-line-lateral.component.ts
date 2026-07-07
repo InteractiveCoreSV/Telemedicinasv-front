@@ -62,7 +62,7 @@ export class MedicosInLineLateralComponent implements OnInit {
           this.currentCategoriesServices = this.appointmeRemision.typeAppoinment
           this.filter.citaInmediata = true;
 
-          if(!appointment.typeAppoinment.online){
+          if(!appointment.typeAppoinment?.online){
             this.filter.subsidiary = appointment.subsidiary._id
             this.typeAppointment = 'Presencial';
           }

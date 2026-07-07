@@ -470,7 +470,7 @@ export class DetalleExpedienteComponent implements OnInit {
                   pdf.setTextColor(46, 74, 118);
                   pdf.text(`Fecha de la cita:`, campoXPosition, yPos);
                   pdf.setTextColor(0, 0, 0);
-                  pdf.text(`${this.datePipe.transform(fichaMedica.appointment.dateAppointment, 'MMMM d, y')} de ${fichaMedica.appointment.hour.hours}`, valorXPosition, yPos);
+                  pdf.text(`${this.datePipe.transform(fichaMedica.appointment.dateAppointment, 'MMMM d, y')} de ${fichaMedica.appointment.hour?.hours ?? 'Dato no encontrado'}`, valorXPosition, yPos);
                   yPos += lineSpacing;
                  //--------------
           
@@ -532,15 +532,15 @@ export class DetalleExpedienteComponent implements OnInit {
                     pdf.setTextColor(46, 74, 118);
                     pdf.text(`Teléfono:`, campoXPosition, yPos);
                     pdf.setTextColor(0, 0, 0);
-                    pdf.text(`${fichaMedica.infoGeneral.phone}`, valorXPosition, yPos);
+                    pdf.text(`${this.formatPhoneNumber(fichaMedica.infoGeneral.phone)}`, valorXPosition, yPos);
                     yPos += lineSpacing;
                   //--------------
-          
+
                   //--------------
                     pdf.setTextColor(46, 74, 118);
-                    pdf.text(`${fichaMedica.infoGeneral.typeDocument ?? 'DUI'}:`, campoXPosition, yPos);
+                    pdf.text(`${this.isDui(fichaMedica.infoGeneral.typeDocument) ? 'DUI' : fichaMedica.infoGeneral.typeDocument}:`, campoXPosition, yPos);
                     pdf.setTextColor(0, 0, 0);
-                    pdf.text(`${this.formatDocument(fichaMedica.infoGeneral.identityNumber)}`, valorXPosition, yPos);
+                    pdf.text(`${this.isDui(fichaMedica.infoGeneral.typeDocument) ? this.formatDocument(fichaMedica.infoGeneral.identityNumber) : (fichaMedica.infoGeneral.identityNumber ?? '')}`, valorXPosition, yPos);
                     yPos += lineSpacing;
                   //--------------
           
@@ -841,17 +841,21 @@ export class DetalleExpedienteComponent implements OnInit {
       }));
   }
 
-  // formatPhoneNumber(phone: string): string {
-  //   const phoneNumber = phone.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
-    
-  //   // Formato: (+504) 7585 7585
-  //   return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '+($1) $2 $3');
-  // }
-  
+  isDui(typeDocument: string): boolean {
+    return typeDocument !== 'Pasaporte' && typeDocument !== 'ID internacional';
+  }
 
-  formatDocument(document: string): string {
-    const documentNumber = document.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
-    return documentNumber.replace(/(\d{4})(\d{4})(\d{5})/, '$1-$2-$3'); // Aplica el formato '0000-0000-00000'
+  formatPhoneNumber(phone: string | number): string {
+    if (!phone) return '';
+    const digits = phone.toString().replace(/\D/g, '');
+    const localNumber = digits.length > 8 ? digits.slice(-8) : digits;
+    return `+503 ${localNumber}`;
+  }
+
+  formatDocument(document: string | number): string {
+    if (document === null || document === undefined) return '';
+    const documentNumber = String(document).replace(/\D/g, ''); // Elimina cualquier carácter no numérico
+    return documentNumber.replace(/(\d{8})(\d{1})/, '$1-$2'); // Aplica el formato DUI '00000000-0'
   }
 
   async deleteFichaMedica(idFichaMedica:any){

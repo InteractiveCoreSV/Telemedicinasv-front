@@ -183,7 +183,7 @@ export class CalendarAppointmentsPageComponent implements OnInit,AfterViewInit,O
               meetingTool:v.meetingTool,
               link:v.link,
               total: v.total,
-              virtual: v.typeAppoinment.online
+              virtual: v.typeAppoinment?.online
             }
           }
         })];

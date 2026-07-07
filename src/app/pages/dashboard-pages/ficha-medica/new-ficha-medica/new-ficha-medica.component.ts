@@ -531,7 +531,7 @@ export class NewFichaMedicaComponent {
     const modal = this.ngbModal.open(GenerateTratamientoComponent,{centered:true, size:'lg'});
 
     modal.componentInstance.medico = this.medico
-    modal.componentInstance.subsidiary = this.appointment.typeAppoinment.online === true ? 'Colonia Santa fe, contiguo al restaurante Tom-Mi' : `${this.appointment.subsidiary.address.department}, ${this.appointment.subsidiary.address.municipality}, ${this.appointment.subsidiary.address.address}`
+    modal.componentInstance.subsidiary = this.appointment.typeAppoinment?.online === true ? 'Colonia Santa fe, contiguo al restaurante Tom-Mi' : `${this.appointment.subsidiary.address.department}, ${this.appointment.subsidiary.address.municipality}, ${this.appointment.subsidiary.address.address}`
     modal.componentInstance.paciente = {
       name: `${this.appointment.user.names} ${this.appointment.user.last_names}`,
       age: this.age,
