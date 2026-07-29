@@ -16,7 +16,7 @@ import { Fancybox } from '@fancyapps/ui';
 import { ViewDocumentComponent } from '../view-document/view-document.component';
 import { Router, RouterModule } from '@angular/router';
 import jsPDF from 'jspdf';
-import { SelectDateAndHourModalComponent } from 'src/app/pages/dashboard-pages/appointments-page/new-appointment-page/select-date-and-hour-modal/select-date-and-hour-modal.component';
+import { SelectDateRangeModalComponent } from 'src/app/pages/dashboard-pages/appointments-page/new-appointment-page/select-date-range-modal/select-date-range-modal.component';
 import { ConfirmReagendaCitaComponent } from '../confirm-reagenda-cita/confirm-reagenda-cita.component';
 import { ViewExpedienteComponent } from '../../expedientes/view-expediente/view-expediente.component';
 import { SelectServiceModalComponent } from 'src/app/pages/dashboard-pages/appointments-page/new-appointment-page/select-service-modal/select-service-modal.component';
@@ -24,6 +24,7 @@ import { ServiceI } from 'src/app/interfaces/service.interface';
 import { PayAppointmentComponent } from '../pay-appointment/pay-appointment.component';
 import { ViewHistoryChangesStatusComponent } from '../view-history-changes-status/view-history-changes-status.component';
 import { ViewSummaryFichasMedicasComponent } from '../../ficha-medica/view-summary-fichas-medicas/view-summary-fichas-medicas.component';
+import { UtilsService } from 'src/app/services/utils.service';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
     private datePipe: DatePipe,
     private alertsService: AlertsService,
     private ngxSpinnerService: NgxSpinnerService,
+    private utilsService: UtilsService,
   ) { }
 
   ngOnInit(): void {
@@ -174,15 +176,19 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
     modal.componentInstance.name = key
   }
 
-  openViewExpediente(patient:any,menorEdad:any){   
+  openViewExpediente(patient:any,menorEdad:any){
     const modalRef = this.ngbModal.open(ViewExpedienteComponent,{centered:true,size:'xl', scrollable:true});
     modalRef.componentInstance.idPaciente = patient;
+    modalRef.componentInstance.idAppointment = this.appointment.user ? null : this.appointment._id;
+    modalRef.componentInstance.externalPatientInfo = this.appointment.user ? null : this.appointment.externalPatient;
     modalRef.componentInstance.menorSelect = menorEdad && menorEdad._id ? menorEdad : null;
   }
 
-  openViewSummaryFichasMedicas(patient:any,menorEdad:any){   
+  openViewSummaryFichasMedicas(patient:any,menorEdad:any){
     const modalRef = this.ngbModal.open(ViewSummaryFichasMedicasComponent,{centered:true,size:'xl', scrollable:true});
     modalRef.componentInstance.idPaciente = patient;
+    modalRef.componentInstance.idAppointment = this.appointment.user ? null : this.appointment._id;
+    modalRef.componentInstance.externalPatientInfo = this.appointment.user ? null : this.appointment.externalPatient;
     modalRef.componentInstance.menorSelect = menorEdad && menorEdad._id ? menorEdad : null;
 
     const infoPatient  = {
@@ -198,13 +204,41 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
   }
   
   dowloaderInfoAppointment(appointment: AppointmentI) {
+    const patientInfo = appointment.user ? {
+      names: appointment.user.names,
+      last_names: appointment.user.last_names,
+      email: appointment.user.email,
+      countryCode: appointment.user.countryCode,
+      phone: appointment.user.phone,
+      typeDocument: appointment.user.typeDocument,
+      identityNumber: appointment.user.identityNumber,
+      idInternacional: appointment.user.idInternacional,
+      passport: appointment.user.passport,
+      nameEmergency: appointment.user.nameEmergency,
+      countryCodeEmergency: appointment.user.countryCodeEmergency,
+      phoneEmergency: appointment.user.phoneEmergency,
+    } : {
+      names: appointment.externalPatient?.names,
+      last_names: '',
+      email: appointment.externalPatient?.email,
+      countryCode: appointment.externalPatient?.countryCode,
+      phone: appointment.externalPatient?.phone,
+      typeDocument: appointment.externalPatient?.typeDocument,
+      identityNumber: appointment.externalPatient?.document,
+      idInternacional: appointment.externalPatient?.document,
+      passport: appointment.externalPatient?.document,
+      nameEmergency: undefined as string | undefined,
+      countryCodeEmergency: undefined as string | undefined,
+      phoneEmergency: undefined as string | undefined,
+    };
+
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'letter',
     });
   
-    const imagePath = 'assets/logos/telemedicina.png';
+    const imagePath = 'assets/logos/analiza-en-casa.png';
     const pageWidth = pdf.internal.pageSize.width;
     const pageHeight = pdf.internal.pageSize.height;
     const xMargin = 10;
@@ -230,7 +264,7 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
   
     this.loadImageAsDataURL(imagePath).then((imageDataUrl: any) => {
       const imgWidth = 55;
-      const imgHeight = 17;
+      const imgHeight = 18.9;
       const xPositionImg = 152;
       const yPositionImg = 15;
   
@@ -242,7 +276,7 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(46, 74, 118);
       pdf.setFontSize(25);
-      pdf.text('Telemedicina Analiza El Salvador', 10, 25);
+      pdf.text('Analiza en casa', 10, 25);
       pdf.setTextColor(103, 119, 136);
       pdf.setFontSize(12);
       pdf.text(`${this.datePipe.transform(currentDate, 'EEEE, MMMM d, y hh:mm a')}`, 10, 32);
@@ -262,12 +296,12 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       pdf.line(xMargin, yPos - 10, pageWidth - xMargin, yPos - 10);
   
       // Título de la sección
-      pdf.setFontSize(18);
-      pdf.setFont("helvetica", "bold");
-      pdf.setTextColor(46, 74, 118);
-      const titleXPosition = pageWidth / 2;
-      pdf.text('Cita Médica', titleXPosition, yPos, { align: 'center' });
-      yPos += lineSpacing;
+      // pdf.setFontSize(18);
+      // pdf.setFont("helvetica", "bold");
+      // pdf.setTextColor(46, 74, 118);
+      // const titleXPosition = pageWidth / 2;
+      // pdf.text('Cita Médica', titleXPosition, yPos, { align: 'center' });
+      // yPos += lineSpacing;
   
       // Configuración para los campos y valores
       pdf.setFontSize(12);
@@ -289,7 +323,7 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       pdf.text(`Nombre:`, campoXPosition, yPos);
       yPos += lineSpacing;
       pdf.setTextColor(103, 119, 136);
-      pdf.text((appointment.user.names ?? '') + ' ' + (appointment.user.last_names ?? ''), valorXPosition, yPos - 1);
+      pdf.text((patientInfo.names ?? '') + ' ' + (patientInfo.last_names ?? ''), valorXPosition, yPos - 1);
       yPos += lineSpacing;
       addPageIfNeeded();
 
@@ -297,30 +331,30 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       pdf.text(`Correo electrónico:`, campoXPosition, yPos);
       yPos += lineSpacing;
       pdf.setTextColor(103, 119, 136);
-      pdf.text(appointment.user.email ?? 'Sin correo registrado', valorXPosition, yPos - 1);
+      pdf.text(patientInfo.email ?? 'Sin correo registrado', valorXPosition, yPos - 1);
       yPos += lineSpacing;
       addPageIfNeeded();
 
       // Primera línea: títulos
       pdf.setTextColor(0, 0, 0);
       pdf.text(`Teléfono:`, campoXPosition, yPos);
-      pdf.text(`${appointment.user.typeDocument}:`, campoXPosition + 65, yPos);
+      pdf.text(`${patientInfo.typeDocument}:`, campoXPosition + 65, yPos);
 
       // Segunda línea: valores
       yPos += lineSpacing;
       pdf.setTextColor(103, 119, 136);
-      pdf.text(`${appointment.user.countryCode} ${appointment.user.phone}`, campoXPosition, yPos);
+      pdf.text(`${patientInfo.countryCode} ${patientInfo.phone}`, campoXPosition, yPos);
 
-      if(appointment.user.typeDocument === 'DUI'){
-        pdf.text(this.formatDocument(appointment.user.identityNumber ?? ''), campoXPosition + 65, yPos);
+      if(patientInfo.typeDocument === 'DUI'){
+        pdf.text(this.formatDocument(patientInfo.identityNumber ?? ''), campoXPosition + 65, yPos);
       }
 
-      if(appointment.user.typeDocument === 'ID internacional'){
-        pdf.text(appointment.user.idInternacional ?? '', campoXPosition + 65, yPos);
+      if(patientInfo.typeDocument === 'ID internacional'){
+        pdf.text(patientInfo.idInternacional ?? '', campoXPosition + 65, yPos);
       }
 
-      if(appointment.user.typeDocument === 'Pasaporte'){
-        pdf.text(appointment.user.passport ?? '', campoXPosition + 65, yPos);
+      if(patientInfo.typeDocument === 'Pasaporte'){
+        pdf.text(patientInfo.passport ?? '', campoXPosition + 65, yPos);
       }
 
       yPos += lineSpacing;
@@ -371,8 +405,8 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
        // Segunda línea: valores
       yPos += lineSpacing;
       pdf.setTextColor(103, 119, 136);
-      pdf.text(appointment.user.nameEmergency ?? '', campoXPosition, yPos);
-      pdf.text(`${appointment.user.countryCodeEmergency ?? ''} ${appointment.user.phoneEmergency ?? ''}`.trim(), campoXPosition + 115, yPos - 1);
+      pdf.text(patientInfo.nameEmergency ?? '', campoXPosition, yPos);
+      pdf.text(`${patientInfo.countryCodeEmergency ?? ''} ${patientInfo.phoneEmergency ?? ''}`.trim(), campoXPosition + 115, yPos - 1);
 
       //-------------
 
@@ -380,35 +414,35 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       addPageIfNeeded();
      //--------------
 
-      pdf.setTextColor(46, 74, 118);
-      pdf.setFont("helvetica", "bold");
-      pdf.text(`Datos de la cita:`, campoXPosition, yPos);
-      yPos += lineSpacing ;
-      pdf.setFont("helvetica", "normal");
+      // pdf.setTextColor(46, 74, 118);
+      // pdf.setFont("helvetica", "bold");
+      // pdf.text(`Datos de la cita:`, campoXPosition, yPos);
+      // yPos += lineSpacing ;
+      // pdf.setFont("helvetica", "normal");
 
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Estado de la cita:`, campoXPosition, yPos);
-      pdf.text(`Nivel de urgencia:`, campoXPosition + 115, yPos);
+      // pdf.setTextColor(0, 0, 0);
+      // pdf.text(`Estado de la cita:`, campoXPosition, yPos);
+      // pdf.text(`Nivel de urgencia:`, campoXPosition + 115, yPos);
 
-       // Segunda línea: valores
-       yPos += lineSpacing;
-       pdf.setTextColor(103, 119, 136);
-       pdf.text(this.statusName(appointment.status), campoXPosition, yPos);
+      //  // Segunda línea: valores
+      //  yPos += lineSpacing;
+      //  pdf.setTextColor(103, 119, 136);
+      //  pdf.text(this.statusName(appointment.status), campoXPosition, yPos);
 
-      pdf.text(appointment.urgency ?? '', campoXPosition + 115, yPos - 1);
+      // pdf.text(appointment.urgency ?? '', campoXPosition + 115, yPos - 1);
 
       //-------------
 
-      yPos += lineSpacing;
-      addPageIfNeeded();
+      // yPos += lineSpacing;
+      // addPageIfNeeded();
 
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Tipo de cita:`, campoXPosition, yPos);
-      yPos += lineSpacing;
-      pdf.setTextColor(103, 119, 136);
-      pdf.text(appointment.typeAppoinment?.name ?? '', valorXPosition, yPos - 1);
-      yPos += lineSpacing;
-      addPageIfNeeded();
+      // pdf.setTextColor(0, 0, 0);
+      // pdf.text(`Tipo de cita:`, campoXPosition, yPos);
+      // yPos += lineSpacing;
+      // pdf.setTextColor(103, 119, 136);
+      // pdf.text(appointment.typeAppoinment?.name ?? '', valorXPosition, yPos - 1);
+      // yPos += lineSpacing;
+      // addPageIfNeeded();
 
       //-------------- Campo 3: Sucursal
       if(appointment && appointment.subsidiary){
@@ -419,23 +453,33 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
         pdf.text(appointment.subsidiary.name , valorXPosition, yPos - 1);
         yPos += lineSpacing;
         addPageIfNeeded();
+
+        if(appointment.subsidiary.esDomicilioPaciente){
+          pdf.setTextColor(0, 0, 0);
+          pdf.text(`Dirección del paciente:`, campoXPosition, yPos);
+          yPos += lineSpacing;
+          pdf.setTextColor(103, 119, 136);
+          pdf.text(appointment.patientAddress ?? '', valorXPosition, yPos - 1);
+          yPos += lineSpacing;
+          addPageIfNeeded();
+        }
       }
       
-      if(appointment && appointment.meetingTool){
-        pdf.setTextColor(0, 0, 0);
-        pdf.text(`Aplicacion preferida para la cita:`, campoXPosition, yPos);
-        yPos += lineSpacing;
-        pdf.setTextColor(103, 119, 136);
-        pdf.text(appointment.meetingTool.name , valorXPosition, yPos - 1);
-        yPos += lineSpacing;
-        addPageIfNeeded();
-      }
+      // if(appointment && appointment.meetingTool){
+      //   pdf.setTextColor(0, 0, 0);
+      //   pdf.text(`Aplicacion preferida para la cita:`, campoXPosition, yPos);
+      //   yPos += lineSpacing;
+      //   pdf.setTextColor(103, 119, 136);
+      //   pdf.text(appointment.meetingTool.name , valorXPosition, yPos - 1);
+      //   yPos += lineSpacing;
+      //   addPageIfNeeded();
+      // }
       //--------------
 
          //-------------- Campo 3: cita referida
       if(appointment && appointment.referencedAppointment){
         pdf.setTextColor(0, 0, 0);
-        pdf.text(`Cita referida por parte de la clinica:`, campoXPosition, yPos);
+        pdf.text(`Paciente referido por parte de la clinica:`, campoXPosition, yPos);
         yPos += lineSpacing;
         pdf.setTextColor(103, 119, 136);
         pdf.text(appointment.referencedSubsidiary?.name ?? '', valorXPosition, yPos - 1);
@@ -456,67 +500,60 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
       })
       //--------------
 
-      //-------------- 
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Médico: ${appointment.medico?.especialidad?.name ?? ''}`, campoXPosition, yPos);
-      yPos += lineSpacing;
-      pdf.setTextColor(103, 119, 136);
-      pdf.text((appointment.medico?.names ?? '') + ' ' + (appointment.medico?.last_names ?? ''), valorXPosition, yPos - 1);
-      yPos += lineSpacing;
-      addPageIfNeeded();
+      //--------------
+      if(appointment.medico){
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(`Médico: ${appointment.medico.especialidad?.name ?? ''}`, campoXPosition, yPos);
+        yPos += lineSpacing;
+        pdf.setTextColor(103, 119, 136);
+        pdf.text(`${appointment.medico.names ?? ''} ${appointment.medico.last_names ?? ''}`, valorXPosition, yPos - 1);
+        yPos += lineSpacing;
+        addPageIfNeeded();
+      }
       //--------------
 
       //--------------
       pdf.setTextColor(0, 0, 0);
-      pdf.text(`Fecha y Hora:`, campoXPosition, yPos);
+      pdf.text(appointment.hour ? `Fecha y Hora:` : `Fecha:`, campoXPosition, yPos);
       yPos += lineSpacing;
       pdf.setTextColor(103, 119, 136);
-      const rawDate: string = this.datePipe.transform(appointment.dateAppointment, 'EEEE, MMMM d, y') ?? '';
-      let capitalizedDay = rawDate ? rawDate.charAt(0).toUpperCase() + rawDate.slice(1) : '';
-      pdf.text(`${capitalizedDay} de ${appointment.hour?.hours ?? ''}`, valorXPosition, yPos);      yPos += lineSpacing;
+      const dateText = this.utilsService.formatAppointmentDate(appointment.dateAppointment, appointment.dateAppointmentEnd, appointment.hour?.hours);
+      pdf.text(dateText, valorXPosition, yPos);      yPos += lineSpacing;
       addPageIfNeeded();
+      //--------------
+
+      //--------------
+      if(appointment.typePayment){
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(`Método de pago:`, campoXPosition, yPos);
+        yPos += lineSpacing;
+        pdf.setTextColor(103, 119, 136);
+        const typePaymentLabel = appointment.typePayment.charAt(0).toUpperCase() + appointment.typePayment.slice(1);
+        pdf.text(typePaymentLabel, valorXPosition, yPos - 1);
+        yPos += lineSpacing;
+        addPageIfNeeded();
+      }
       //--------------
 
       //-------------- Campo 4: Información de pago
-      pdf.setTextColor(46, 74, 118);
-      pdf.setFont("helvetica", "bold");
-      pdf.text(`Información de pago:`, campoXPosition, yPos);
-      yPos += lineSpacing ;
-      pdf.setFont("helvetica", "normal");
+      // pdf.setTextColor(46, 74, 118);
+      // pdf.setFont("helvetica", "bold");
+      // pdf.text(`Información de pago:`, campoXPosition, yPos);
+      // yPos += lineSpacing ;
+      // pdf.setFont("helvetica", "normal");
 
-      // Primera línea: títulos
       // pdf.setTextColor(0, 0, 0);
-      // pdf.text(`Metodo de pago:`, campoXPosition, yPos);
-      // pdf.text(`Total pagado:`, campoXPosition + 90, yPos);
+      // pdf.text(`Total pagado:`, campoXPosition, yPos);
+      // yPos += lineSpacing;
+      // pdf.setTextColor(103, 119, 136);
+      // pdf.text(`$${appointment.total}`, valorXPosition, yPos - 1);
+      // yPos += lineSpacing;
+      //--------------
+      //--------------
 
-      // Segunda línea: valores
-      yPos += lineSpacing;
-      pdf.setTextColor(103, 119, 136);
-      pdf.text(`${this.methodPayment(appointment.typePayment, appointment.status)}`, campoXPosition, yPos);
-      pdf.text(`$${appointment.total}`, campoXPosition + 90, yPos);      
-      yPos += lineSpacing;
-      //--------------
-      //--------------
-  
       // Guardar el PDF
-      pdf.save(`Cita | ${capitalizedDay} de ${appointment.hour?.hours ?? ''}`);
+      pdf.save(`Paciente | ${dateText}`);
     });
-  }
-
-  methodPayment(typePayment:string, status:string): string {
-    if(typePayment == 'cash'){
-      return status === 'Completed' ? 'Pago en sucursal' : 'Pago pendiente en sucursal'
-    }
-
-    if(typePayment == 'insurance'){
-      return 'Pago con aseguradora'
-    }
-
-    if(typePayment == 'transferencia'){
-      return 'Pago por transferencia'
-    }
-
-    return 'Pago con tarjeta'
   }
 
   async loadImageAsDataURL(url:any) {
@@ -577,24 +614,24 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
   }
 
   async appintmentReprogramin(){
+    if(!this.appointment.medico) return;
 
-    const modalRef = this.ngbModal.open(SelectDateAndHourModalComponent,{centered:true,size:'lg',backdrop:'static'});
+    const modalRef = this.ngbModal.open(SelectDateRangeModalComponent,{centered:true,size:'lg',backdrop:'static'});
     modalRef.componentInstance.medico = this.appointment.medico._id;
-
-    if(this.date){
-      modalRef.componentInstance.dateSelectedForm = this.date;
-    }
-
-    modalRef.componentInstance.userID = this.appointment.user._id;
 
     if(this.appointment.subsidiary){
       modalRef.componentInstance.subsidiary = this.appointment.subsidiary._id
     }
 
+    if(this.date){
+      modalRef.componentInstance.date = this.date.date ?? null;
+      modalRef.componentInstance.dateEnd = this.date.dateEnd ?? null;
+    }
+
     try {
-      const {date} = await modalRef.result;
-      if(date){
-        this.date= date;
+      const result = await modalRef.result;
+      if(result?.date){
+        this.date = result;
 
         const data = {
           typeAppoinment: this.appointment.typeAppoinment,
@@ -608,14 +645,15 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
           birthdateUnderAge:this.appointment.birthdateUnderAge,
 
           urgency:this.appointment.urgency,
+          patientAddress:this.appointment.patientAddress,
 
           subsidiary:this.appointment.subsidiary,
 
           service:this.appointment.service,
           medico: this.appointment.medico,
-          dateAppointment: this.date.date,
-          hour: this.date.hour,
-    
+          dateAppointment: result.date,
+          dateAppointmentEnd: result.dateEnd ?? null,
+
           documentAppointment: this.appointment.documentAppointment,
           commentAppointment:this.appointment.commentAppointment,
 
@@ -628,9 +666,8 @@ export class ViewDetailAppointmentModalComponent implements OnInit {
 
           status: this.appointment.typeAppoinment?.online === true ? 'Pending' : 'Reserved',
 
-    
+
           reprogramada:true,
-          extraordinaria:this.date.extraordinaria,
         };
 
         this.ngbActiveModal.close()

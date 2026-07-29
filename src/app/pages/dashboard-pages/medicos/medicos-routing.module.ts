@@ -32,17 +32,6 @@ const routes: Routes = [
         },
         component: AllMedicosComponent
       },
-      // {
-      //   path:'medicos-status',
-      //   data:{
-      //     title:'Médicos en linea',
-      //     breadcrumb:{
-      //       title:'Médicos',
-      //       url:'/dashboard/medicos-status'
-      //     }
-      //   },
-      //   component: MedicosInLineComponent
-      // },
       {
         path:'nuevo-medico',
         data:{
@@ -66,40 +55,40 @@ const routes: Routes = [
         },
         component: NewMedicoComponent
       },
-      {
-        path:'nueva-solicitud-medico',
-        data:{
-          title:'Nueva solicitud de médico',
-          breadcrumb:{
-            title:'Nuevo',
-            url:'/dashboard/medicos/nueva-solicitud-medico'
-          }
-        },
-        component: NewMedicoSolicitudComponent
-      },
-      {
-        path:'editar-solicitud-medico',
-        canActivate:[SolicitudMedicoGuard],
-        data:{
-          title:'Editar solicitud de médico',
-          breadcrumb:{
-            title:'Editar',
-            url:'/dashboard/medicos/editar-solicitud-medico'
-          }
-        },
-        component: NewMedicoSolicitudComponent
-      },
-      {
-        path:'solicitudes-medico',
-        data:{
-          title:'Solicitudes para médico',
-          breadcrumb:{
-            title:'Solicitudes para médico',
-            url:'/dashboard/medicos/solicitudes-medico'
-          }
-        },
-        component: AllMedicoSolicitudComponent
-      },
+      // {
+      //   path:'nueva-solicitud-medico',
+      //   data:{
+      //     title:'Nueva solicitud de médico',
+      //     breadcrumb:{
+      //       title:'Nuevo',
+      //       url:'/dashboard/medicos/nueva-solicitud-medico'
+      //     }
+      //   },
+      //   component: NewMedicoSolicitudComponent
+      // },
+      // {
+      //   path:'editar-solicitud-medico',
+      //   canActivate:[SolicitudMedicoGuard],
+      //   data:{
+      //     title:'Editar solicitud de médico',
+      //     breadcrumb:{
+      //       title:'Editar',
+      //       url:'/dashboard/medicos/editar-solicitud-medico'
+      //     }
+      //   },
+      //   component: NewMedicoSolicitudComponent
+      // },
+      // {
+      //   path:'solicitudes-medico',
+      //   data:{
+      //     title:'Solicitudes para médico',
+      //     breadcrumb:{
+      //       title:'Solicitudes para médico',
+      //       url:'/dashboard/medicos/solicitudes-medico'
+      //     }
+      //   },
+      //   component: AllMedicoSolicitudComponent
+      // },
     ]
   }
 ];

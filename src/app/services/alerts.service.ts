@@ -171,7 +171,7 @@ export class AlertsService {
     }
   }
 
-  async appointmentSuccess(title:string = 'Pago procesado',text:string = 'Tu cita ha sido reservada con exito'){
+  async appointmentSuccess(title:string = 'Pago procesado',text:string = 'Tu paciente ha sido reservado con exito'){
     await Swal.fire({
       title:title,
       text:text,

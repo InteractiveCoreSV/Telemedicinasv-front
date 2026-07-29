@@ -8,8 +8,13 @@
   <div class="px-4" >
 
     <div>
-        <p class="mb-1">        
-            <span class="title">Paciente:</span> {{survey.user ? survey.user.names : 'paciente no encontrado'}}  {{survey.user ? survey.user.last_names : ''}}
+        <p class="mb-1">
+            <span class="title">Paciente:</span>
+            <ng-container *ngIf="survey.user; else externalPatientDetail">{{survey.user.names}} {{survey.user.last_names}}</ng-container>
+            <ng-template #externalPatientDetail>
+              {{survey.externalPatient ? survey.externalPatient.names : 'paciente no encontrado'}}
+              <span *ngIf="survey.externalPatient" class="badge ml-1" style="background-color:#919191;">No registrado</span>
+            </ng-template>
         </p>
 
         <div class="mb-1">
@@ -22,13 +27,21 @@
           <span *ngIf="(survey.appointment?.service?.length ?? 0) === 0">Servicio no encontrada</span>
         </div>
 
-        <p class="mb-1">
-            <span class="title">Médico:</span>
-            {{survey.appointment?.medico ? survey.appointment?.medico?.names+' '+ survey.appointment?.medico?.last_names ? survey.appointment?.medico?.last_names : '' : 'Médico no encontrado'}}
+        <p class="mb-1" *ngIf="survey.appointment?.medico">
+            <span class="title">Médico:</span> {{survey.appointment?.medico?.names}} {{survey.appointment?.medico?.last_names}}
+        </p>
+
+        <p class="mb-1" *ngIf="!survey.appointment?.medico && !survey.appointment?.externalMedico">
+            <span class="title">Médico:</span> Médico no encontrado
+        </p>
+
+        <p class="mb-1" *ngIf="survey.appointment?.externalMedico">
+            <span class="title">Médico externo:</span> {{survey.appointment?.externalMedico?.names}}
+            <span class="badge ml-1" style="background-color:#919191;">Externo</span>
         </p>
 
         <p class="mb-1">
-            <span class="title">Fecha de la cita:</span> {{survey.appointment?.dateAppointment | date:'EEEE, MMMM d, y' | titlecase}}
+            <span class="title">Fecha del paciente:</span> {{survey.appointment?.dateAppointment | date:'EEEE, MMMM d, y' | titlecase}}
         </p>
 
     </div>

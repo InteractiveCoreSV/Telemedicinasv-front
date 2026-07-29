@@ -8,7 +8,6 @@ import { UsersService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewAppointmentModalComponent } from 'src/app/components/modals/appointments/new-appointment-modal/new-appointment-modal.component';
-import { NewAppointmentFormsService } from '../../appointments-page/new-appointment-page/new-appointment-forms.service';
 
 @Component({
   selector: 'app-medicos-in-line',
@@ -27,8 +26,7 @@ export class MedicosInLineComponent implements OnInit {
     private medicosService: UsersService,
     private alertsService: AlertsService,
     private webSocketService: WebSocketService,
-    private ngbModal: NgbModal,
-    private newAppointmentFormsService: NewAppointmentFormsService
+    private ngbModal: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -62,8 +60,7 @@ export class MedicosInLineComponent implements OnInit {
 
     openModalNewAppoinment(medico:UserI){
       if(medico.statusMedico === 'enLinea'){
-        const modal = this.ngbModal.open(NewAppointmentModalComponent,{centered:true,size:'lg',scrollable:true, backdrop:'static'});
-        this.newAppointmentFormsService.medicoDisponible$.next(medico)
+        this.ngbModal.open(NewAppointmentModalComponent,{centered:true,size:'lg',scrollable:true, backdrop:'static'});
       }
     }
 

@@ -144,7 +144,7 @@ export class ViewUsersComponent implements OnInit {
         const columnWidths = [{ wch: 30 }, { wch: 30 }, { wch: 15 }, { wch: 30 }, { wch: 40 }];
         const forHeader = ['Nombres','Apellidos','Edad','Teléfono','Correo']
         
-        const title = `Pacientes Telemedicina Analiza El Salvador`
+        const title = `Pacientes Analiza En Casa`
 
         this.utilsService.exportAsExcel(dataExport, title,forHeader,columnWidths,title );
         this.ngxSpinnerService.hide('generalSpinner');

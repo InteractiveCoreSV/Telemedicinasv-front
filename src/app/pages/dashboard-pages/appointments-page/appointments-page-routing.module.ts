@@ -13,7 +13,7 @@ const routes: Routes = [
       {
         path:'todas-las-citas',
         data:{
-          title:'Historial de citas',
+          title:'Historial de pacientes',
           breadcrumb:{
             title:'Historial',
             url:'/dashboard/citas/todas-las-citas'

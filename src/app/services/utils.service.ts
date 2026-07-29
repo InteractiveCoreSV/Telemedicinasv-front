@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router, ActivatedRoute, PRIMARY_OUTLET } from '@angular/router';
@@ -36,8 +37,23 @@ export class UtilsService {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private title: Title,
-    private http: HttpClient
+    private http: HttpClient,
+    private datePipe: DatePipe
   ) { }
+
+  // Formatea la fecha de una cita: un solo día (con hora si aplica) o un rango "Del X al Y".
+  formatAppointmentDate(dateAppointment:any, dateAppointmentEnd?:any, hour?:string | null):string {
+    const capitalize = (value:string | null) => value ? value.charAt(0).toUpperCase() + value.slice(1) : '';
+
+    if(!dateAppointmentEnd){
+      const day = capitalize(this.datePipe.transform(dateAppointment,'EEEE, MMMM d, y'));
+      return hour ? `${day} de ${hour}` : day;
+    }
+
+    const start = capitalize(this.datePipe.transform(dateAppointment,'MMMM d, y'));
+    const end = capitalize(this.datePipe.transform(dateAppointmentEnd,'MMMM d, y'));
+    return `Del ${start} al ${end}`;
+  }
 
   getCurrentDataRoute(){
     return this.currentDataRoute$.asObservable();
@@ -58,7 +74,7 @@ export class UtilsService {
     ).subscribe((event)=>{
       // const currentTitle = this.title.getTitle();
       this.currentDataRoute$.next(event);
-      this.title.setTitle(`Telemedicina Analiza El Salvador`);
+      this.title.setTitle(`Analiza En Casa`);
     })
   }
 

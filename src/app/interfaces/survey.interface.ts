@@ -1,4 +1,4 @@
-import { AppointmentI } from "./appointment.interface";
+import { AppointmentI, ExternalPatientI } from "./appointment.interface";
 import { FileAWSI } from "./files.interface";
 import { UserI } from "./user.interface";
 
@@ -41,7 +41,8 @@ export interface AnswerSurveysI {
   _id: string;
   encuesta: SurveyI,
   appointment?: AppointmentI,
-  user: UserI,
+  user?: UserI,
+  externalPatient?: ExternalPatientI,
   response: QuestionI[],
   statusComplete:boolean,
   surveyNumber:number

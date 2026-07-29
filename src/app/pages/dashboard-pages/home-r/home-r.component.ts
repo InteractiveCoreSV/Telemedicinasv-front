@@ -54,12 +54,8 @@ export class HomeRComponent {
     });
   }
 
-  openModalNewAppoinment(medico?: UserI){
+  openModalNewAppoinment(){
     const modal = this.ngbModal.open(NewAppointmentModalComponent,{centered:true,size:'lg',scrollable:true, backdrop:'static'});
-   
-    if(medico){
-      this.newAppointmentFormsService.medicoDisponible$.next(medico);
-    }
 
     modal.result.then((result)=>{
       if(result.reload){

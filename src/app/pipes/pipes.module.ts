@@ -19,9 +19,9 @@ import { ParseAllDay } from './parse-all-day.pipe';
 import { ParseStatusSolicitudMedicoPipe } from './parse-status-solicitud-medico.pipe';
 import { ParseStatusMedicoPipe } from './parse-status-medico.pipe';
 import { CheckedServicePipe } from './checked-service.pipe';
-import { CalcYearsOfPracticePipe } from './calc-years-of-practice.pipe';
 import { MedicoScorePipe } from './medico-score.pipe';
 import { DollarPipe } from './dollar.pipe';
+import { FormatAppointmentDatePipe } from './format-appointment-date.pipe';
 
 const listPipes = [
   SearchUsersPipe,
@@ -43,9 +43,9 @@ const listPipes = [
   ParseStatusSolicitudMedicoPipe,
   ParseStatusMedicoPipe,
   CheckedServicePipe,
-  CalcYearsOfPracticePipe,
   MedicoScorePipe,
-  DollarPipe
+  DollarPipe,
+  FormatAppointmentDatePipe
 ]
 
 @NgModule({

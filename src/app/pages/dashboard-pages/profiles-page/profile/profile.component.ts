@@ -1,5 +1,5 @@
 ﻿import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription, finalize, tap } from 'rxjs';
@@ -13,7 +13,6 @@ import { NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angula
 import { nanoid } from 'nanoid'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewMenorEdadComponent } from 'src/app/components/modals/new-menor-edad/new-menor-edad.component';
-import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-profile',
@@ -52,7 +51,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   imgsSello:File[] = []
 
   isMedico:boolean = false
-  aggregate:boolean = true
 
   strongPassword = false;
 
@@ -93,12 +91,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.authService.getUserInfo().subscribe((userInfo: UserI | null) => {
         if (userInfo) {
           this.isMedico = userInfo.roles?.[0]?.name === 'medico';
-
-          if (this.isMedico && this.aggregate) {
-            this.agregarSubespecialidad();
-            this.agregarEducacion();
-            this.aggregate = false;
-          }
 
           if (!this.userToEdit._id && userInfo._id) {
             this.loadFullUserProfile(userInfo._id);
@@ -271,14 +263,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       roles:['',Validators.required],
 
       especialidad:['',[]],
-      especialidadInstitucion:['',[]],
-      especialidadYear:['',[]],
-      cursos:['',[]],
-      diplomas: ['', []],
-      yearStartedPracticing:['',[]],
-      educacion: this.formBuilder.array([]),
-      subespecialidades: this.formBuilder.array([]),
-
     });
 
     this.createUserForm.get('_id')?.disable();
@@ -381,10 +365,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if(this.userToEdit.roles?.[0]) this.setRole(this.userToEdit.roles[0])
 
     this.especialidad = this.userToEdit.especialidad?._id ?? null
-
-    this.cargarEducacion(this.userToEdit.educacion || []);
-    this.cargarSubespecialidades(this.userToEdit.subespecialidades || []);
-
   }
 
   setRole(role:RoleI){
@@ -451,131 +431,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   // End firma digital
 
-  //edicacion
-  get educacion(): FormArray {
-    return this.createUserForm.get('educacion') as FormArray;
-  }
-
-  newEducacion(): FormGroup {
-    return this.formBuilder.group({
-      institucion: ['', Validators.required],
-      year: ['', [Validators.required]]
-    });
-  }
-
-  agregarEducacion() {
-    this.educacion.push(this.newEducacion());
-  }
-
-  eliminarEducacion(index: number) {
-    this.educacion.removeAt(index);
-  }
-
-  //Subespecialidad
-  get subespecialidades(): FormArray {
-    return this.createUserForm.get('subespecialidades') as FormArray;
-  }
-
-  newSubespecialidad(): FormGroup {
-    return this.formBuilder.group({
-      name: ['', Validators.required],
-      year: ['', [Validators.required]],
-      institucion: ['', [Validators.required]]
-    });
-  }
-
-  agregarSubespecialidad() {
-    this.subespecialidades.push(this.newSubespecialidad());
-  }
-
-  eliminarSubespecialidad(i: number) {
-    this.subespecialidades.removeAt(i);
-  }
-
   setEspecialidad(especialidad:any){
     this.createUserForm.get('especialidad')?.setValue(especialidad)
     this.especialidad = especialidad
   }
-
-   cargarEducacion(educacion: any[]) {
-      const formArray = this.createUserForm.get('educacion') as FormArray;
-      formArray.clear();
-      if (!educacion || educacion.length === 0) return;
-  
-      educacion.forEach(e => {
-        formArray.push(this.formBuilder.group({
-          institucion: [e.institucion, [Validators.required]],
-          year: [e.year, [Validators.required]]
-        }));
-      });
-      
-      this.changeDetectorRef.detectChanges();
-    }
-  
-    cargarSubespecialidades(subs: any[]) {
-      const formArray = this.createUserForm.get('subespecialidades') as FormArray;
-      formArray.clear();
-  
-      if (!subs || subs.length === 0) return;
-  
-      subs.forEach(s => {
-        formArray.push(this.formBuilder.group({
-          name: [s.name, []],
-          institucion: [s.institucion, []],
-          year: [new Date(s.year), [Validators.required]]
-        }));
-      });
-    }
-  
-    changeDateEnter(value: string, item: any) {
-  
-      if (!value) {
-        return;
-      }
-  
-      if (value.length !== 10) {
-        return;
-      }
-  
-      const [day, month, year] = value.split('/');
-      const date = new Date(`${year}-${month}-${day}T00:00:00`);
-  
-      if (!isNaN(date.getTime())) {
-        item.get('year')?.setValue(date, { emitEvent: false });
-      }
-    }
-  
-    changeDateCalendar(value: any, item: any) {
-      if (!value) return;
-  
-      const formatted = dayjs(value).format('DD/MM/YYYY');
-  
-      // Actualiza el input de máscara visualmente:
-      item.get('year')?.setValue(value, { emitEvent: false });
-    }
-  
-    changeDateEnterForm(value: string, item: string) {
-      if (!value) {
-        return;
-      }
-  
-      if (value.length !== 10) {
-        return;
-      }
-  
-      const [day, month, year] = value.split('/');
-      const date = new Date(`${year}-${month}-${day}T00:00:00`);
-      if (!isNaN(date.getTime())) {
-        this.createUserForm.get(item)?.setValue(date, { emitEvent: false });
-        this.changeDetectorRef.detectChanges();
-      }
-    }
-  
-    changeDateCalendarForm(value: any, item: any) {
-      if (!value) return;
-  
-      this.createUserForm.get(item)?.setValue(value, { emitEvent: false });
-      this.changeDetectorRef.detectChanges()
-    }
 }
 

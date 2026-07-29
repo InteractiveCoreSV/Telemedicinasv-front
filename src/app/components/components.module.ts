@@ -66,6 +66,7 @@ import { ChangeToMedicoTratamientoComponent } from './modals/expedientes/change-
 import { SelectServiceComponent } from './selects/select-services/select-services.component';
 import { ChangeStatusSolicitudMedicoComponent } from './modals/solicitud-medico/change-status-solicitud-medico/change-status-solicitud-medico.component';
 import { CreateNewMedicoComponent } from './modals/solicitud-medico/create-new-medico/create-new-medico.component';
+import { RegisterMedicoComponent } from './modals/register-medico/register-medico.component';
 import { MedicosInLineLateralComponent } from './medicos-in-line-lateral/medicos-in-line-lateral.component';
 import { ViewAnswersSurveyComponent } from './modals/view-answers-survey/view-answers-survey.component';
 import { SelectEspecialidadComponent } from './selects/select-especialidad/select-especialidad.component';
@@ -150,6 +151,7 @@ let components = [
     NewMenorEdadComponent,
     ChangeToMedicoTratamientoComponent,
     CreateNewMedicoComponent,
+    RegisterMedicoComponent,
     ViewAnswersSurveyComponent,
     AppointmentRemisionComponent,
     PayAppointmentComponent,

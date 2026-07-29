@@ -10,6 +10,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 import { DatePipe } from '@angular/common';  // Importar DatePipe
 
 
@@ -27,7 +28,8 @@ import { DatePipe } from '@angular/common';  // Importar DatePipe
     FormsModule,
     ReactiveFormsModule,
     ComponentsModule,
-    NgxMaskDirective
+    NgxMaskDirective,
+    PipesModule
   ],
   providers: [DatePipe],  // Proveedor de DatePipe
 

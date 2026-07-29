@@ -417,7 +417,7 @@ export class DetalleExpedienteComponent implements OnInit {
                 format: 'letter'
               });
               
-              const imagePath = 'assets/logos/telemedicina.png';
+              const imagePath = 'assets/logos/analiza-en-casa.png';
               const pageWidth = pdf.internal.pageSize.width;
               const pageHeight = pdf.internal.pageSize.height;
               const xMargin = 10;
@@ -428,7 +428,7 @@ export class DetalleExpedienteComponent implements OnInit {
               
               this.loadImageAsDataURL(imagePath).then((imageDataUrl:any) => {
                 const imgWidth = 45;
-                const imgHeight = 13;
+                const imgHeight = 15.4;
                 const xPositionImg = 155;
                 const yPositionImg = 12;
               
@@ -468,13 +468,13 @@ export class DetalleExpedienteComponent implements OnInit {
                  let valorXPosition = pageWidth - xMargin - padding - 115;
           
                   pdf.setTextColor(46, 74, 118);
-                  pdf.text(`Fecha de la cita:`, campoXPosition, yPos);
+                  pdf.text(`Fecha del paciente:`, campoXPosition, yPos);
                   pdf.setTextColor(0, 0, 0);
-                  pdf.text(`${this.datePipe.transform(fichaMedica.appointment.dateAppointment, 'MMMM d, y')} de ${fichaMedica.appointment.hour?.hours ?? 'Dato no encontrado'}`, valorXPosition, yPos);
+                  pdf.text(`${this.datePipe.transform(fichaMedica.appointment?.dateAppointment, 'MMMM d, y') ?? 'Dato no encontrado'} de ${fichaMedica.appointment?.hour?.hours ?? 'Dato no encontrado'}`, valorXPosition, yPos);
                   yPos += lineSpacing;
                  //--------------
-          
-                  if(fichaMedica.appointment.underAge === true){
+
+                  if(fichaMedica.appointment?.underAge === true){
                     //--------------
                     pdf.setTextColor(46, 74, 118);
                     pdf.text(`Nombre del paciente (Menor edad):`, campoXPosition, yPos);
@@ -512,13 +512,13 @@ export class DetalleExpedienteComponent implements OnInit {
                                   
                   //--------------
                     pdf.setTextColor(46, 74, 118);
-                    pdf.text(fichaMedica.appointment.underAge ? 'Adulto responsable:' : 'Nombre del paciente:', campoXPosition, yPos);
+                    pdf.text(fichaMedica.appointment?.underAge ? 'Adulto responsable:' : 'Nombre del paciente:', campoXPosition, yPos);
                     pdf.setTextColor(0, 0, 0);
                     pdf.text(`${fichaMedica.infoGeneral.name}`, valorXPosition, yPos);
                     yPos += lineSpacing;
                   //--------------
                   
-                  if(!fichaMedica.appointment.underAge){
+                  if(!fichaMedica.appointment?.underAge){
                     //--------------
                       pdf.setTextColor(46, 74, 118);
                       pdf.text(`Edad:`, campoXPosition, yPos);
@@ -778,7 +778,7 @@ export class DetalleExpedienteComponent implements OnInit {
               
                 // Definir las posiciones para la imagen y el texto
                 const imgWidthFooter = 50;
-                const imgHeightFooter = 15;
+                const imgHeightFooter = 17.1;
                 const xPositionImgFooter = xMargin; // Posición de la imagen a la izquierda
                 const textXPositionFotter = pageWidth - xMargin - 60; // Posición del texto a la derecha
               

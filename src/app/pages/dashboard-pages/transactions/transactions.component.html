@@ -9,7 +9,7 @@
           type="text" 
           class="form-control center" 
           id="inputGroupMergeSearch" 
-          placeholder="Buscar nombre, monto, #cita"  
+          placeholder="Buscar nombre, monto, #paciente"
           aria-describedby="inputGroupMergeSearchlAddOn"
           [(ngModel)]="filters.search"
           (ngModelChange)="getForSearch($event)"
@@ -83,7 +83,7 @@
             <th>Monto</th>
             <th>Fecha de transacción</th>
             <!-- <th>RRN</th> -->
-            <th>Nro. Cita</th>
+            <th>Nro. Paciente</th>
             <!-- <th>Citas</th> -->
           </tr>
         </thead>

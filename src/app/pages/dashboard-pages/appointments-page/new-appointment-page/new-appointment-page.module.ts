@@ -24,7 +24,9 @@ import { SelectSubsidiaryModalComponent } from './select-subsidiary-modal/select
 import { SelectServiceModalComponent } from './select-service-modal/select-service-modal.component';
 import { SelectMedicoModalComponent } from './select-medico-modal/select-medico-modal.component';
 import { SelectDateAndHourModalComponent } from './select-date-and-hour-modal/select-date-and-hour-modal.component';
+import { SelectDateRangeModalComponent } from './select-date-range-modal/select-date-range-modal.component';
 import { CreditCardDirectivesModule } from 'angular-cc-library';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { CreditCardDirectivesModule } from 'angular-cc-library';
     SelectServiceModalComponent,
     SelectMedicoModalComponent,
     SelectDateAndHourModalComponent,
+    SelectDateRangeModalComponent,
 
   ],
   imports: [
@@ -57,7 +60,8 @@ import { CreditCardDirectivesModule } from 'angular-cc-library';
     NgxPermissionsModule,
     NgbModule,
     AutocompleteLibModule,
-    CreditCardDirectivesModule
+    CreditCardDirectivesModule,
+    NgSelectModule
   ],
   exports:[
     NewAppointmentPageComponent

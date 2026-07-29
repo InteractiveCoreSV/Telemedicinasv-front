@@ -17,7 +17,6 @@ import Swal from 'sweetalert2';
 })
 export class CustomFichaMedicaComponent implements OnInit{
   formFichaMedica:SectionFichaMedicaI[]= []
-  formFichaMedicaSectionWoman!:SectionFichaMedicaI
   nameFinchaMedica!:string
   _idFinchaMedica!:string
 
@@ -39,78 +38,57 @@ export class CustomFichaMedicaComponent implements OnInit{
 
   }
 
-  async newCampoModal(id?:string,woman:boolean = false,campo?:any,indexCampo?:number){
+  async newCampoModal(id:string,campo?:any,indexCampo?:number){
     const modal = this.ngbModal.open(AddCampoFichaMedicaComponent,{centered:true});
     modal.componentInstance.campo = campo;
 
     try {
       const result = await modal.result;
       if(result.campo){
-        if(woman){
+        const index = this.formFichaMedica.findIndex(item => item.id === id);
+        if (index !== -1) {
           if(campo){
-            this.formFichaMedicaSectionWoman.campos[indexCampo?indexCampo:0] = result.campo;
+            this.formFichaMedica[index].campos[indexCampo?indexCampo:0] = result.campo;
           }else {
-            this.formFichaMedicaSectionWoman.campos.push(result.campo);
+            this.formFichaMedica[index].campos.push(result.campo);
           }
-
-        }else{
-
-          const index = this.formFichaMedica.findIndex(item => item.id === id);
-          if (index !== -1) {
-            if(campo){
-              this.formFichaMedica[index].campos[indexCampo?indexCampo:0] = result.campo;
-            }else {
-              this.formFichaMedica[index].campos.push(result.campo);
-            }
-          } 
-
         }
       }
     } catch (error) {}
   }
-  
+
 
   removeCampo(iSection:number,i:number){
     this.formFichaMedica[iSection].campos.splice(i, 1)
   }
 
-  removeCampoSectionWoman(i:number){
-    this.formFichaMedicaSectionWoman.campos.splice(i, 1)
-  }
-
-  async newSection(woman:boolean = false,section?:any,indexCampo?:number){
+  async newSection(section?:any,indexSection?:number){
     const modal = this.ngbModal.open(AddSectionFichaMedicaComponent,{centered:true});
     modal.componentInstance.newSectionName = section?.name;
     modal.componentInstance.sectionOnlyWoman = section?.onlyWoman;
-
 
     try {
       const result = await modal.result;
       if(result.section){
 
-        if(woman){
+        const existeOtraSeccionFemenina = this.formFichaMedica.some((s, i) => s.onlyWoman && i !== indexSection);
+        if(result.section.sectionOnlyWoman && existeOtraSeccionFemenina){
+          this.alertsService.toastMixin('Solo puede existir una sección femenina','warning');
+          return;
+        }
 
-          if(section ){
-            this.formFichaMedicaSectionWoman.name = result.section.newSectionName;
-            this.formFichaMedicaSectionWoman.onlyWoman = result.section.sectionOnlyWoman;
-          }
+        if(section && indexSection !== undefined){
+          this.formFichaMedica[indexSection].name = result.section.newSectionName;
+          this.formFichaMedica[indexSection].onlyWoman = result.section.sectionOnlyWoman;
 
         }else {
-
-          if(section && indexCampo){
-            this.formFichaMedica[indexCampo].name = result.section.newSectionName;
-            this.formFichaMedica[indexCampo].onlyWoman = result.section.sectionOnlyWoman;
-  
-          }else {
-            this.formFichaMedica.push({
-              id: nanoid(),
-              name: result.section.newSectionName,
-              onlyWoman: result.section.sectionOnlyWoman,
-              position: this.formFichaMedica.length > 0 ? this.formFichaMedica[this.formFichaMedica.length - 1].position + 1: 1,
-              campos: []
-            });
-          }
-
+          this.formFichaMedica.push({
+            id: nanoid(),
+            name: result.section.newSectionName,
+            onlyWoman: result.section.sectionOnlyWoman,
+            position: this.formFichaMedica.length > 0 ? this.formFichaMedica[this.formFichaMedica.length - 1].position + 1: 1,
+            campos: []
+          });
         }
 
       }
@@ -119,6 +97,14 @@ export class CustomFichaMedicaComponent implements OnInit{
 
   removeSection(iSection:number){
     this.formFichaMedica.splice(iSection, 1)
+  }
+
+  moveSection(index:number, direction:number){
+    const targetIndex = index + direction;
+    if(targetIndex < 0 || targetIndex >= this.formFichaMedica.length) return;
+
+    [this.formFichaMedica[index], this.formFichaMedica[targetIndex]] =
+      [this.formFichaMedica[targetIndex], this.formFichaMedica[index]];
   }
 
 
@@ -134,9 +120,6 @@ export class CustomFichaMedicaComponent implements OnInit{
         this._idFinchaMedica = res.fichaMedicaSections._id;
 
         this.formFichaMedica = res.fichaMedicaSections.sections ;
-        if(res.fichaMedicaSections.seccionWoman){
-          this.formFichaMedicaSectionWoman = res.fichaMedicaSections.seccionWoman
-        }
       })
     })
   }
@@ -145,7 +128,7 @@ export class CustomFichaMedicaComponent implements OnInit{
   async saveFichaMedicaSections(){
     await this.ngxSpinnerService.show('generalSpinner');
 
-    this.fichaMendicaService.saveFichaMedicaSections({_id:this._idFinchaMedica, formFichaMedica:this.formFichaMedica,formFichaMedicaSectionWoman:this.formFichaMedicaSectionWoman}).pipe(
+    this.fichaMendicaService.saveFichaMedicaSections({_id:this._idFinchaMedica, formFichaMedica:this.formFichaMedica}).pipe(
       finalize(async()=>await this.ngxSpinnerService.hide('generalSpinner'))
     ).subscribe({
       next:(res:any)=>{

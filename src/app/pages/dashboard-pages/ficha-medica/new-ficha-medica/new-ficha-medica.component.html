@@ -12,7 +12,7 @@
                     <span class="text-header-pdf-2">Telemedicina</span>
                 </div> -->
                 <div>
-                    <img style="width: 160px;" src="assets/logos/telemedicina.png" alt="">
+                    <img style="width: 160px;" src="assets/logos/analiza-en-casa.svg" alt="">
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
           <button 
             class="btn  btn-primary  mr-2"  style="width: auto;   "
             (click)="openViewSummaryFichasMedicas(
-              appointment.user._id,
+              appointment.user?._id,
               {
                 _id: appointment.idUnderAge,
                 name: appointment.nameUnderAge, 
@@ -35,12 +35,12 @@
             class="btn btn-primary btn-150 mr-2" 
             (click)="viewDetailAppointment( appointment)"
           >
-            Ver Cita
+            Ver Paciente
           </button>
           <button 
             class="btn btn-primary btn-150" 
             (click)="openViewExpediente(
-              appointment.user._id,
+              appointment.user?._id,
               {
                 _id: appointment.idUnderAge,
                 name: appointment.nameUnderAge, 
@@ -57,8 +57,8 @@
             <!-- INFO DEL PACIENTE -->
             <div class="row">
                 <div class="mb-2 col-12" >
-                    <label class="form-label label-auth mb-0" for="date">Fecha de la cita</label>
-                    <p class="m-0 p-0">{{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour?.hours ?? 'Dato no encontrado'}}</p>
+                    <label class="form-label label-auth mb-0" for="date">Fecha del paciente</label>
+                    <p class="m-0 p-0">{{appointment | formatAppointmentDate}}</p>
                 </div>
 
                 <div class="mb-2 col-12 col-md-9" *ngIf="appointment.underAge">
@@ -122,7 +122,7 @@
                 
                 <div class="mb-2 col-12 col-sm-10" >
                     <label class="form-label label-auth mb-0" for="name">{{appointment.underAge ? 'Adulto responsable' : 'Nombre del paciente'}} </label>
-                    <p class="m-0 p-0">{{appointment.user.names}} {{appointment.user.last_names}}</p>
+                    <p class="m-0 p-0">{{patientInfo.names}} {{patientInfo.last_names}}</p>
                 </div>
 
                 <div class="mb-2  col-6 col-sm-2" *ngIf="!appointment.underAge">
@@ -143,37 +143,37 @@
                 <div class="mb-2 col-12 col-sm-6" >
                     <label class="form-label label-auth mb-0" for="date">Teléfono</label>
                     <p class="m-0 p-0">
-                      <span class="mr-1">{{appointment.user.countryCode}}</span> <input type="text" [mask]="appointment.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="appointment.user.phone"  [ngModelOptions]="{standalone: true}">
+                      <span class="mr-1">{{patientInfo.countryCode}}</span> <input type="text" [mask]="patientInfo.mask" class="viewInputFormatMask" disabled [(ngModel)]="patientInfo.phone"  [ngModelOptions]="{standalone: true}">
 
                     </p>
                 </div>
 
                 <div class="mb-2 col-12 col-sm-6" >
-                    <label class="form-label label-auth mb-0" for="date">{{appointment.user.typeDocument}}</label>
+                    <label class="form-label label-auth mb-0" for="date">{{patientInfo.typeDocument}}</label>
                     <p class="m-0 p-0">
-                        <input 
-                          *ngIf="appointment.user.typeDocument === 'DUI'"
-                            type="text" 
-                            mask="00000000-0" 
-                            class="viewInputFormatMask" 
+                        <input
+                          *ngIf="patientInfo.typeDocument === 'DUI'"
+                            type="text"
+                            mask="00000000-0"
+                            class="viewInputFormatMask"
                             disabled
-                            [(ngModel)]="appointment.user.identityNumber"  
+                            [(ngModel)]="patientInfo.identityNumber"
                             [ngModelOptions]="{standalone: true}"
                         >
-                        <input 
-                          *ngIf="appointment.user.typeDocument === 'Pasaporte'"
-                            type="text" 
-                            class="viewInputFormatMask" 
+                        <input
+                          *ngIf="patientInfo.typeDocument === 'Pasaporte'"
+                            type="text"
+                            class="viewInputFormatMask"
                             disabled
-                            [(ngModel)]="appointment.user.passport"  
+                            [(ngModel)]="patientInfo.passport"
                             [ngModelOptions]="{standalone: true}"
                         >
-                        <input 
-                          *ngIf="appointment.user.typeDocument === 'ID internacional'"
-                            type="text" 
-                            class="viewInputFormatMask" 
+                        <input
+                          *ngIf="patientInfo.typeDocument === 'ID internacional'"
+                            type="text"
+                            class="viewInputFormatMask"
                             disabled
-                            [(ngModel)]="appointment.user.idInternacional"  
+                            [(ngModel)]="patientInfo.idInternacional"
                             [ngModelOptions]="{standalone: true}"
                         >
                     </p>
@@ -209,7 +209,7 @@
 
             <div class="row">
                 <div class="mb-2 col-12" *ngIf="appointment.commentAppointment">
-                    <label class="form-label label-auth mb-0" for="date">Comentario para la cita</label>
+                    <label class="form-label label-auth mb-0" for="date">Comentario para el paciente</label>
                     <p class="m-0 p-0">{{appointment.commentAppointment}}</p>
                 </div>
 
@@ -246,67 +246,12 @@
           </div>
       </div>
 
-        <!-- SECCIONES SOLO PARA MUJERES -->
-        <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;" *ngIf="isWoman">
-          <h3 class="my-2 text-center">{{fichaMedicaSectionWoman.name}}</h3>
-          
-          <div class="row flex-wrap px-2">
-              <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedicaSectionWoman.campos; let i = index">
-                  <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
-                  <div class="d-flex align-items-end" *ngIf="campo.component === 'Entrada de texto'">
-                      <input
-                          [formControlName]="campo.name"
-                          [type]="campo.type === 'Número (solo números)' ? 'number': 'text'"
-                          [name]="campo.name"
-                          [placeholder]="campo.placeholder"
-                          class="form-control mr-1"
-                          [style.max-width]="campo.width+'px'"
-                      />
-                      <ng-container *ngIf="campo.unidades.length > 1;else onlyUnidad">
-                          <ng-select [formControlName]="campo.name + 'Unidades'" class="unidades" [placeholder]="'Unidades'" style="width: 100px;">
-                              <ng-option *ngFor="let unidad of campo.unidades" [value]="unidad">
-                                  {{unidad}}
-                              </ng-option>
-                          </ng-select>
-                      </ng-container>
-
-                      <ng-template #onlyUnidad>
-                          <span>{{campo.unidades[0]}}</span>
-                      </ng-template>
-              </div>
-
-              <div *ngIf="campo.component === 'Selector opción multiple'">
-                      <ng-select                        
-                      [multiple]="campo.selectMultiple ? campo.selectMultiple : false"
-                      class="unidades" 
-                      [formControlName]="campo.name" 
-                      [placeholder]="campo.placeholder" 
-                      style="min-width: 200px;" 
-                      [style.max-width]="campo.width ? campo.width+'px' : '100%'"
-                      >
-                        <ng-option *ngFor="let option of campo.optionsSelect" [value]="option">
-                            {{option}}
-                        </ng-option>
-                      </ng-select>
-                  </div>
-
-                  <textarea [formControlName]="campo.name" *ngIf="campo.component === 'Bloque de texto'" [placeholder]="campo.placeholder" class="form-control" rows="5"></textarea>
-                
-                  <span *ngIf="form.get(campo.name)?.hasError('required') && formSubmited" class="invalid-feedback d-block">Requerido</span>
-
-                  <ng-container *ngIf="campo.unidades.length > 1">
-                      <span *ngIf="form.get(campo.name+ 'Unidades')?.hasError('required') && formSubmited" class="invalid-feedback d-block">Unidad requerida</span>
-                  </ng-container>
-              
-              </div>
-          </div>
-
-      </div>
-
         <!-- SECIONES DE FICHA MEDICA -->
-        <div *ngFor="let fichaMedica of fichaMedica"  class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+        <ng-container *ngFor="let fichaMedica of fichaMedica">
+        <div *ngIf="!fichaMedica.onlyWoman || isWoman" class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+            <span class="badge bg-info text-white" *ngIf="fichaMedica.onlyWoman">Sección femenina</span>
             <h3 class="my-2 text-center">{{fichaMedica.name}}</h3>
-            
+
             <div class="row flex-wrap px-2">
                 <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.campos; let i = index">
                     <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
@@ -319,7 +264,7 @@
                             class="form-control mr-1"
                             [style.max-width]="campo.width+'px'"
                         />
-                        <ng-container *ngIf="campo.unidades.length > 1;else onlyUnidad">
+                        <ng-container *ngIf="(campo.unidades?.length ?? 0) > 1;else onlyUnidad">
                             <ng-select [formControlName]="campo.name + 'Unidades'" class="unidades" [placeholder]="'Unidades'" style="width: 100px;">
                                 <ng-option *ngFor="let unidad of campo.unidades" [value]="unidad">
                                     {{unidad}}
@@ -351,7 +296,7 @@
 
                     <span *ngIf="form.get(campo.name)?.hasError('required') && formSubmited" class="invalid-feedback d-block">Requerido</span>
 
-                    <ng-container *ngIf="campo.unidades.length > 1">
+                    <ng-container *ngIf="(campo.unidades?.length ?? 0) > 1">
                         <span *ngIf="form.get(campo.name+ 'Unidades')?.hasError('required') && formSubmited" class="invalid-feedback d-block">Unidad requerida</span>
                     </ng-container>
                 
@@ -359,10 +304,11 @@
             </div>
 
         </div>
+        </ng-container>
 
         </div>
 
-        <div class="row mb-3">  
+        <div class="row mb-3">
             <div class="col-12 ">
                 <h4 class="mt-4">Estudios</h4>
 
@@ -503,7 +449,7 @@
 
             <div class="col-12 d-flex justify-content-between mt-8 mb-8">
               <div>
-                  <img style="width: 140px;" src="assets/logos/telemedicina.png" alt="">
+                  <img style="width: 140px;" src="assets/logos/analiza-en-casa.svg" alt="">
               </div>
 
               <div>

@@ -10,17 +10,13 @@ class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical nav
           <img
             style="max-width: 8.5rem; min-width: 8.5rem"
             class="navbar-brand-logo"
-            [src]="
-              light
-                ? '/assets/logos/telemedicina.png'
-                : '/assets/logos/telemedicina-white.png'
-            "
-            alt="Telemedicina Analiza El Salvador"
+            [src]="'/assets/logos/analiza-en-casa-with.svg'"
+            alt="Analiza En Casa"
           />
           <img
             class="navbar-brand-logo-mini"
-            src="/assets/logos/telemedicina-white.png"
-            alt="Telemedicina Analiza El Salvador"
+            src="/assets/logos/analiza-en-casa-with.svg"
+            alt="Analiza En Casa"
           />
         </a>
 
@@ -144,10 +140,10 @@ class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical nav
             <a
               class="btn btn-sidebar w-100 navbar-brand-logo" style="max-width: 100%; min-width: 100%; border-left: 2px solid #fff !important;" [class]="light ? 'btn-outline-light' : ''"
               (click)="openModalNewAppoinment()"
-              title="Crear Cita"
+              title="Crear Paciente"
               data-placement="left"
             >
-              Crear Cita
+              Crear Paciente
             </a>
           </li>
 
@@ -156,15 +152,15 @@ class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical nav
               class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
               [class]="router.url.includes('dashboard/appointement')?'active':''"
               href="javascript:;"
-              title="Citas"
+              title="Pacientes"
               style="cursor: pointer;"
             >
               <div class="container-icon">
                 <img src="assets/icons/icon-calendar-sidebar.png" alt="calendar-icon">
-              </div>   
+              </div>
               <span
                 class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
-                >Citas</span
+                >Pacientes</span
               >
             </a>
 
@@ -173,19 +169,19 @@ class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical nav
                 <a
                   class="nav-link cursor-pointer"
                   (click)="openModalNewAppoinment()"
-                  title="Crear cita"
+                  title="Crear Paciente"
                 >
-                  <span class="text-truncate">Crear Cita</span>
+                  <span class="text-truncate">Crear Paciente</span>
                 </a>
               </li>
-             
+
               <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="/dashboard/citas/todas-las-citas"
                   title="Historial"
                 >
-                  <span class="text-truncate">Todas las Citas</span>
+                  <span class="text-truncate">Todos los Pacientes</span>
                 </a>
               </li>
             </ul>
@@ -197,14 +193,14 @@ class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical nav
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               routerLink="/dashboard/citas/todas-las-citas"
-              title="Mis Citas"
+              title="Mis Atenciones"
             >
               <div class="container-icon">
                 <img src="assets/icons/icon-calendar-sidebar.png" alt="calendar-icon">
-              </div>   
+              </div>
               <span
                 class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
-                >Mis Citas</span
+                >Mis Atenciones</span
               >
             </a>
           </li>
@@ -305,7 +301,7 @@ class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical nav
                   <span class="text-truncate">Nuevo médico</span>
                 </a>
               </li>
-              <li class="nav-item" >
+              <!-- <li class="nav-item" >
                 <a
                   class="nav-link"
                   routerLink="/dashboard/medicos/solicitudes-medico"
@@ -322,10 +318,50 @@ class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical nav
                 >
                   <span class="text-truncate">Nueva solicitud de médico</span>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
           <!--END MEDICOS -->
+
+          <!-- ENFERMERAS -->
+          <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle height"
+              [class]="router.url.includes('dashboard/enfermeras')?'active':''"
+              href="javascript:;"
+              title="Enfermeras/os"
+            >
+              <div class="container-icon">
+                <img src="assets/icons/icon-users.png" alt="enfermeras-icon">
+              </div>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >Enfermeras/os</span
+              >
+            </a>
+
+            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/enfermeras/ver-enfermeras"
+                  title="Todas las enfermeras/os"
+                >
+                  <span class="text-truncate">Todas las enfermeras/os</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/dashboard/enfermeras/crear-enfermera"
+                  title="Nueva enfermera/o"
+                >
+                  <span class="text-truncate">Nueva enfermera/o</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--END ENFERMERAS -->
 
           <!-- FICHAS MEDICAS -->
           <li class="navbar-vertical-aside-has-menu" *ngxPermissionsOnly="['admin']">

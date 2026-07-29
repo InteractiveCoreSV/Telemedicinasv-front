@@ -14,7 +14,7 @@
           <div class="row resume-appointment">
 
             <div class="col-12 h-100 " *ngIf="newVirtual == true">
-              <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-1">Selecciona la aplicación preferida para la cita</label>
+              <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-1">Selecciona la aplicación preferida para el paciente</label>
               <div class="d-flex flex-column flex-md-row w-100  align-items-center">
                   <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2 mb-2" *ngFor="let herramienta of videoConferencia">
                       <div>
@@ -53,7 +53,7 @@
               <!-- <div *ngIf="appointment.urgency" class="mb-2 d-flex" [innerHTML]="appointment.urgency | parseUrgency"></div> -->
 
               <p class="mb-2">        
-                <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment?.name ?? 'Dato no encontrado'}}
+                <span class="title mr-2">Tipo de Paciente:</span> {{appointment.typeAppoinment.name}}
               </p>
 
               <div class="mb-2">
@@ -114,12 +114,17 @@
 
 
             <div class="col-12 col-md-6 border-radius">
-              <p class="mb-2" *ngIf="appointment && appointment.subsidiary">        
+              <p class="mb-2" *ngIf="appointment && appointment.subsidiary">
                 <span class="title mr-2">Sucursal:</span> {{appointment.subsidiary.name}}
+                <span *ngIf="appointment.subsidiary.esDomicilioPaciente" class="badge badge-domicilio-paciente ml-2"><i class="fas fa-house"></i> Domicilio</span>
+              </p>
+
+              <p class="mb-2" *ngIf="appointment && appointment.subsidiary?.esDomicilioPaciente">
+                <span class="title mr-2">Dirección del paciente:</span> {{appointment.patientAddress}}
               </p>
 
               <p class="mb-2" *ngIf="appointment.meetingTool">        
-                <span class="title mr-2">Aplicacion preferida para la cita:</span> {{appointment.meetingTool.name}}
+                <span class="title mr-2">Aplicacion preferida para el paciente:</span> {{appointment.meetingTool.name}}
               </p>
 
               <div class="mb-2">
@@ -132,12 +137,12 @@
                 <ul><li *ngFor="let service of appointment.service">{{service.name}} {{service.price | dollar }}</li></ul>
               </div>
 
-              <p class="mb-2">        
-                <span class="title mr-2">Médico:</span> {{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}}  {{appointment.medico ? appointment.medico.last_names : ''}}
+              <p class="mb-2" *ngIf="appointment.medico">
+                <span class="title mr-2">Médico:</span> {{appointment.medico.names}}  {{appointment.medico.last_names}}
               </p>
 
-              <p class="mb-2">        
-                <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour?.hours ?? 'Dato no encontrado'}}
+              <p class="mb-2">
+                <span class="title mr-2">Fecha{{appointment.hour ? ' y Hora' : ''}}:</span> {{appointment | formatAppointmentDate}}
               </p>
 
               <p class="mb-2">        
@@ -146,7 +151,7 @@
 
               <p class="mb-2">        
                 <span class="title mr-2">Documento:</span> 
-                <span *ngIf="!appointment.documentAppointment">No se agrego documento a la cita</span>
+                <span *ngIf="!appointment.documentAppointment">No se agrego documento al paciente</span>
                 <a class="cursor-pointer" *ngIf="appointment.documentAppointment" (click)="openModalViewDocument(appointment.documentAppointment.location, appointment.documentAppointment.key)">{{appointment.documentAppointment.key}}</a>
               </p>
 

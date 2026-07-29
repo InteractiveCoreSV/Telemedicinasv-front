@@ -5,7 +5,7 @@
     <div class="col-12 " >
       <div class="">
         <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet p-0 m-0">Buscar Paciente</label>
-        <app-searchs-users (userSelected)="setUser($event)" [role]="'patient'"></app-searchs-users> 
+        <app-searchs-users (userSelected)="setUser($event)" [role]="'patient'" [searchAllFields]="true" [placeholder]="'Busca por nombre, apellido, correo o DUI'"></app-searchs-users>
       </div>
     </div>
   </div>

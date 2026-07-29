@@ -17,7 +17,8 @@ export interface AppointmentI{
   referencedAppointment:boolean;
   referencedSubsidiary:SubsidiaryI;
 
-  user:UserI;
+  user?:UserI;
+  externalPatient?:ExternalPatientI;
   underAge?:boolean,
   idUnderAge?:string,
   nameUnderAge?:string,
@@ -25,18 +26,25 @@ export interface AppointmentI{
   urgency:string;
 
   subsidiary:SubsidiaryI;
+  patientAddress:string;
+  diagnostico?:string;
   service:ServiceI[];
-  medico:UserI,
+  medico?:UserI,
+  externalMedico?:ExternalMedicoI;
   dateAppointment:string;
-  hour:Hours2I;
+  dateAppointmentEnd?:string;
+  hour?:Hours2I;
   documentAppointment:FileAWSI,
+  duiImage?:FileAWSI;
+  indicacionMedica?:FileAWSI;
+  insuranceType?:'aseguradora' | 'particular';
   commentAppointment:string;
   total:number,
 
   status:  'Pending' | 'Reserved' | 'Confirmed' | 'Completed' | 'Refuse' | 'InProgress'  | 'pending_payment';
   timeStatusInProgress?:dateHourI;
 
-  typePayment:'creditCard' | 'cash' | 'insurance' | 'transferencia'  | 'pending_payment'
+  typePayment?:'tarjeta' | 'efectivo' | 'cheque' | 'transferencia'
   imgComprobante:FileAWSI,
 
   insurance?:InsuranceI,
@@ -70,4 +78,21 @@ export interface HistoryStatusI {
   status:string,
   motivoCancel:string,
   dateChange:Date;
+}
+
+export interface ExternalPatientI {
+  names:string;
+  phone:string;
+  countryCode:string;
+  mask:string;
+  typeDocument:'DUI' | 'ID internacional' | 'Pasaporte';
+  document:string;
+  email?:string;
+}
+
+export interface ExternalMedicoI {
+  names:string;
+  phone:string;
+  countryCode:string;
+  mask:string;
 }

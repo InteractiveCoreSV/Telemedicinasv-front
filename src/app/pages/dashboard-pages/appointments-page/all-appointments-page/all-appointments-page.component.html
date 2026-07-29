@@ -73,6 +73,12 @@
       <div class="mb-2 px-2 col-sm-6 col-md-auto" *ngxPermissionsExcept="['patient','medico']">
         <app-select-especialidad (changeEspecialidad)="filters.especialidad = $event; getAppointments()"></app-select-especialidad>
       </div>
+
+      <div class="mb-2 px-2 col-sm-6 col-md-auto" *ngxPermissionsExcept="['patient','medico']">
+        <button type="button" class="btn btn-sm btn-ghost-primary" (click)="exportToExcel()">
+          Descargar Excel <i class="fas fa-file-download"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -118,7 +124,7 @@
 
                 <td>
                   <div  class="d-flex flex-column">
-                    <span>{{appointment.dateAppointment | date:'MMMM d, y' | titlecase}}, {{appointment.hour ? appointment.hour.hours : 'Hora no encontrada'}}</span>
+                    <span>{{appointment | formatAppointmentDate}}</span>
                     <span *ngIf="appointment.reprogramada" class="badge" style="background-color:#00bcd4;width: 140px;">Cita Reprogramada</span>
                     <span *ngIf="appointment.remitida" class="badge" style="background-color:#5f5f5f;width: 140px;">Cita Remitida</span>
                     <span *ngIf="appointment.referencedAppointment" class="badge" style="background-color:#748a8df7;width: 140px;">Cita Referida</span>
@@ -128,8 +134,13 @@
 
                 <td >
                   <div class="d-flex flex-column">
-                    <div>
-                      {{appointment.user ? appointment.user.names : 'Usuario no encontrado'}} {{appointment.user ? appointment.user.last_names : ''}}
+                    <div *ngIf="appointment.user">
+                      {{appointment.user.names}} {{appointment.user.last_names}}
+                    </div>
+
+                    <div class="d-flex flex-column" *ngIf="!appointment.user">
+                      <span>{{appointment.externalPatient ? appointment.externalPatient.names : 'Usuario no encontrado'}}</span>
+                      <span *ngIf="appointment.externalPatient" class="badge w-auto" style="background-color:#919191;">No registrado</span>
                     </div>
 
                     <div class="d-flex flex-column"  *ngIf="appointment.nameUnderAge">
@@ -151,10 +162,19 @@
 
                 <td>
                   <div class="d-flex flex-column">
-                    <span>
-                      {{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}}  {{appointment.medico ? appointment.medico.last_names : ''}}
+                    <span *ngIf="appointment.medico">
+                      {{appointment.medico.names}} {{appointment.medico.last_names}}
                     </span>
                     <span style="color: #4e4e4e;" *ngIf="appointment.medico && appointment.medico.especialidad">{{appointment.medico.especialidad.name}}</span>
+
+                    <span *ngIf="!appointment.medico && !appointment.externalMedico">
+                      Médico no encontrado
+                    </span>
+
+                    <div class="d-flex flex-column" *ngIf="appointment.externalMedico">
+                      <span>{{appointment.externalMedico.names}}</span>
+                      <span class="badge w-auto" style="background-color:#919191;">Externo</span>
+                    </div>
                   </div>
                 </td>
 

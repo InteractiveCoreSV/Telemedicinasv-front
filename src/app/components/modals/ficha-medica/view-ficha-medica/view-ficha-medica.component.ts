@@ -29,7 +29,16 @@ export class ViewFichaMedicaComponent {
     private fichaMedicaService: FichaMedicaService,
   ) {}
 
-  ngOnInit() {   
+  ngOnInit() {
+  }
+
+  // Compatibilidad con fichas antiguas donde la sección femenina se guardó aparte (seccionWoman)
+  getDisplaySections(fichaMedica: any): any[] {
+    const sections = fichaMedica?.sections || [];
+    if (fichaMedica?.isWoman && fichaMedica?.seccionWoman && !sections.some((s: any) => s.onlyWoman)) {
+      return [...sections, { ...fichaMedica.seccionWoman, onlyWoman: true }];
+    }
+    return sections;
   }
 
   isDui(typeDocument: string): boolean {

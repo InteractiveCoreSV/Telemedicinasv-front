@@ -19,10 +19,6 @@ export interface SolicitudMedicoI{
 
   especialidad:EspecialidadI,
   numberColegio?: number,
-  clinicaMedica: boolean,
-  clinicaName?: string,
-  clinicaAddress?: string,
-  clinicaPhone?: string,
   createdAt:Date,
 
   userCreate:boolean

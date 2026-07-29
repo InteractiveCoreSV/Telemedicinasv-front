@@ -180,7 +180,7 @@ export class ReportPatientsInFollowUpComponent implements OnInit,AfterViewInit, 
     })
 
     const columnWidths = [{ wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 }];
-    const forHeader = ['Paciente','Medico','Número de citas','Monto total']
+    const forHeader = ['Paciente','Medico','Número de pacientes','Monto total']
     
     const title = `Datos del ${this.formateDate(this.filters.rangeDates.from)} al ${ this.formateDate(this.filters.rangeDates.to)}`
 

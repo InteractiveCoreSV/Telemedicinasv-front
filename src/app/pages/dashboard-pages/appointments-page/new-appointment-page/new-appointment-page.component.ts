@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, Output, EventEmitter, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgStepperComponent } from 'angular-ng-stepper';
 import { LabelStepsI } from 'src/app/components/steps-labels/steps-labels.component';
@@ -16,7 +16,7 @@ export class NewAppointmentPageComponent implements OnInit,AfterViewInit {
 
   labels:LabelStepsI[] = [
     {
-      label:'Tipo de cita',
+      label:'Tipo de Paciente',
       number:'1'
     },
     {
@@ -44,7 +44,8 @@ export class NewAppointmentPageComponent implements OnInit,AfterViewInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     public ngbActiveModal: NgbActiveModal,
-    private newAppointmentFormsService: NewAppointmentFormsService
+    private newAppointmentFormsService: NewAppointmentFormsService,
+    private elementRef: ElementRef
   ) { }
 
   ngOnInit(): void {
@@ -59,6 +60,7 @@ export class NewAppointmentPageComponent implements OnInit,AfterViewInit {
 
   setCurrentSlider(slide: any) {
     this.currentSlide = slide.selectedIndex;
+    this.elementRef.nativeElement.closest('.modal-body')?.scrollTo(0, 0);
   }
 
   nextStepper() {
@@ -75,6 +77,5 @@ export class NewAppointmentPageComponent implements OnInit,AfterViewInit {
 
   closeModal(){
     this.ngbActiveModal.close({reload:false});
-    this.newAppointmentFormsService.medicoDisponible$.next(null);
   }
 }

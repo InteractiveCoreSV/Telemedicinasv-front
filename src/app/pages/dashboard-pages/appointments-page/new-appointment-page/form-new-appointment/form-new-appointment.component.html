@@ -3,7 +3,7 @@
     <div class="row " translate="no">
 
         <div class="col-12 h-100 mt-3">
-            <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet mb-5">Seleccion tipo de Cita</label>
+            <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet mb-5">Seleccion tipo de Paciente <span class="text-danger">*</span></label>
             <div class="d-flex flex-wrap w-100 justify-content-center align-items-center">
                 <ng-container *ngIf="!loading">
                     <div class="card ratioTypeAppoinment border-0 position-relative card-radio" *ngFor="let category of categoriesServices">
@@ -23,12 +23,12 @@
             </div>
 
             <div *ngIf="formSubmited && getControl('typeAppoinment')?.invalid" class="invalid-feedback d-block mt-2">
-                El tipo de cita es requerido
+                El tipo de paciente es requerido
             </div>
         </div>
   
         <div class="col-12 h-100 mt-4" *ngIf="getControl('typeAppoinment')?.value.online == true">
-            <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet mb-5">Selecciona aplicacion preferida para la cita</label>
+            <label class="form-label text-primary fw-600 w-100 text-center label-new-appointmet mb-5">Selecciona aplicacion preferida para el paciente <span class="text-danger">*</span></label>
             <div class="d-flex flex-column flex-md-row w-100 justify-content-center align-items-center">
                 <div class="card border-0 position-relative card-radio card-radio-custom ratioMeetingTool mx-2 mb-2" *ngFor="let herramienta of videoConferencia">
                     <div>

@@ -285,7 +285,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
     appointments.map((v: any) => {
       let sum = v.pending + v.completed + v.confirmed + v.reserved + v.refuse + (v.inProgress || 0) + (v.pendingPayment || 0)
       let formatDate = moment(v.date).format("D MMMM")
-      this.labelsBar.push(`${formatDate} | ${sum} citas`)
+      this.labelsBar.push(`${formatDate} | ${sum} pacientes`)
     })
 
     let countsPending: any[] = []
@@ -338,7 +338,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
       this.dataBar.push({
         data: countsPending,
-        label: 'Citas Pendientes', 
+        label: 'Pacientes Pendientes', 
         backgroundColor: "#e89697",
         pointBackgroundColor: "#e89697",
         pointBorderColor: "#e89697",
@@ -372,7 +372,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
         backgroundColor: "#95c11f",
         pointBackgroundColor: "#95c11f",
         pointBorderColor: "#95c11f",
-        label: 'Citas Reservadas', 
+        label: 'Pacientes Reservados', 
         hoverBackgroundColor: "#000",
         borderColor: "#95c11f",
         barThickness: 10,
@@ -399,7 +399,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
       
       this.dataBar.push({
         data: countsConfirmed,
-        label: 'Citas Confirmadas', 
+        label: 'Pacientes Confirmados', 
         backgroundColor: "#3a74d3",
         pointBackgroundColor: "#3a74d3",
         pointBorderColor: "#3a74d3",
@@ -430,7 +430,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
       this.dataBar.push({
         data: countsCompleted,
-        label: 'Citas Completadas', 
+        label: 'Pacientes Completados', 
         backgroundColor: "#2e4a76",
         pointBackgroundColor: "#2e4a76",
         pointBorderColor: "#2e4a76",
@@ -470,7 +470,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
       this.dataBar.push({
         data: countsRefuse,
-        label: 'Citas Canceladas', 
+        label: 'Pacientes Cancelados', 
         backgroundColor: "#ea4850",
         pointBackgroundColor: "#ea4850",
         pointBorderColor: "#ea4850",
@@ -634,7 +634,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
             let dateFormat = moment(v._id.dateAppointment).format("D MMMM")
             if (!seenDates.has(dateFormat)) {
               seenDates.add(dateFormat);
-              this.labelsBar.push(`${dateFormat} | ${sum} citas`)
+              this.labelsBar.push(`${dateFormat} | ${sum} pacientes`)
             }
           })
   
@@ -696,7 +696,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
             this.dataBar.push({
               data: countsPending,
-              label: 'Citas Pendientes', 
+              label: 'Pacientes Pendientes', 
               backgroundColor: "#e89697",
               pointBackgroundColor: "#e89697",
               pointBorderColor: "#e89697",
@@ -729,7 +729,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
               backgroundColor: "#95c11f",
               pointBackgroundColor: "#95c11f",
               pointBorderColor: "#95c11f",
-              label: 'Citas Reservadas', 
+              label: 'Pacientes Reservados', 
               hoverBackgroundColor: "#000",
               borderColor: "#95c11f",
               barThickness: 10,
@@ -757,7 +757,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
             
             this.dataBar.push({
               data: countsConfirmed,
-              label: 'Citas Confirmadas', 
+              label: 'Pacientes Confirmados', 
               backgroundColor: "#3a74d3",
               pointBackgroundColor: "#3a74d3",
               pointBorderColor: "#3a74d3",
@@ -787,7 +787,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
             this.dataBar.push({
               data: countsCompleted,
-              label: 'Citas Completadas', 
+              label: 'Pacientes Completados', 
               backgroundColor: "#2e4a76",
               pointBackgroundColor: "#2e4a76",
               pointBorderColor: "#2e4a76",
@@ -827,7 +827,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
             this.dataBar.push({
               data: countsRefuse,
-              label: 'Citas Canceladas', 
+              label: 'Pacientes Cancelados', 
               backgroundColor: "#ea4850",
               pointBackgroundColor: "#ea4850",
               pointBorderColor: "#ea4850",
@@ -978,7 +978,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
        if(serverAppointments.length > 0){
         serverAppointments.map((v: any) => {
           let sum = v.info.pending + v.info.completed + v.info.confirmed + v.info.reserved + v.info.refuse + (v.info.inProgress || 0) + (v.info.pendingPayment || 0)
-          this.labelsBar.push(`${v.mes} | ${sum} citas`)
+          this.labelsBar.push(`${v.mes} | ${sum} pacientes`)
 
         })
 
@@ -1033,7 +1033,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
           this.dataBar.push({
             data: countsPending,
-            label: 'Citas Pendientes', 
+            label: 'Pacientes Pendientes', 
             backgroundColor: "#e89697",
             pointBackgroundColor: "#e89697",
             pointBorderColor: "#e89697",
@@ -1066,7 +1066,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
             backgroundColor: "#95c11f",
             pointBackgroundColor: "#95c11f",
             pointBorderColor: "#95c11f",
-            label: 'Citas Reservadas', 
+            label: 'Pacientes Reservados', 
             hoverBackgroundColor: "#000",
             borderColor: "#95c11f",
             barThickness: 10,
@@ -1094,7 +1094,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
           
           this.dataBar.push({
             data: countsConfirmed,
-            label: 'Citas Confirmadas', 
+            label: 'Pacientes Confirmados', 
             backgroundColor: "#3a74d3",
             pointBackgroundColor: "#3a74d3",
             pointBorderColor: "#3a74d3",
@@ -1124,7 +1124,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
           this.dataBar.push({
             data: countsCompleted,
-            label: 'Citas Completadas', 
+            label: 'Pacientes Completados', 
             backgroundColor: "#2e4a76",
             pointBackgroundColor: "#2e4a76",
             pointBorderColor: "#2e4a76",  
@@ -1155,7 +1155,7 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
 
            this.dataBar.push({
               data: countsRefuse,
-              label: 'Citas Canceladas', 
+              label: 'Pacientes Cancelados', 
               backgroundColor: "#ea4850",
               pointBackgroundColor: "#ea4850",
               pointBorderColor: "#ea4850",
@@ -1301,11 +1301,11 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
       dataExport.push({
         date:label,
         total: this.dataBar.reduce((sum, d) => sum + d.data[index], 0),
-        pending:this.dataBar.filter(d => d.label === 'Citas Pendientes')[0].data[index],
-        reserved:this.dataBar.filter(d => d.label === 'Citas Reservadas')[0].data[index],
-        confirmed:this.dataBar.filter(d => d.label === 'Citas Confirmadas')[0].data[index],
-        completed:this.dataBar.filter(d => d.label === 'Citas Completadas')[0].data[index],
-        refuse:this.dataBar.filter(d => d.label === 'Citas Canceladas')[0].data[index],
+        pending:this.dataBar.filter(d => d.label === 'Pacientes Pendientes')[0].data[index],
+        reserved:this.dataBar.filter(d => d.label === 'Pacientes Reservados')[0].data[index],
+        confirmed:this.dataBar.filter(d => d.label === 'Pacientes Confirmados')[0].data[index],
+        completed:this.dataBar.filter(d => d.label === 'Pacientes Completados')[0].data[index],
+        refuse:this.dataBar.filter(d => d.label === 'Pacientes Cancelados')[0].data[index],
 
       })
     })
@@ -1313,6 +1313,6 @@ export class ForAppointmentsStatusComponent implements OnInit, OnChanges {
     const columnWidths = [{ wch: 30 }, { wch: 15 },{ wch: 15 },{ wch: 15 },{ wch: 15 },{ wch: 15 },{ wch: 15 },];
     const forHeader = ['Fecha','Total','Pendientes','Reservadas','Confirmadas','Completadas','Canceladas']
 
-    this.utilsService.exportAsExcel(dataExport, 'Citas por estado',forHeader,columnWidths);
+    this.utilsService.exportAsExcel(dataExport, 'Pacientes por estado',forHeader,columnWidths);
   }
 }

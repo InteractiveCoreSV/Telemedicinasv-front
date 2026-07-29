@@ -22,8 +22,6 @@ export class CreateNewMedicoComponent implements OnInit {
   formSubmited:boolean = false;
 
   @Input() solicitudMedico!: SolicitudMedicoI;
-  
-  arancerPerHour:any
 
   strongPassword = false;
   
@@ -136,39 +134,18 @@ export class CreateNewMedicoComponent implements OnInit {
       typeDocument:['',[Validators.required]],
       identityNumber: ['', [Validators.required,Validators.pattern(/^[0-9]+$/)]],
       passport:['',[Validators.required]],
-      idInternacional:['',[Validators.required]],      numberColegio:['',[Validators.required]],
-      numberRegistro:['',[Validators.required,Validators.pattern(/^\d{11}$/)]],
-      arancerPerHour:['',[Validators.required]],
+      idInternacional:['',[Validators.required]],
+      numberColegio:['',[Validators.required]],
+      especialidad:['',[]],
+
       nameEmergency:['',[]],
       phoneEmergency: ['', []],
       countryCodeEmergency: ['+503', []],
       COICodeEmergency: ['ESA', []],
       maskEmergency: ['0000 0000', []],
-      especialidad:['',[]],
-
-      clinicaMedica:[false,[Validators.required]],
-      clinicaName:['',[Validators.required]],
-      clinicaAddress:['',[Validators.required]],
-      clinicaPhone:['',[Validators.required]],
     });
 
     this.createMedicoForm.get('_id')?.disable();
-
-    this.createMedicoForm.get('clinicaName')?.disable();
-    this.createMedicoForm.get('clinicaAddress')?.disable();
-    this.createMedicoForm.get('clinicaPhone')?.disable();
-
-    this.createMedicoForm.get('clinicaMedica')?.valueChanges.subscribe(valor => {
-      if(valor === true){
-        this.createMedicoForm.get('clinicaName')?.enable();
-        this.createMedicoForm.get('clinicaAddress')?.enable();
-        this.createMedicoForm.get('clinicaPhone')?.enable();
-      }else {
-        this.createMedicoForm.get('clinicaName')?.disable();
-        this.createMedicoForm.get('clinicaAddress')?.disable();
-        this.createMedicoForm.get('clinicaPhone')?.disable();
-      }
-    });
 
      this.createMedicoForm.get('typeDocument')?.valueChanges.subscribe(value => {
       if(value === 'Pasaporte'){
@@ -199,26 +176,6 @@ export class CreateNewMedicoComponent implements OnInit {
 
   updateTypeDocument(item:any){
     this.getControl('typeDocument')?.setValue(item);
-  }
-
-   // Este método maneja la entrada de texto del campo
-   formatArancerPerHourOnInput(event: any): void {
-    let value = event.target.value;
-    // Eliminar cualquier carácter no numérico, exceptuando el punto decimal
-    value = value.replace(/[^0-9]/g, '');
-
-    // Si el valor no tiene decimales, agregar ".00"
-    if (value === '') {
-      this.createMedicoForm.get('arancerPerHour')?.setValue('0.00');
-      return;
-    }
-    const numericValue = parseFloat(value) / 100;
-
-    // Actualizar el valor en el formulario
-    this.arancerPerHour = numericValue.toFixed(2);
-
-    const valueFloat = parseFloat(this.arancerPerHour);
-    this.createMedicoForm.get('arancerPerHour')?.setValue(isNaN(valueFloat) ? 0.00 : valueFloat.toFixed(2));
   }
 
   setSubsidiary(subsidiary:any){
@@ -268,6 +225,5 @@ export class CreateNewMedicoComponent implements OnInit {
   setMedico(){
     this.createMedicoForm.patchValue(this.solicitudMedico);
     this.especialidad = this.solicitudMedico.especialidad._id ?? null
-    this.createMedicoForm.get('clinicaMedica')?.setValue(this.solicitudMedico.clinicaMedica ? this.solicitudMedico.clinicaMedica : false)
   }
 }

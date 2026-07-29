@@ -1,3 +1,4 @@
+import { ExternalPatientI } from "./appointment.interface";
 import { FileAWSI } from "./files.interface";
 import { UserI } from "./user.interface";
 
@@ -5,7 +6,9 @@ export interface ExpedienteI {
   _id?: string;
   name:string;
   comment:string;
-  patient: UserI;
+  patient?: UserI;
+  externalPatient?: ExternalPatientI;
+  appointment?: string;
   userCreate: UserI;
   document:FileAWSI;
   typeDocument:string;

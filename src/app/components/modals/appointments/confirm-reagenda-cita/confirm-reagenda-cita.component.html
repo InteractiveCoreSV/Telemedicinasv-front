@@ -1,5 +1,5 @@
 ﻿<div class="modal-header border-bottom pb-3">
-    <h4 class="modal-title">Confirmar reprogramación de cita</h4>
+    <h4 class="modal-title">Confirmar reprogramación de paciente</h4>
     <button type="button" class="close  btn-icon" (click)="ngbActiveModal.close()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -17,7 +17,7 @@
               <div *ngIf="appointment.urgency" class="mb-2 d-flex" [innerHTML]="appointment.urgency | parseUrgency"></div>
 
               <p class="mb-2">        
-                <span class="title mr-2">Tipo de Cita:</span> {{appointment.typeAppoinment?.name ?? 'Dato no encontrado'}}
+                <span class="title mr-2">Tipo de Paciente:</span> {{appointment.typeAppoinment.name}}
               </p>
 
               <div class="mb-2">
@@ -79,12 +79,17 @@
 
 
             <div class="col-12 col-md-6 border-radius">
-              <p class="mb-2" *ngIf="appointment && appointment.subsidiary">        
+              <p class="mb-2" *ngIf="appointment && appointment.subsidiary">
                 <span class="title mr-2">Sucursal:</span> {{appointment.subsidiary.name}}
+                <span *ngIf="appointment.subsidiary.esDomicilioPaciente" class="badge badge-domicilio-paciente ml-2"><i class="fas fa-house"></i> Domicilio</span>
+              </p>
+
+              <p class="mb-2" *ngIf="appointment && appointment.subsidiary?.esDomicilioPaciente">
+                <span class="title mr-2">Dirección del paciente:</span> {{appointment.patientAddress}}
               </p>
 
               <p class="mb-2" *ngIf="appointment.meetingTool">        
-                <span class="title mr-2">Aplicacion preferida para la cita:</span> {{appointment.meetingTool.name}}
+                <span class="title mr-2">Aplicacion preferida para el paciente:</span> {{appointment.meetingTool.name}}
               </p>
 
               <!-- <p class="mb-2">        
@@ -98,12 +103,12 @@
                 <ul><li *ngFor="let service of appointment.service">{{service.name}} {{service.price | dollar }}</li></ul>
               </div>
 
-              <p class="mb-2">        
-                <span class="title mr-2">Médico:</span> {{appointment.medico ? appointment.medico.names : 'Médico no encontrado'}}  {{appointment.medico ? appointment.medico.last_names : ''}}
+              <p class="mb-2" *ngIf="appointment.medico">
+                <span class="title mr-2">Médico:</span> {{appointment.medico.names}}  {{appointment.medico.last_names}}
               </p>
 
-              <p class="mb-2">        
-                <span class="title mr-2">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour?.hours ?? 'Dato no encontrado'}}
+              <p class="mb-2">
+                <span class="title mr-2">Fecha{{appointment.hour ? ' y Hora' : ''}}:</span> {{appointment | formatAppointmentDate}}
               </p>
 
               <p class="mb-2">        
@@ -112,7 +117,7 @@
 
               <p class="mb-2">        
                 <span class="title mr-2">Documento:</span> 
-                <span *ngIf="!appointment.documentAppointment">No se agrego documento a la cita</span>
+                <span *ngIf="!appointment.documentAppointment">No se agrego documento al paciente</span>
                 <a class="cursor-pointer" *ngIf="appointment.documentAppointment" (click)="openModalViewDocument(appointment.documentAppointment.location, appointment.documentAppointment.key)">{{appointment.documentAppointment.key}}</a>
               </p>
 
@@ -126,11 +131,7 @@
                 <img class="cursor-pointer" (click)="viewAtt(appointment.imgComprobante.location)" [src]="appointment.imgComprobante.location" alt="" style="max-width: 300px; border: 1px solid #2e4a76; border-radius: 8px;">
               </p>
 
-              <p class="mb-2" *ngIf="appointment.typePayment === 'insurance'">        
-                <span class="title mr-2">Nombre de la aseguradora:</span> {{appointment.insuranceName}}
-              </p>
-
-              <p class="mb-2">        
+              <p class="mb-2">
                 <span class="title mr-2">Total pagado:</span> <span style="color: rgba(0, 144, 66, 1);"><strong>$ </strong> {{appointment.total}}</span>
               </p>
               

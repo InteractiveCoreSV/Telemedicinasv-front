@@ -242,31 +242,7 @@
                   </div>
                 </div>
                 <!-- END ROW -->
-                 
-                <div class="col-12 mb-3">
-                  <div class="custom-control custom-switch">
-                    <input formControlName="clinicaMedica" type="checkbox" class="custom-control-input" id="statusSwitch">
-                    <label class="custom-control-label" for="statusSwitch">Clínica médica o Hospital</label>
-                  </div>
-                </div>
 
-                <!-- START ROW -->
-                <div class="col-12 col-sm-6" *ngIf="createMedicoForm.value.clinicaMedica === true">
-                  <div class="form-group">
-                    <input formControlName="clinicaName" [class]="formSubmited && createMedicoForm.get('clinicaName')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre de la clinica o hospital">
-                    <div *ngIf="formSubmited && createMedicoForm.get('clinicaName')?.invalid" class="invalid-feedback">El nombre es requerido</div>
-                  </div>
-                </div>
-                <!-- END ROW -->
-                <!-- START ROW -->
-                <div class="col-12 col-sm-6" *ngIf="createMedicoForm.value.clinicaMedica === true">
-                  <div class="form-group">
-                    <input formControlName="clinicaAddress" [class]="formSubmited && createMedicoForm.get('clinicaAddress')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Dirección de la clinica o hospital">
-                    <div *ngIf="formSubmited && createMedicoForm.get('clinicaAddress')?.invalid" class="invalid-feedback">La dirección de la clinica es requerida</div>
-                  </div>
-                </div>
-                <!-- END ROW -->
-  
               </div>
 
           </div>

@@ -33,14 +33,14 @@
         </div>
         <!-- End Header -->
     
-        <h4 class="fw-custom p-3 custom-title-statistics">Reporte diario de citas</h4>
+        <h4 class="fw-custom p-3 custom-title-statistics">Reporte diario de pacientes</h4>
       <div class="row mx-2 pb-4 ">
         <ng-container *ngIf="!loading">
           <div class="col-6  my-2 px-2 my-md-1 px-md-1">
             <a>
               <div class="card text-center" [style]="'border-bottom: 5px solid #2E4A76'" style="border-radius: 0.25rem !important; height: 100%;">
                 <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
-                  <h4 class="card-title">Citas Completadas</h4>
+                  <h4 class="card-title">Pacientes Completados</h4>
                   <span style="font-size: medium; color: #2E4A76;">Cantidad: {{appointments && appointments.totalAppointmentsCompleted ? appointments.totalAppointmentsCompleted : 0}}</span>
                   <span style="font-size: medium; color: #2E4A76;">Total: <strong>$ </strong> {{appointments && appointments.totalSalesCompleted ? appointments.totalSalesCompleted : 0}}</span>
                 </div>
@@ -52,7 +52,7 @@
             <a>
               <div class="card text-center" [style]="'border-bottom: 5px solid #ea4850'" style="border-radius: 0.25rem !important; height: 100%;">
                 <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
-                  <h4 class="card-title">Citas Canceladas</h4>
+                  <h4 class="card-title">Pacientes Cancelados</h4>
                   <span style="font-size: medium; color: #ea4850;">Cantidad: {{appointments && appointments.totalAppointmentsRefuse ? appointments.totalAppointmentsRefuse : 0}}</span>
                   <span style="font-size: medium; color: #ea4850;">Total: <strong>$ </strong> {{appointments && appointments.totalSalesRefuse ? appointments.totalSalesRefuse : 0}}</span>
                 </div>

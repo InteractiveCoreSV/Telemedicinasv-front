@@ -17,6 +17,10 @@ export class NewDocumentExpedienteComponent implements OnInit, AfterViewInit {
 
   @Input() documentToEdit!: ExpedienteI;
 
+  // Paciente externo (no registrado): en vez de `user`, se pasa la cita + los datos capturados en la agenda
+  @Input() appointment?: string | null;
+  @Input() externalPatient?: any | null;
+
   document:File[] =[];
   user!:string
   name!: string
@@ -76,7 +80,9 @@ export class NewDocumentExpedienteComponent implements OnInit, AfterViewInit {
 
     formData.append('archivo', this.document[0]);
 
-    formData.append('user', this.user);
+    if(this.user) formData.append('user', this.user);
+    if(this.appointment) formData.append('appointment', this.appointment);
+    if(this.externalPatient) formData.append('externalPatient', JSON.stringify(this.externalPatient));
     formData.append('comment', this.comment.nativeElement.value);
     formData.append('name', this.name);
     formData.append('category', this.category);
@@ -84,9 +90,9 @@ export class NewDocumentExpedienteComponent implements OnInit, AfterViewInit {
     const typeDocument =  this.document[0].type == 'application/pdf' ? 'pdf' :
                           ['application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(this.document[0].type) ? 'word':
                           'image';
-    
+
     formData.append('typeDocument', typeDocument);
- 
+
     await this.ngxSpinnerService.show('generalSpinner');
 
     this.expedienteService.saveDocumentExpediente(formData).pipe(

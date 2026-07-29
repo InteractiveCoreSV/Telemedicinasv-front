@@ -30,7 +30,6 @@ import { ViewSummaryFichasMedicasComponent } from 'src/app/components/modals/fic
 export class NewFichaMedicaComponent {
   form!: FormGroup;
   fichaMedica:SectionFichaMedicaI[]= []
-  fichaMedicaSectionWoman!:SectionFichaMedicaI
   idFichaMedica!:any;
 
   womanControles:any = []
@@ -49,6 +48,24 @@ export class NewFichaMedicaComponent {
 
   idAppointment!:any;
   appointment!:AppointmentI;
+
+  // Datos del paciente normalizados: vienen de `appointment.user` (registrado) o
+  // de `appointment.externalPatient` (no registrado) — mismo patrón que
+  // `dowloaderInfoAppointment` en view-detail-appointment-modal.component.ts
+  patientInfo!:{
+    names?:string;
+    last_names?:string;
+    email?:string;
+    countryCode?:string;
+    phone?:string;
+    mask?:string;
+    typeDocument?:string;
+    identityNumber?:string;
+    idInternacional?:string;
+    passport?:string;
+    procedimientos?:any;
+    planificacion?:any;
+  };
 
   age!:string;
   sexo!:string;
@@ -189,7 +206,7 @@ export class NewFichaMedicaComponent {
       
       this.formSubmited = true
       await this.ngxSpinnerService.show('generalSpinner');
-      this.appointmentsService.changeStatusInProgress(this.idAppointment,'InProgress', timeStatusInProgress,this.appointment.medico._id).pipe(
+      this.appointmentsService.changeStatusInProgress(this.idAppointment,'InProgress', timeStatusInProgress,this.appointment.medico!._id).pipe(
             tap((res:any)=>{
               this.authService.updateToke(res['token'])
             }),
@@ -211,8 +228,37 @@ export class NewFichaMedicaComponent {
       next:((res:any)=>{
         this.appointment = res.appointment;
 
-        if(this.appointment.user.age && !this.appointment.underAge) this.age = this.appointment.user.age.toString()
-        if(this.appointment.user.address) this.address = this.appointment.user.address
+        this.patientInfo = this.appointment.user ? {
+          names: this.appointment.user.names,
+          last_names: this.appointment.user.last_names,
+          email: this.appointment.user.email,
+          countryCode: this.appointment.user.countryCode,
+          phone: this.appointment.user.phone,
+          mask: this.appointment.user.mask,
+          typeDocument: this.appointment.user.typeDocument,
+          identityNumber: this.appointment.user.identityNumber,
+          idInternacional: this.appointment.user.idInternacional,
+          passport: this.appointment.user.passport,
+          procedimientos: this.appointment.user.procedimientos,
+          planificacion: this.appointment.user.planificacion,
+        } : {
+          names: this.appointment.externalPatient?.names,
+          last_names: '',
+          email: this.appointment.externalPatient?.email,
+          countryCode: this.appointment.externalPatient?.countryCode,
+          phone: this.appointment.externalPatient?.phone,
+          mask: this.appointment.externalPatient?.mask,
+          typeDocument: this.appointment.externalPatient?.typeDocument,
+          identityNumber: this.appointment.externalPatient?.document,
+          idInternacional: this.appointment.externalPatient?.document,
+          passport: this.appointment.externalPatient?.document,
+          // No aplica: no se captura en el formulario de agenda para pacientes externos
+          procedimientos: undefined,
+          planificacion: undefined,
+        };
+
+        if(this.appointment.user?.age && !this.appointment.underAge) this.age = this.appointment.user.age.toString()
+        this.address = this.appointment.user?.address || this.appointment.patientAddress;
 
         if(this.appointment.underAge) this.forSelectWoman = null
 
@@ -239,9 +285,8 @@ export class NewFichaMedicaComponent {
 
         this.idFichaMedica = res.fichaMedicaSections._id
         this.fichaMedica = res.fichaMedicaSections.sections ;
-        this.fichaMedicaSectionWoman = res.fichaMedicaSections.seccionWoman
-        
-        this.formConfig = this.fichaMedica.reduce((config:any, fichaMedica) => {
+
+        this.formConfig = this.fichaMedica.filter(seccion => !seccion.onlyWoman).reduce((config:any, fichaMedica) => {
           fichaMedica.campos.forEach((campo: CampoFichaMedicaI) => {
             config[campo.name] = { required: campo.required };
 
@@ -249,7 +294,7 @@ export class NewFichaMedicaComponent {
               config[campo.name + 'Unidades'] = { required: true,value:campo.unidades[0]};
             } else  if(campo.unidades.length > 0){
               config[campo.name + 'Unidades'] = { required: campo.required };
-            } 
+            }
           });
           return config;
         }, {})
@@ -260,9 +305,11 @@ export class NewFichaMedicaComponent {
     })
   }
 
-  openViewSummaryFichasMedicas(patient:any,menorEdad:any){   
+  openViewSummaryFichasMedicas(patient:any,menorEdad:any){
     const modalRef = this.ngbModal.open(ViewSummaryFichasMedicasComponent,{centered:true,size:'xl', scrollable:true});
     modalRef.componentInstance.idPaciente = patient;
+    modalRef.componentInstance.idAppointment = this.appointment.user ? null : this.appointment._id;
+    modalRef.componentInstance.externalPatientInfo = this.appointment.user ? null : this.appointment.externalPatient;
     modalRef.componentInstance.menorSelect = menorEdad && menorEdad._id ? menorEdad : null;
 
     const infoPatient  = {
@@ -289,21 +336,24 @@ export class NewFichaMedicaComponent {
   }
 
   addControlsWoman(){
-    this.fichaMedicaSectionWoman.campos.forEach((campo: CampoFichaMedicaI) => {
+    const seccionWoman = this.fichaMedica.find(seccion => seccion.onlyWoman);
+    if(!seccionWoman) return;
+
+    seccionWoman.campos.forEach((campo: CampoFichaMedicaI) => {
 
       this.formConfigWoman[campo.name] = { required: campo.required };
 
       if(campo.userCampo == 'procedimientos'){
-        this.formConfigWoman[campo.name] = { 
-          required: true, 
-          value: campo.selectMultiple ? this.appointment.user.procedimientos : this.appointment.user.procedimientos ? this.appointment.user.procedimientos[0] : '' 
+        this.formConfigWoman[campo.name] = {
+          required: true,
+          value: campo.selectMultiple ? this.patientInfo.procedimientos : this.patientInfo.procedimientos ? this.patientInfo.procedimientos[0] : ''
         };
       }
 
       if(campo.userCampo == 'planificacion'){
-        this.formConfigWoman[campo.name] = { 
-          required: true, 
-          value: campo.selectMultiple ? this.appointment.user.planificacion : this.appointment.user.planificacion ? this.appointment.user.planificacion[0] : '' 
+        this.formConfigWoman[campo.name] = {
+          required: true,
+          value: campo.selectMultiple ? this.patientInfo.planificacion : this.patientInfo.planificacion ? this.patientInfo.planificacion[0] : ''
         };
       }
   
@@ -404,33 +454,23 @@ export class NewFichaMedicaComponent {
         })
       })
 
-      if(this.fichaMedicaSectionWoman){
-        this.fichaMedicaSectionWoman.campos.map(campo => {
-          if(campo.unidades.length > 0){
-            campo.value =  `${this.form.get(campo.name)?.value} ${this.form.get(`${campo.name}Unidades`)?.value}`
-          }else{
-            campo.value = this.form.get(campo.name)?.value
-          }
-        })
-      }
-
-      const documento = this.appointment.user.typeDocument === 'DUI' ? this.appointment.user.identityNumber :
-                        this.appointment.user.typeDocument === 'Pasaporte' ? this.appointment.user.passport :
-                        this.appointment.user.idInternacional
+      const documento = this.patientInfo.typeDocument === 'DUI' ? this.patientInfo.identityNumber :
+                        this.patientInfo.typeDocument === 'Pasaporte' ? this.patientInfo.passport :
+                        this.patientInfo.idInternacional;
 
       const data = {
         idFichaMedica: this.idFichaMedica,
         underAge: this.appointment.underAge,
         sections:this.fichaMedica,
-        seccionWoman:this.fichaMedicaSectionWoman,
         isWoman:this.isWoman,
-        patient:this.appointment.underAge === true? this.appointment.idUnderAge : this.appointment.user._id,
+        patient: this.appointment.underAge === true ? this.appointment.idUnderAge : (this.appointment.user?._id ?? null),
+        externalPatient: this.appointment.user ? null : this.appointment.externalPatient,
         appointment: this.appointment._id,
         dateAppointment: this.appointment.dateAppointment,
         infoGeneral:{
-          name: `${this.appointment.user.names} ${this.appointment.user.last_names}` ,
-          phone: `${this.appointment.user.countryCode} ${this.appointment.user.phone}`,
-          typeDocument: this.appointment.user.typeDocument,
+          name: `${this.patientInfo.names} ${this.patientInfo.last_names}`,
+          phone: `${this.patientInfo.countryCode} ${this.patientInfo.phone}`,
+          typeDocument: this.patientInfo.typeDocument,
           identityNumber:documento,
           address: this.address,
           age: this.age,
@@ -490,7 +530,7 @@ export class NewFichaMedicaComponent {
 
     modal.componentInstance.medico = this.medico;
     modal.componentInstance.paciente = {
-      name: `${this.appointment.user.names} ${this.appointment.user.last_names}`,
+      name: `${this.patientInfo.names} ${this.patientInfo.last_names}`,
       age: this.age,
       underAge: this.appointment.underAge,
       nameUnderAge: this.appointment.nameUnderAge,
@@ -533,7 +573,7 @@ export class NewFichaMedicaComponent {
     modal.componentInstance.medico = this.medico
     modal.componentInstance.subsidiary = this.appointment.typeAppoinment?.online === true ? 'Colonia Santa fe, contiguo al restaurante Tom-Mi' : `${this.appointment.subsidiary.address.department}, ${this.appointment.subsidiary.address.municipality}, ${this.appointment.subsidiary.address.address}`
     modal.componentInstance.paciente = {
-      name: `${this.appointment.user.names} ${this.appointment.user.last_names}`,
+      name: `${this.patientInfo.names} ${this.patientInfo.last_names}`,
       age: this.age,
       underAge: this.appointment.underAge,
       nameUnderAge: this.appointment.nameUnderAge,
@@ -621,9 +661,11 @@ export class NewFichaMedicaComponent {
     });
   }
 
-  openViewExpediente(patient:any,menorEdad:any){   
+  openViewExpediente(patient:any,menorEdad:any){
     const modalRef = this.ngbModal.open(ViewExpedienteComponent,{centered:true,size:'xl', scrollable:true});
     modalRef.componentInstance.idPaciente = patient;
+    modalRef.componentInstance.idAppointment = this.appointment.user ? null : this.appointment._id;
+    modalRef.componentInstance.externalPatientInfo = this.appointment.user ? null : this.appointment.externalPatient;
     modalRef.componentInstance.menorSelect = menorEdad && menorEdad._id ? menorEdad : null;
   }
 }

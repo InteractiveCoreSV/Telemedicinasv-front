@@ -119,6 +119,7 @@ export class SelectDateAndHourModalComponent implements OnInit,OnDestroy {
   createForm(){
     this.formDate = this.formBuilder.group({
       date:['',[Validators.required]],
+      dateEnd:[null,[]],
       hour:['',[Validators.required]],
       // extraordinaria:[false,[Validators.required]]
     });
@@ -128,10 +129,28 @@ export class SelectDateAndHourModalComponent implements OnInit,OnDestroy {
 
 
   setDateSelected(){
-    this.formDate.get('date')?.setValue(this.dateSelected);
+    const start = Array.isArray(this.dateSelected) ? this.dateSelected[0] : this.dateSelected;
+    const end = Array.isArray(this.dateSelected) ? (this.dateSelected[1] ?? null) : null;
+
+    this.formDate.get('date')?.setValue(start);
+    this.formDate.get('dateEnd')?.setValue(end);
+
+    if(end){
+      // Rango de varios días: no se reserva una hora específica.
+      this.formDate.get('hour')?.clearValidators();
+      this.formDate.get('hour')?.setValue(null);
+      this.formDate.get('hour')?.updateValueAndValidity();
+      this.showHours = false;
+      this.daySelected = '';
+      return;
+    }
+
+    this.formDate.get('hour')?.setValidators([Validators.required]);
+    this.formDate.get('hour')?.updateValueAndValidity();
+
     dayjs.locale('en');
-    this.daySelected = dayjs(this.dateSelected).format('dddd');
-    
+    this.daySelected = dayjs(start).format('dddd');
+
     this.getHoursUnavailable();
   }
 

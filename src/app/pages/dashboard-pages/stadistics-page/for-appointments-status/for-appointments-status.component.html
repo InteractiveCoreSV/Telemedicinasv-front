@@ -7,7 +7,7 @@
         </button>
       </div>
 
-      <h4 class="fw-custom px-3 py-1 custom-title-statistics text-center">Citas según estado</h4>
+      <h4 class="fw-custom px-3 py-1 custom-title-statistics text-center">Pacientes según estado</h4>
 
       <!-- Header -->
       <div class="card-header pt-0" *ngIf="!rangeDates?.from">
@@ -129,7 +129,7 @@
                 <div class="card-body px-3 pb-2 d-flex flex-column justify-content-center" >
                   <h4 class="card-title">{{ quoteStatus.data.name }}</h4>
                   <span [style.color]="(quoteStatus.data.color)" style="font-size: medium;">{{quoteStatus.count}}</span>
-                  <button class="btn btn-sm btn-primary" *ngIf="quoteStatus.data.name === 'Canceladas 24H antes'" (click)="viewAppointmnet('forCanceled')">Ver Citas</button>
+                  <button class="btn btn-sm btn-primary" *ngIf="quoteStatus.data.name === 'Canceladas 24H antes'" (click)="viewAppointmnet('forCanceled')">Ver Pacientes</button>
                 </div>
               </div>
             </a>

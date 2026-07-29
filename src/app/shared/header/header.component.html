@@ -3,7 +3,7 @@
     <div class="navbar-brand-wrapper">
       <!-- Logo -->
       <a class="navbar-brand" routerLink="/dashboard" aria-label="Front">
-        <img class="navbar-brand-logo" style="width: 2.5rem !important; min-width: 2.7rem !important;" src="/assets/logos/telemedicina-mini.png" alt="Telemedicina Analiza El Salvador">
+        <img class="navbar-brand-logo" style="width: 2.5rem !important; min-width: 2.7rem !important;" src="/assets/logos/analiza-en-casa-with.svg" alt="Analiza En Casa">
         <!-- <img class="navbar-brand-logo-mini" src="/assets/logos/telemedicina-mini.png" alt="Logo"> -->
       </a>
       <!-- End Logo -->
@@ -29,10 +29,10 @@
             [routerLinkActiveOptions]="{ exact: true }"
             routerLink="/dashboard/citas/todas-las-citas"
             class="btn text-white btn-header w-100 navbar-brand-logo d-flex align-items-center" 
-            style="width: auto !important; max-width: 161px !important;"
+            style="width: auto !important; max-width: 194px !important;"
             >
               <img style="margin-right: 10px; width: 19px; height: 13px;" src="assets/icons/icon-menu.png" alt="">
-              <span>Todas las citas</span>
+              <span>Todos los Pacientes</span>
             </a
           >
         </li>
@@ -53,9 +53,10 @@
           *ngxPermissionsExcept="'medico'"
           (click)="openModalNewAppoinment()"
             class="btn text-white btn-header w-100 navbar-brand-logo"
+            style="width: auto !important; max-width: 184px !important;"
             >
               <img style="margin-right: 10px" src="assets/icons/icon-calendar.png" alt="">
-              <span>Crear Cita</span>
+              <span>Crear Paciente</span>
             </a
           >
         </li>

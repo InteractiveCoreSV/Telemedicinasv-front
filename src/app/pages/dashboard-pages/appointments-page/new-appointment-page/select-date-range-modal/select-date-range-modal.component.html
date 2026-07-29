@@ -1,0 +1,50 @@
+<div class="modal-header border-bottom pb-3">
+  <h5 class="modal-title text-center w-100">Selecciona la fecha</h5>
+  <button type="button" class="btn btn-sm p-0 close" (click)="ngbActiveModal.close()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M19 5L5 19M5.00001 5L19 19" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<div class="modal-body" translate="no">
+  <div class="row">
+    <div class="col-12 col-lg-5 text-center p-2">
+      <h6 class="fw-600">Calendario</h6>
+      <ng-container *ngIf="!loadingCalendar; else loadingCalendarTempla">
+        <owl-date-time-inline
+          id="calendar-client-range"
+          [startAt]="openCalendarIn"
+          [selectMode]="'range'"
+          [(ngModel)]="dateSelected"
+          (ngModelChange)="onDateSelected()"
+          [ngModelOptions]="{standalone:true}"
+          (monthSelected)="selectMonth($event)"
+          [owlDateTimeFilter]="filterDates.bind(this)"
+          [min]="minDate"
+          [pickerType]="'calendar'"
+        ></owl-date-time-inline>
+      </ng-container>
+
+      <ng-template #loadingCalendarTempla>
+        <app-loading-table variant="spinner"></app-loading-table>
+      </ng-template>
+    </div>
+
+    <div class="col-12 col-lg-7 text-center p-2 d-flex flex-column justify-content-center align-items-center">
+      <h6 class="fw-600 w-100 text-lg-start">Resumen</h6>
+
+      <div class="w-100">
+        <p *ngIf="!date">Selecciona un día, o un rango de días, en el calendario.</p>
+        <p *ngIf="date && !dateEnd">Fecha seleccionada: <strong>{{date | date:'EEEE, MMMM d, y'|titlecase}}</strong></p>
+        <p *ngIf="date && dateEnd">Del <strong>{{date | date:'MMMM d, y'|titlecase}}</strong> al <strong>{{dateEnd | date:'MMMM d, y'|titlecase}}</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer row">
+  <div class="col-12 d-flex justify-content-end">
+    <button [disabled]="!date" (click)="aceptar()" class="btn btn-primary" style="width: 150px;">Aceptar</button>
+  </div>
+</div>

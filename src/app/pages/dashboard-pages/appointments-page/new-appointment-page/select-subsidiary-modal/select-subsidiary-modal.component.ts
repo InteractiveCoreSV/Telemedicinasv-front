@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { finalize, Subscription } from 'rxjs';
 import { PaginationDetailsI } from 'src/app/interfaces/paginationDetails.interface';
@@ -15,6 +15,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./select-subsidiary-modal.component.scss']
 })
 export class SelectSubsidiaryModalComponent  implements OnInit {
+
+  @Input() patientAddress:string = '';
 
   formSubmited:boolean = false;
 
@@ -89,7 +91,7 @@ export class SelectSubsidiaryModalComponent  implements OnInit {
 
   getSubsidiaries(){
     this.loading = true;
-    this.subsidiaryService.getSubsidiaries(this.page, {status:true}).pipe(
+    this.subsidiaryService.getSubsidiaries(this.page, {status:true, incluirDomicilio:true}).pipe(
       finalize(()=>{
         this.loading = false;
       })

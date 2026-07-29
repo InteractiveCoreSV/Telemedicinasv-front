@@ -18,7 +18,7 @@
                 <div class="d-flex justify-content-end align-items-center">
 
                     <div>
-                        <img style="width: 160px;" src="assets/logos/telemedicina.png" alt="">
+                        <img style="width: 160px;" src="assets/logos/analiza-en-casa.svg" alt="">
                     </div>
                 </div>
             </div>
@@ -28,33 +28,33 @@
                 <!-- INFO DEL PACIENTE -->
                 <div class="row">
                     <div class="mb-2 col-12" >
-                        <label class="form-label label-auth mb-0" for="date">Fecha de la cita</label>
-                        <p class="m-0 p-0">{{fichaMedica.appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{fichaMedica.appointment.hour?.hours}}</p>
+                        <label class="form-label label-auth mb-0" for="date">Fecha del paciente</label>
+                        <p class="m-0 p-0">{{fichaMedica.appointment | formatAppointmentDate}}</p>
                     </div>
 
-                    <div class="mb-2 col-12 col-md-9" *ngIf="fichaMedica.appointment.underAge">
+                    <div class="mb-2 col-12 col-md-9" *ngIf="fichaMedica.appointment?.underAge">
                         <label class="form-label label-auth mb-0" for="date">Nombre del paciente (Menor de edad)</label>
-                        <p class="m-0 p-0">{{fichaMedica.appointment.nameUnderAge}}</p>
+                        <p class="m-0 p-0">{{fichaMedica.appointment?.nameUnderAge}}</p>
                     </div>
 
 
-                    <div class="mb-2 col-12 col-md-3" *ngIf="fichaMedica.appointment.underAge">
+                    <div class="mb-2 col-12 col-md-3" *ngIf="fichaMedica.appointment?.underAge">
                         <label class="form-label label-auth mb-0" for="date">Fecha de nacimiento</label>
-                        <p class="m-0 p-0">{{fichaMedica.appointment.birthdateUnderAge | date:'MMMM d, y'|titlecase}}</p>
+                        <p class="m-0 p-0">{{fichaMedica.appointment?.birthdateUnderAge | date:'MMMM d, y'|titlecase}}</p>
                     </div>
 
-                    <div *ngIf="fichaMedica.appointment.underAge" class="mb-2 col-6" >
+                    <div *ngIf="fichaMedica.appointment?.underAge" class="mb-2 col-6" >
                         <label class="form-label label-auth mb-0" for="date">Edad</label>
                         <p class="m-0 p-0">{{fichaMedica.infoGeneral.age}}</p>
                     </div>
-    
-                    <div *ngIf="fichaMedica.appointment.underAge" class="mb-2 col-6" >
+
+                    <div *ngIf="fichaMedica.appointment?.underAge" class="mb-2 col-6" >
                         <label class="form-label label-auth mb-0" for="date">Sexo</label>
                         <p class="m-0 p-0">{{fichaMedica.infoGeneral.sexo}}</p>
                     </div>
 
                     <div class="mb-2 col-12" >
-                        <label class="form-label label-auth mb-0" for="date">{{fichaMedica.appointment.underAge ? 'Adulto responsable' : 'Nombre del paciente'}}</label>
+                        <label class="form-label label-auth mb-0" for="date">{{fichaMedica.appointment?.underAge ? 'Adulto responsable' : 'Nombre del paciente'}}</label>
                         <p class="m-0 p-0">{{fichaMedica.infoGeneral.name}}</p>
                     </div>
 
@@ -93,7 +93,7 @@
                         <p class="m-0 p-0">{{fichaMedica.infoGeneral.address}}</p>
                     </div>
 
-                    <div *ngIf="!fichaMedica.appointment.underAge" class="mb-2 col-6 col-md-2" >
+                    <div *ngIf="!fichaMedica.appointment?.underAge" class="mb-2 col-6 col-md-2" >
                         <label class="form-label label-auth mb-0" for="date">Edad</label>
                         <p class="m-0 p-0">{{fichaMedica.infoGeneral.age}}</p>
                     </div>
@@ -101,30 +101,31 @@
 
             </div>
 
-            <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;" *ngIf="fichaMedica.appointment && fichaMedica.appointment.commentAppointment || fichaMedica.appointment.documentAppointment">
+            <div  class="card px-4 mb-4" style="border: 1px solid #2E4A76;" *ngIf="fichaMedica.appointment?.commentAppointment || fichaMedica.appointment?.documentAppointment">
                 <h3 class="my-2 text-center">Adicional paciente</h3>
 
                 <div class="row">
-                    <div class="mb-2 col-12" *ngIf="fichaMedica.appointment.commentAppointment">
-                        <label class="form-label label-auth mb-0" for="date">Comentario para la cita</label>
-                        <p class="m-0 p-0">{{fichaMedica.appointment.commentAppointment}}</p>
+                    <div class="mb-2 col-12" *ngIf="fichaMedica.appointment?.commentAppointment">
+                        <label class="form-label label-auth mb-0" for="date">Comentario para el paciente</label>
+                        <p class="m-0 p-0">{{fichaMedica.appointment?.commentAppointment}}</p>
                     </div>
 
-                    <div class="mb-2 col-12" *ngIf="fichaMedica.appointment.documentAppointment">
+                    <div class="mb-2 col-12" *ngIf="fichaMedica.appointment?.documentAppointment">
                         <label class="form-label label-auth mb-0" for="date">Documento</label>
                         <div>
-                            <a class="cursor-pointer" (click)="openModalViewDocument(fichaMedica.appointment.documentAppointment.location, fichaMedica.appointment.documentAppointment.key)">{{fichaMedica.appointment.documentAppointment.key}}</a>
+                            <a class="cursor-pointer" (click)="openModalViewDocument(fichaMedica.appointment.documentAppointment.location, fichaMedica.appointment.documentAppointment.key)">{{fichaMedica.appointment?.documentAppointment?.key}}</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SECIONES DE FICHA MEDICA SOLO MUJERES-->
-            <div *ngIf="fichaMedica.isWoman" class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
-                <h3 class="my-2 text-center">{{fichaMedica.seccionWoman.name}}</h3>
-                
+            <!-- SECIONES DE FICHA MEDICA -->
+            <div *ngFor="let fichaMedica of getDisplaySections(fichaMedica)"  class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
+                <span class="badge bg-info text-white" *ngIf="fichaMedica.onlyWoman">Sección femenina</span>
+                <h3 class="my-2 text-center">{{fichaMedica.name}}</h3>
+
                 <div class="row flex-wrap px-2">
-                    <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.seccionWoman.campos; let i = index">
+                    <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.campos; let i = index">
                         <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
                         <p class="m-0 p-0" *ngIf="!campo.selectMultiple">{{campo.value}}</p>
                         <ul class="p-0 pl-3" *ngIf="campo.selectMultiple">
@@ -132,20 +133,6 @@
                                 {{v}}
                             </li>
                         </ul>
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- SECIONES DE FICHA MEDICA -->
-            <div *ngFor="let fichaMedica of fichaMedica.sections"  class="card px-4 mb-4" style="border: 1px solid #2E4A76;">
-                <h3 class="my-2 text-center">{{fichaMedica.name}}</h3>
-                
-                <div class="row flex-wrap px-2">
-                    <div class="mb-3 mr-4" [ngClass]="{'col-12 p-0':campo.component === 'Bloque de texto'}"   *ngFor="let campo of fichaMedica.campos; let i = index">
-                        <label class="form-label label-auth mb-0" [for]="campo.name">{{campo.name}}</label>
-                        <p class="m-0 p-0">{{campo.value}}</p>
                     </div>
                 </div>
 
@@ -255,7 +242,7 @@
 
                 <div class="col-12 d-flex justify-content-between mt-8 mb-8">
                 <div>
-                    <img style="width: 140px;" src="assets/logos/telemedicina.png" alt="">
+                    <img style="width: 140px;" src="assets/logos/analiza-en-casa.svg" alt="">
                 </div>
 
                 <div>

@@ -34,6 +34,11 @@ export class ExpedienteService {
   getDocumentExpedientesUser(_id:string, category:any, page:number,nameDocumment:string){
     return this.httpClient.get(`${UTL_DOCUMENT_EXPEDIENTE}/getDocumentsExpedienteByPatient`,{params:{_id,category,page,nameDocumment}})
   }
+
+  // Paciente externo (no registrado): no hay _id de patient, se agrupa por la cita puntual
+  getDocumentExpedientesByAppointment(appointment:string, category:any, page:number,nameDocumment:string){
+    return this.httpClient.get(`${UTL_DOCUMENT_EXPEDIENTE}/getDocumentsExpedienteByPatient`,{params:{appointment,category,page,nameDocumment}})
+  }
   
   combertToPDF(url:string){
     return this.httpClient.get(`${UTL_DOCUMENT_EXPEDIENTE}/combertToPDF`,{params:{url}})

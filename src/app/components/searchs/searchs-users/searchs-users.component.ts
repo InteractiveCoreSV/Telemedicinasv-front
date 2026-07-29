@@ -17,6 +17,10 @@ export class SearchsUsersComponent implements OnInit {
   @Input() classes:string[]=[];
   @Input() placeholder:string ='Busca por Nombres';
   @Input() role!:string;
+  // Oculta las pestañas (Nombres/Apellidos/Correo/...) y busca directo por nombre completo.
+  @Input() simpleSearch:boolean = false;
+  // Oculta las pestañas y busca en un solo input contra nombres, apellidos, correo y documento (DUI/pasaporte/ID) a la vez.
+  @Input() searchAllFields:boolean = false;
 
   keyboard:string = 'names';
 
@@ -70,7 +74,23 @@ export class SearchsUsersComponent implements OnInit {
     if(this.role)filters.role = this.role
     this.usersService.searchUsers(search,filters).subscribe({
       next:(res:any)=>{
-        this.users = res.users;
+        if(this.simpleSearch){
+          this.users = (res.users ?? []).map((u:UserI) => ({...u, fullName: `${u.names} ${u.last_names}`}));
+        }else if(this.searchAllFields){
+          this.users = (res.users ?? []).map((u:UserI) => {
+            // El DUI se guarda sin guion, pero se suele escribir con guion (ej. "00012379-5");
+            // se agrega también esa forma para que el filtro local del buscador lo encuentre igual.
+            const identityNumberWithDash = u.identityNumber && u.identityNumber.length === 9
+              ? `${u.identityNumber.slice(0,8)}-${u.identityNumber.slice(8)}`
+              : null;
+            return {
+              ...u,
+              searchBlob: [u.names, u.last_names, u.email, u.identityNumber, identityNumberWithDash, u.passport, u.idInternacional, u.phone].filter(Boolean).join(' ')
+            };
+          });
+        }else{
+          this.users = res.users;
+        }
         this.changeDetectorRef.detectChanges();
       }
     })

@@ -22,8 +22,14 @@
         <span class="title">Menor de edad</span>
 
         <span class="info-user mr-2"><strong>Paciente:</strong></span> {{infoPatient.nameUnderAge}}
-        <span class="info-user mr-2"><strong>Edad</strong></span> {{age}}      
+        <span class="info-user mr-2"><strong>Edad</strong></span> {{age}}
       </ng-container>
+    </div>
+
+    <div class="container-user-info mt-1" *ngIf="!infoPatient?.user && externalPatientInfo">
+      <span class="badge mb-1" style="background-color:#919191;">Paciente no registrado</span>
+      <span class="info-user mr-2"><strong>Paciente:</strong></span> {{externalPatientInfo.names}}
+      <span class="info-user mr-2"><strong>Edad</strong></span> {{age}}
     </div>
   </div>
 
@@ -58,17 +64,10 @@
           <thead class="thead-light">
             <tr>
               <th></th>
-              <ng-container *ngIf="isWomam">
-                <th [attr.colspan]="seccionWoman.campos.length" class="text-center"
-                    [ngStyle]="{ 'background-color': colors[(colors.length - 1) % colors.length] }">
-                  {{ seccionWoman.name }}
-                </th>
-              </ng-container>
-
               <ng-container *ngFor="let section of fichaMedicaSections; let i = index; trackBy: trackBySection">
                 <th [attr.colspan]="section.campos.length" class="text-center"
                     [ngStyle]="{ 'background-color': colors[i % colors.length] }">
-                  {{ section.name }}
+                  {{ section.name }} <span *ngIf="section.onlyWoman">(Sección femenina)</span>
                 </th>
               </ng-container>
               <th></th>
@@ -77,12 +76,6 @@
 
             <tr>
               <th class="date" rowspan="2">Fecha</th>
-
-              <ng-container *ngIf="isWomam">
-                <th *ngFor="let campo of seccionWoman.campos">
-                  {{ campo.name }}
-                </th>
-              </ng-container>
 
               <ng-container *ngFor="let section of fichaMedicaSections; trackBy: trackBySection">
                 <th *ngFor="let campo of section.campos; trackBy: trackByCampo">
@@ -102,33 +95,17 @@
                   <!-- Fecha -->
                   <td>{{ summary.createdAt | date:'MMMM d, y' | titlecase }}</td>
 
-                    <ng-container *ngIf="isWomam">
-                      <ng-container *ngFor="let campo of seccionWoman.campos; trackBy: trackByCampo">
-
-                        <td 
-                          class="text-truncate"
-                          style="max-width: 180px; cursor: pointer;"
-                          [attr.title]="getCampoWomanValue(summary, campo.name)"
-                          data-bs-toggle="tooltip"
-                        >
-                          {{ getCampoWomanValue(summary, campo.name) | slice:0:40 }}
-                          {{ getCampoWomanValue(summary, campo.name)?.length > 40 ? '...' : '' }}
-                        </td>
-
-                      </ng-container>
-                    </ng-container>
-                  
                   <ng-container *ngFor="let section of fichaMedicaSections; trackBy: trackBySection">
                     <ng-container *ngFor="let campo of section.campos; trackBy: trackByCampo">
 
-                      <td 
+                      <td
                         class="text-truncate"
                         style="max-width: 180px; cursor: pointer;"
-                        [attr.title]="getCampoValue(summary, section.name, campo.name)"
+                        [attr.title]="getCampoValue(summary, section, campo.name)"
                         data-bs-toggle="tooltip"
                       >
-                        {{ getCampoValue(summary, section.name, campo.name) | slice:0:40 }}
-                        {{ getCampoValue(summary, section.name, campo.name)?.length > 40 ? '...' : '' }}
+                        {{ getCampoValue(summary, section, campo.name) | slice:0:40 }}
+                        {{ getCampoValue(summary, section, campo.name)?.length > 40 ? '...' : '' }}
                       </td>
 
                     </ng-container>

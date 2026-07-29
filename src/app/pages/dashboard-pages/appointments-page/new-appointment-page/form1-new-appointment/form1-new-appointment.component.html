@@ -3,11 +3,26 @@
   <div class="row" >
 
     <div class="col-12 mb-3" *ngxPermissionsOnly="['admin','sac','medico']">
-      <div class="row h-100 align-items-start">
+
+      <div class="col-12 mb-3">
+        <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Tipo de usuario <span class="text-danger">*</span></label>
+        <div class="d-flex">
+          <div class="custom-radio mb-2 cursor-pointer mr-4" style="padding-left: 36px !important;">
+            <input class="custom-control-input" type="radio" value="registered" id="patientTypeRegistered" name="patientType" formControlName="patientType">
+            <label class="custom-control-label" for="patientTypeRegistered">Usuario registrado</label>
+          </div>
+          <div class="custom-radio mb-2 cursor-pointer" style="padding-left: 36px !important;">
+            <input class="custom-control-input" type="radio" value="external" id="patientTypeExternal" name="patientType" formControlName="patientType">
+            <label class="custom-control-label" for="patientTypeExternal">Usuario externo o no registrado</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row h-100 align-items-start" *ngIf="form1.get('patientType')?.value !== 'external'">
         <div class="col-12 col-lg-9" >
           <div class="">
-            
-            <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Buscar y seleccionar al usuario <span *ngIf="form1.get('underAge')?.value">(mayor de edad responsable del menor)</span></label>
+
+            <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Buscar y seleccionar al usuario <span class="text-danger">*</span> <span *ngIf="form1.get('underAge')?.value">(mayor de edad responsable del menor)</span></label>
 
             <app-searchs-users (userSelected)="setUser($event)"></app-searchs-users>
 
@@ -15,7 +30,7 @@
               <h4 class="mb-0 info-user-title" > <span style="margin-right: 5px;" [innerHTML]="form1.value.user.names"> </span> <span [innerHTML]="form1.value.user.last_names"></span></h4>
               <div class="d-flex flex-column">
                 <span class="info-user"><strong>Correo del usuario:</strong> <span [innerHTML]="form1.value.user.email"></span></span>
-                <span class="info-user d-flex"><strong>Numero de telefono:</strong> 
+                <span class="info-user d-flex"><strong>Numero de telefono:</strong>
                   <p class="m-0 p-0">
                     <span class="mr-1">{{form1.value.user.countryCode}}</span> <input type="text" [mask]="form1.value.user.mask" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.phone"  [ngModelOptions]="{standalone: true}">
                   </p>
@@ -23,13 +38,13 @@
                 <div class="d-flex">
                   <span class="info-user mr-2">
                     <strong>Documento de identidad ({{form1.value.user.typeDocument}}):</strong>
-                  </span> 
+                  </span>
                   <input *ngIf="form1.value.user.typeDocument ==='DUI'" type="text" mask="00000000-0" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.identityNumber"  [ngModelOptions]="{standalone: true}">
                   <input *ngIf="form1.value.user.typeDocument === 'Pasaporte'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.passport"  [ngModelOptions]="{standalone: true}">
-                  <input *ngIf="form1.value.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.idInternacional"  [ngModelOptions]="{standalone: true}">        
+                  <input *ngIf="form1.value.user.typeDocument ==='ID internacional'" type="text" class="viewInputFormatMask" disabled [(ngModel)]="form1.value.user.idInternacional"  [ngModelOptions]="{standalone: true}">
                 </div>
               </div>
-              
+
               <button (click)="deleteUser()" style="position: absolute;top: 0;right: 0; color: rgba(46, 74, 118, 0.59);" class="btn btn-icon">
                 <i class="fas fa-trash"></i>
               </button>
@@ -40,10 +55,271 @@
             </div>
           </div>
         </div>
-          
+
         <div class="col-12 col-lg-3 mt-3">
           <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0 mb-3">Nuevo usuario</label>
           <button class="btn btn-primary" (click)="createNewUser()">Crear nuevo usuario</button>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="form1.get('patientType')?.value === 'external'">
+        <div class="col-12 mb-3">
+          <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Nombre completo del paciente <span class="text-danger">*</span></label>
+          <input formControlName="externalPatientNames" type="text" class="form-control" placeholder="Ingresa el nombre completo del paciente" [class]="formSubmited && getControl('externalPatientNames')?.invalid ? 'is-invalid' : ''">
+          <div *ngIf="formSubmited && getControl('externalPatientNames')?.invalid" class="invalid-feedback d-block mt-2">
+            El nombre del paciente es requerido
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+          <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Número de teléfono <span class="text-danger">*</span></label>
+          <div class="input-group d-flex justify-content-center justify-content-md-start">
+            <div ngbDropdown class="d-inline-block" container="body">
+              <button
+                type="button"
+                class="btn pr-0"
+                style="background-color: #f6f6f6; height: 100%; border:1px solid #E4E4E4 !important; border-right: none !important;"
+                (click)="isOpenDropdownPatientPhone = !isOpenDropdownPatientPhone"
+                ngbDropdownToggle
+              >
+                {{ getControl('externalPatientCOICode')?.value }}
+                <i class="fas ml-2" [ngClass]="{ 'fa-chevron-up': isOpenDropdownPatientPhone, 'fa-chevron-down': !isOpenDropdownPatientPhone }"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <ng-container *ngFor="let item of countries">
+                  <button
+                    ngbDropdownItem
+                    [ngClass]="{ selected: item.COICode === getControl('externalPatientCOICode')?.value }"
+                    (click)="
+                      getControl('externalPatientCountryCode')?.setValue(item.countryCode);
+                      getControl('externalPatientCOICode')?.setValue(item.COICode);
+                      getControl('externalPatientMask')?.setValue(item.mask)
+                    "
+                  >
+                    {{ item.name }}
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+            <input
+              type="text"
+              placeholder="9587-6543"
+              class="form-control input-phone pl-1"
+              formControlName="externalPatientPhone"
+              [class]="formSubmited && getControl('externalPatientPhone')?.invalid ? 'is-invalid d-block' : ''"
+              [allowNegativeNumbers]="false"
+              [mask]="getControl('externalPatientMask')?.value"
+              [prefix]="getControl('externalPatientCountryCode')?.value + ' '"
+              style="padding-left: 1rem !important;"
+            />
+          </div>
+          <div *ngIf="formSubmited && getControl('externalPatientPhone')?.invalid" class="invalid-feedback d-block mt-2">
+            El teléfono del paciente es requerido
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+          <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Documento de identidad <span class="text-danger">*</span></label>
+          <div class="input-group d-flex justify-content-center justify-content-md-start">
+            <div ngbDropdown class="d-inline-block custom-dropdawn" container="body">
+              <button
+                type="button"
+                class="btn p-2"
+                style="background-color: #f6f6f6; height: 100%; border:1px solid #E4E4E4 !important; border-right: none !important;"
+                (click)="isOpenDropdownPatientDoc = !isOpenDropdownPatientDoc"
+                ngbDropdownToggle
+              >
+                {{ getControl('externalPatientTypeDocument')?.value }}
+                <i class="fas ml-2" [ngClass]="{ 'fa-chevron-up': isOpenDropdownPatientDoc, 'fa-chevron-down': !isOpenDropdownPatientDoc }"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <ng-container *ngFor="let item of typesDocuments">
+                  <button ngbDropdownItem [ngClass]="{ selected: item === getControl('externalPatientTypeDocument')?.value }" (click)="updateExternalPatientTypeDocument(item)">
+                    {{ item }}
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+            <input
+              *ngIf="getControl('externalPatientTypeDocument')?.value === 'DUI'"
+              formControlName="externalPatientDocument"
+              [class]="formSubmited && getControl('externalPatientDocument')?.invalid ? 'is-invalid' : ''"
+              mask="00000000-0"
+              type="text"
+              placeholder="Número de documento"
+              class="form-control"
+            />
+            <input
+              *ngIf="getControl('externalPatientTypeDocument')?.value === 'Pasaporte'"
+              formControlName="externalPatientDocument"
+              [class]="formSubmited && getControl('externalPatientDocument')?.invalid ? 'is-invalid' : ''"
+              type="text"
+              placeholder="Número de pasaporte"
+              class="form-control"
+            />
+            <input
+              *ngIf="getControl('externalPatientTypeDocument')?.value === 'ID internacional'"
+              formControlName="externalPatientDocument"
+              [class]="formSubmited && getControl('externalPatientDocument')?.invalid ? 'is-invalid' : ''"
+              type="text"
+              placeholder="ID internacional"
+              class="form-control"
+            />
+          </div>
+          <div *ngIf="formSubmited && getControl('externalPatientDocument')?.invalid" class="invalid-feedback d-block mt-2">
+            El documento de identidad del paciente es requerido
+          </div>
+        </div>
+
+        <div class="col-12 mb-3">
+          <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Correo electrónico (opcional)</label>
+          <input formControlName="externalPatientEmail" type="email" class="form-control" placeholder="Ingresa el correo del paciente" [class]="getControl('externalPatientEmail')?.invalid ? 'is-invalid' : ''">
+          <div *ngIf="getControl('externalPatientEmail')?.invalid" class="invalid-feedback d-block mt-2">
+            El correo electrónico no es válido
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Dirección del paciente <span class="text-danger">*</span></label>
+      <textarea formControlName="patientAddress" rows="2" class="form-control" placeholder="Ingresa la dirección del paciente"></textarea>
+      <div *ngIf="formSubmited && getControl('patientAddress')?.invalid" class="invalid-feedback d-block mt-2">
+        La dirección del paciente es requerida
+      </div>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Aseguradora / Particular</label>
+      <ng-select
+        [items]="insuranceTypeOptions"
+        bindLabel="label"
+        bindValue="value"
+        formControlName="insuranceType"
+        [clearable]="true"
+        [searchable]="false"
+        placeholder="Selecciona una opción"
+      ></ng-select>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Foto del DUI del paciente</label>
+      <app-dropzone-only-one
+        [accept]="'image/jpeg,image/png,image/gif'"
+        [multiple]="false"
+        [label]="'Suelta o selecciona la foto del DUI'"
+        (filesOutput)="setDuiImage($event)"
+      ></app-dropzone-only-one>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Foto de la indicación médica</label>
+      <app-dropzone-only-one
+        [accept]="'image/jpeg,image/png,image/gif'"
+        [multiple]="false"
+        [label]="'Suelta o selecciona la foto de la indicación médica'"
+        (filesOutput)="setIndicacionMedica($event)"
+      ></app-dropzone-only-one>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Diagnóstico</label>
+      <textarea formControlName="diagnostico" rows="2" class="form-control" placeholder="Ingresa el diagnóstico"></textarea>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Buscar médico</label>
+      <div class="d-flex align-items-start gap-2">
+        <div class="flex-grow-1">
+          <app-searchs-users [role]="'medico'" [simpleSearch]="true" [placeholder]="'Busca médico por nombre completo'" (userSelected)="setMedico($event)"></app-searchs-users>
+        </div>
+        <button class="btn btn-primary flex-shrink-0 text-nowrap px-2" type="button" style="height: 43px; width: 175px; margin-left: 10px;" (click)="openRegisterMedico()">Registrar Médico</button>
+      </div>
+
+      <div *ngIf="medicoSelected" class="container-user-info" style="position: relative;">
+        <h4 class="mb-0 info-user-title"> <span style="margin-right: 5px;" [innerHTML]="medicoSelected.names"></span> <span [innerHTML]="medicoSelected.last_names"></span></h4>
+        <div class="d-flex flex-column">
+          <span class="info-user d-flex"><strong>Numero de telefono:</strong>
+            <p class="m-0 p-0">
+              <span class="mr-1">{{medicoSelected.countryCode}}</span> <input type="text" [mask]="medicoSelected.mask" class="viewInputFormatMask" disabled [ngModel]="medicoSelected.phone" [ngModelOptions]="{standalone: true}">
+            </p>
+          </span>
+        </div>
+
+        <button (click)="deleteMedico()" style="position: absolute;top: 0;right: 0; color: rgba(46, 74, 118, 0.59);" class="btn btn-icon">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-12 mb-3 mb-2">
+      <div class="custom-control custom-switch">
+        <input formControlName="isExternalMedico" type="checkbox" class="custom-control-input" id="isExternalMedicoSwitch">
+        <label
+          class="custom-control-label"
+          for="isExternalMedicoSwitch"
+          style="color: rgba(189, 189, 189, 1) !important; font-size: 12px;"
+        >
+          Médico externo 
+        </label>
+      </div>
+    </div>
+
+    <div class="col-12 mb-3" *ngIf="form1.get('isExternalMedico')?.value">
+      <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+          <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Nombre completo del médico <span class="text-danger">*</span></label>
+          <input formControlName="externalMedicoNames" type="text" class="form-control" placeholder="Ingresa el nombre completo del médico" [class]="formSubmited && getControl('externalMedicoNames')?.invalid ? 'is-invalid' : ''">
+          <div *ngIf="formSubmited && getControl('externalMedicoNames')?.invalid" class="invalid-feedback d-block mt-2">
+            El nombre del médico es requerido
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+          <label class="form-label text-primary fw-600 w-100 text-start label-new-appointmet p-0 m-0">Número de teléfono <span class="text-danger">*</span></label>
+          <div class="input-group d-flex justify-content-center justify-content-md-start">
+            <div ngbDropdown class="d-inline-block" container="body">
+              <button
+                type="button"
+                class="btn pr-0"
+                style="background-color: #f6f6f6; height: 100%; border:1px solid #E4E4E4 !important; border-right: none !important;"
+                (click)="isOpenDropdownMedicoPhone = !isOpenDropdownMedicoPhone"
+                ngbDropdownToggle
+              >
+                {{ getControl('externalMedicoCOICode')?.value }}
+                <i class="fas ml-2" [ngClass]="{ 'fa-chevron-up': isOpenDropdownMedicoPhone, 'fa-chevron-down': !isOpenDropdownMedicoPhone }"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <ng-container *ngFor="let item of countries">
+                  <button
+                    ngbDropdownItem
+                    [ngClass]="{ selected: item.COICode === getControl('externalMedicoCOICode')?.value }"
+                    (click)="
+                      getControl('externalMedicoCountryCode')?.setValue(item.countryCode);
+                      getControl('externalMedicoCOICode')?.setValue(item.COICode);
+                      getControl('externalMedicoMask')?.setValue(item.mask)
+                    "
+                  >
+                    {{ item.name }}
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+            <input
+              type="text"
+              placeholder="9587-6543"
+              class="form-control input-phone pl-1"
+              formControlName="externalMedicoPhone"
+              [class]="formSubmited && getControl('externalMedicoPhone')?.invalid ? 'is-invalid d-block' : ''"
+              [allowNegativeNumbers]="false"
+              [mask]="getControl('externalMedicoMask')?.value"
+              [prefix]="getControl('externalMedicoCountryCode')?.value + ' '"
+              style="padding-left: 1rem !important;"
+            />
+          </div>
+          <div *ngIf="formSubmited && getControl('externalMedicoPhone')?.invalid" class="invalid-feedback d-block mt-2">
+            El teléfono del médico es requerido
+          </div>
         </div>
       </div>
     </div>
@@ -57,7 +333,7 @@
           for="underAgeSwitch"
           style="color: rgba(189, 189, 189, 1) !important; font-size: 12px;"
         >
-          Cita para menor de edad
+          Paciente menor de edad
         </label>
       </div>
     </div>
@@ -104,21 +380,21 @@
           for="referencedAppointmentSwitch"
           style="color: rgba(189, 189, 189, 1) !important; font-size: 12px;"
         >
-          Cita referida
+          Paciente referido
         </label>
       </div>
     </div>
 
     <div class="col-12 " *ngIf="form1.get('referencedAppointment')?.value">
-      <h5>Cita referida</h5>
+      <h5>Paciente referido</h5>
 
-        <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-3">Seleccione la sucursal que refiere la cita</label>
+        <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-3">Seleccione la sucursal que refiere al paciente <span class="text-danger">*</span></label>
         <app-select-subsidiary (subsidiarySelectedEv)="setSubsidiaryReferenced($event)" [consultorioMedico]="false"></app-select-subsidiary>
     
     </div>
 
     <div class="col-12 h-100 mt-3">
-      <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-3">Selecciona nivel de Urgencia</label>
+      <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-3">Selecciona nivel de Urgencia <span class="text-danger">*</span></label>
       <div class="d-flex flex-column flex-sm-row w-100  align-items-center">
           <div class="card border-0 position-relative mb-2 card-radio card-radio-custom ratioMeetingTool mx-2" *ngFor="let urgency of urgencies">
               <div class="d-flex align-items-center">

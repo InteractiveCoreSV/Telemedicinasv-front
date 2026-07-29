@@ -70,9 +70,9 @@ export class AnswerSurveyComponent implements OnInit, OnDestroy {
     this.appointmentsService.getAppointmentByIdForSurvey(this.idAppointment).subscribe({
       next:((res:any)=>{
         this.appointment = res.appointment;
-        if(this.appointment){
+        if(this.appointment && (this.appointment.user || this.appointment.externalPatient)){
           this.validationAppointmentSurvey();
-          this.patient = this.appointment.user._id
+          this.patient = this.appointment.user?._id
           this.getSurvey()
 
         }else {
@@ -172,11 +172,13 @@ export class AnswerSurveyComponent implements OnInit, OnDestroy {
 
     this.ngxSpinnerService.show('generalSpinner')
     const data = {
-      user: this.appointment.user._id,
+      user: this.appointment.user?._id ?? null,
+      externalPatient: this.appointment.user ? null : this.appointment.externalPatient,
       appointment:this.appointment._id,
       survey: this.survey._id,
       response: this.survey.questions,
-      medico: this.appointment.medico._id
+      medico: this.appointment.medico?._id ?? null,
+      externalMedico: this.appointment.externalMedico ?? null,
     }
 
     this.surveysService.completeSurvey(data).pipe(

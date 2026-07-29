@@ -3,7 +3,6 @@ import { UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { AppointmentI } from 'src/app/interfaces/appointment.interface';
 import { ServiceI } from 'src/app/interfaces/service.interface';
-import { UserI } from 'src/app/interfaces/user.interface';
 
 export interface FormsNewAppointmentI{
   [formName:string]:UntypedFormGroup
@@ -25,8 +24,6 @@ export class NewAppointmentFormsService {
   appointmentRegistered$:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   remitida$:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  medicoDisponible$:BehaviorSubject<UserI | null> = new BehaviorSubject<UserI | null>(null);
-
   appointmeRemision$:BehaviorSubject<AppointmentI | null> = new BehaviorSubject<AppointmentI | null>(null);
 
   constructor() { }
@@ -37,18 +34,16 @@ export class NewAppointmentFormsService {
     this.totalAppointment$.next(0);
     this.appointmentRegistered$.next(false);
     this.remitida$.next(false);
-    this.medicoDisponible$.next(null);
     this.appointmeRemision$.next(null);
   }
 
   /**
    * Resets form3 fields downstream from the given step.
-   * - 'all': resets subsidiary + service + medico + date/hour
-   * - 'subsidiary': resets service + medico + date/hour (keeps subsidiary)
-   * - 'service': resets medico + date/hour (keeps subsidiary + service)
-   * - 'medico': resets date/hour only (keeps subsidiary + service + medico)
+   * - 'all': resets subsidiary + service + date
+   * - 'subsidiary': resets service + date (keeps subsidiary)
+   * - 'service': resets date only (keeps subsidiary + service)
    */
-  resetForm3From(from: 'all' | 'subsidiary' | 'service' | 'medico' = 'all'){
+  resetForm3From(from: 'all' | 'subsidiary' | 'service' = 'all'){
     const form3 = this.forms['form3'];
     if(!form3) return;
 
@@ -58,21 +53,9 @@ export class NewAppointmentFormsService {
     if(from === 'all' || from === 'subsidiary'){
       form3.get('service')?.setValue(null);
     }
-    if(from === 'all' || from === 'subsidiary' || from === 'service'){
-      form3.get('medico')?.setValue(null);
-    }
     form3.get('date')?.setValue(null);
-    form3.get('hour')?.setValue(null);
+    form3.get('dateEnd')?.setValue(null);
     form3.get('disabledDate')?.setValue(null);
-    form3.get('dayAppointment')?.setValue(null);
-
-    const preselectedMedico = this.medicoDisponible$.value;
-    if(preselectedMedico){
-      form3.get('medico')?.setValue(preselectedMedico);
-      if(from === 'all'){
-        form3.get('subsidiary')?.setValue(preselectedMedico.subsidiary ?? null);
-      }
-    }
   }
 
   getAllValuesFromForms(){

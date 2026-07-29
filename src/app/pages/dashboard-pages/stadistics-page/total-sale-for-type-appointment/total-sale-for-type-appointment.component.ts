@@ -259,11 +259,11 @@ getCurrentYearDateRange(): { from: Date; to: Date } {
 
 
     const columnWidths = [{ wch: 30 }, { wch: 30 }, { wch: 30 } ];
-    const forHeader = ['Mes','Citas virtuales', 'Citas presenciales']
+    const forHeader = ['Mes','Pacientes virtuales', 'Pacientes presenciales']
     
     const title = `Datos del ${this.formateDate(this.filters.rangeDates.from)} al ${ this.formateDate(this.filters.rangeDates.to)}`
 
-    this.utilsService.exportAsExcel(dataExport, 'Ingresos por tipo de cita',forHeader,columnWidths,title );
+    this.utilsService.exportAsExcel(dataExport, 'Ingresos por tipo de paciente',forHeader,columnWidths,title );
   }
 
     formateDate(date:any){

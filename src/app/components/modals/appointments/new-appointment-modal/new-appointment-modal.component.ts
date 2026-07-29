@@ -49,7 +49,6 @@ export class NewAppointmentModalComponent implements OnInit {
   
     closeModal(){
       this.ngbActiveModal.close({reload:false});
-      this.newAppointmentFormsService.medicoDisponible$.next(null);
       this.newAppointmentFormsService.reset();
     }
 }

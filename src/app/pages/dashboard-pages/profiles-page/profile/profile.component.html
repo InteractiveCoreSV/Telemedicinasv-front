@@ -246,16 +246,16 @@
 
                               <!-- START ROW -->  
               <div class="col-12 col-sm-6">
-                <label class="form-control-label">Nombre del contacto de emergencia</label>
+                <label class="form-control-label">{{isMedico ? 'Nombre del contacto de asistente' : 'Nombre del contacto de emergencia'}}</label>
                 <div class="form-group">
-                  <input formControlName="nameEmergency" [class]="formSubmited && createUserForm.get('nameEmergency')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombre de contacto de emergencia">
+                  <input formControlName="nameEmergency" [class]="formSubmited && createUserForm.get('nameEmergency')?.invalid?'is-invalid':''" type="text" class="form-control" [placeholder]="isMedico ? 'Nombre del asistente' : 'Nombre de contacto de emergencia'">
                   <div *ngIf="formSubmited && createUserForm.get('nameEmergency')?.invalid" class="invalid-feedback">Este campo es requerido</div>
                 </div>
               </div>
               <!-- END ROW -->
 
               <div class="col-12 col-sm-8 col-md-6">
-                <label class="form-control-label">Número del contacto de emergencia</label>
+                <label class="form-control-label">{{isMedico ? 'Número del contacto de asistente' : 'Número del contacto de emergencia'}}</label>
                 <div class="input-group d-flex justify-content-center justify-content-md-start">
                   <div ngbDropdown class="d-inline-block" container="body">
                     <button
@@ -409,228 +409,19 @@
                 <div class="col-12">
                   <label class="form-control-label">Complemento de perfil médico</label>
                 </div>
-                <!-- START ROW -->
-                <div class="col-12 col-sm-6">
-                  <label class="label-section mb-0">Año que comenzó a ejercer</label>
-                   <div class="d-flex align-items-center position-relative">
-                        
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          type="text"
-                          mask="00/00/0000"
-                          [dropSpecialCharacters]="false"
-                          class="form-control dateEnter"
-                          [ngModel]="createUserForm.get('yearStartedPracticing')?.value | date:'dd/MM/yyyy'"
-                          (ngModelChange)="changeDateEnterForm($event,'yearStartedPracticing')"
-                          [ngModelOptions]="{standalone: true}"
-                          [class]="formSubmited && createUserForm.get('yearStartedPracticing')?.invalid ? 'is-invalid' : ''"
-                        >
 
-                        <!-- INPUT DEL CALENDARIO -->
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          class="form-control dateCalendar"
-                          formControlName="yearStartedPracticing"
-                          [owlDateTime]="dt2"
-                          (dateChange)="changeDateCalendarForm($event, 'yearStartedPracticing')"
-                          [class]="formSubmited && createUserForm.get('yearStartedPracticing')?.invalid ? 'is-invalid' : ''"
-                        >
-
-                        <!-- ICONO -->
-                        <span [owlDateTimeTrigger]="dt2" class="ml-2" style="cursor: pointer;">
-                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
-                        </span>
-
-                        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-
-                      </div>
-                </div>
-
-                <div class="col-12 col-sm-6">
-                  <label class="label-section mb-0">Tiempo ejerciendo</label>
-                  <p>{{createUserForm.get('yearStartedPracticing')?.value | calcYearsOfPracticePipe}}</p>
-                </div>
-                <!-- END ROW -->
-
-                <div formArrayName="educacion" class="col-12 d-flex flex-column mb-3 card py-3 mt-3">
-                  <!-- <label class="label-section mb-2">Institución educativa</label> -->
-
-                  <div *ngFor="let edu of educacion.controls; let i = index" [formGroupName]="i" class="row mb-2 align-items-center">
-                    <div class="col-12 col-md-8 px-1 pl-3">
-                      <label class="label-section mb-0 col-12">Institución educativa</label>
-                      <input 
-                        formControlName="institucion"
-                        [class]="formSubmited && edu.get('institucion')?.invalid ? 'is-invalid' : ''"
-                        type="text"
-                        class="form-control"
-                        placeholder="Institución educativa"
-                      >
-                    </div>
-
-                    <div class="col-10 col-md-3 px-1 pl-3 pl-md-1 mt-2 mt-md-0">
-                      <label class="label-section mb-0 col-12">Año de egreso</label>
-                      <div class="d-flex align-items-center position-relative">
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          type="text"
-                          mask="00/00/0000"
-                          [dropSpecialCharacters]="false"
-                          class="form-control dateEnter"
-                          [ngModel]="edu.get('year')?.value | date:'dd/MM/yyyy'"
-                          (ngModelChange)="changeDateEnter($event, edu)"
-                          [ngModelOptions]="{standalone: true}"
-                          [class]="formSubmited && edu.get('year')?.invalid ? 'is-invalid' : ''"
-                        >
-
-                        <!-- INPUT DEL CALENDARIO -->
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          class="form-control dateCalendar"
-                          formControlName="year"
-                          [owlDateTime]="dt1"
-                          (dateChange)="changeDateCalendar($event, edu)"
-                          [class]="formSubmited && edu.get('year')?.invalid ? 'is-invalid' : ''"
-                        >
-
-                        <!-- ICONO -->
-                        <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
-                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
-                        </span>
-
-                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- ESPECIALIDADES -->
+                <!-- ESPECIALIDAD -->
                 <div  class="col-12 d-flex flex-column mb-3 card py-3">
                   <div class="row mb-2 align-items-center">
                     <div class="col-12 col-md-6 px-1 pl-3">
-                      <label class="label-section mb-0 col-12">Especiliadad</label>
-                      <app-select-especialidad 
+                      <label class="label-section mb-0 col-12">Especialidad</label>
+                      <app-select-especialidad
                         [especialidadSelected]="especialidad"
                         (changeEspecialidad)="setEspecialidad($event)"
                       ></app-select-especialidad>
                       <div *ngIf="formSubmited && createUserForm.get('especialidad')?.invalid" class="invalid-feedback d-block">La especialidad es requerida</div>
                     </div>
-
-                    <div class="col-12 col-md-8 mt-2">
-                      <label class="label-section mb-0 ">Institución educativa</label>
-                      <input formControlName="especialidadInstitucion" [class]="formSubmited && createUserForm.get('especialidadInstitucion')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Institución">
-                      <div *ngIf="formSubmited && createUserForm.get('especialidadInstitucion')?.invalid" class="invalid-feedback d-block">La institución es requerida</div>
-                    </div>
-
-                    <div class="col-10 col-md-3 px-1 pl-3 pl-md-1 mt-md-0">
-                      <label class="label-section mb-0 col-12">Año de egreso</label>
-                      <div class="d-flex align-items-center position-relative">
-                        <!-- INPUT CON MÁSCARA DD/MM/YYYY -->
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          type="text"
-                          mask="00/00/0000"
-                          class="form-control dateEnter"
-                          [dropSpecialCharacters]="false"
-                          [ngModel]="createUserForm.get('especialidadYear')?.value | date:'dd/MM/yyyy'"
-                          (ngModelChange)="changeDateEnterForm($event, 'especialidadYear')"
-                          [ngModelOptions]="{standalone: true}"
-                          [class]="formSubmited && createUserForm.get('especialidadYear')?.invalid ? 'is-invalid' : ''"
-                        >
-
-                        <!-- INPUT DEL CALENDARIO -->
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          class="form-control dateCalendar"
-                          formControlName="especialidadYear"
-                          [owlDateTime]="dt1"
-                          (dateChange)="changeDateCalendarForm($event, 'especialidadYear')"
-                          [class]="formSubmited && createUserForm.get('especialidadYear')?.invalid ? 'is-invalid' : ''"
-                        >
-
-                        <!-- ICONO -->
-                        <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
-                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
-                        </span>
-
-                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-
-                      </div>
-                    </div>
-
                   </div>
-                </div>
-
-                <!-- SUBESPECIALIDADES -->
-                <div formArrayName="subespecialidades" class="col-12 d-flex flex-column mb-3 card py-3">
-                  <div *ngFor="let subespecialidad of subespecialidades.controls; let i = index" [formGroupName]="i" class="row mb-2 align-items-center">
-                    <div class="col-12 col-md-8 px-1 pl-3">
-                      <label class="label-section mb-0 col-12">Subespecialidad</label>
-                      <input 
-                        formControlName="name"
-                        [class]="formSubmited && subespecialidad.get('name')?.invalid ? 'is-invalid' : ''"
-                        type="text"
-                        class="form-control"
-                        placeholder="Nombre"
-                      >
-                    </div>
-
-                    <div class="col-10 col-md-3 px-1 pl-3 pl-md-1 mt-2 mt-md-0">
-                      <label class="label-section mb-0 col-12">Año de egreso</label>
-                      <div class="d-flex align-items-center position-relative">
-                        <!-- INPUT CON MÁSCARA DD/MM/YYYY -->
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          type="text"
-                          mask="00/00/0000"
-                          class="form-control dateEnter"
-                          [dropSpecialCharacters]="false"
-                          [ngModel]="subespecialidad.get('year')?.value | date:'dd/MM/yyyy'"
-                          (ngModelChange)="changeDateEnter($event, subespecialidad)"
-                          [ngModelOptions]="{standalone: true}"
-                          [class]="formSubmited && subespecialidad.get('year')?.invalid ? 'is-invalid' : ''"
-                        >
-
-                        <!-- INPUT DEL CALENDARIO -->
-                        <input
-                          placeholder="DD/MM/YYYY"
-                          class="form-control dateCalendar"
-                          formControlName="year"
-                          [owlDateTime]="dt1"
-                          (dateChange)="changeDateCalendar($event, subespecialidad)"
-                          [class]="formSubmited && subespecialidad.get('year')?.invalid ? 'is-invalid' : ''"
-                        >
-
-                        <!-- ICONO -->
-                        <span [owlDateTimeTrigger]="dt1" class="ml-2" style="cursor: pointer;">
-                          <i class="fa fa-calendar" style="font-size: 25px;"></i>
-                        </span>
-
-                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-
-                      </div>
-                    </div>
-
-                    
-                    <div class="col-12 mt-2">
-                      <label class="label-section mb-0 ">Institución educativa</label>
-                      <input formControlName="institucion" [class]="formSubmited && subespecialidad.get('institucion')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Institución">
-                      <div *ngIf="formSubmited && subespecialidad.get('institucion')?.invalid" class="invalid-feedback d-block">La institución es requerida</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-12 d-flex flex-column mb-3 card py-3">
-                  <label class="label-section mb-2">Cursos</label>
-                  <textarea formControlName="cursos" placeholder="Ingrese sus cursos (nombre, donde, fecha)" class="form-control" style="text-align: start !important; height: auto !important;" rows="5"></textarea>
-
-                </div>
-
-                
-                <div class="col-12 d-flex flex-column mb-3 card py-3">
-                  <label class="label-section mb-2">Diplomas</label>
-                  <textarea formControlName="diplomas" placeholder="Ingrese sus diplomas (nombre, donde, fecha)" class="form-control" style="text-align: start !important; height: auto !important;" rows="5"></textarea>
-
                 </div>
               </div>
 

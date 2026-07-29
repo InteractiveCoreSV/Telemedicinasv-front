@@ -32,6 +32,8 @@ export class ViewExpedienteComponent implements OnInit {
   userInfo!:UserI | null
 
   @Input() idPaciente!:string;
+  @Input() idAppointment?:string | null;
+  @Input() externalPatientInfo?:any | null;
   @Input() menorSelect!:MenorEdadI;
 
   paciente!:UserI;
@@ -90,7 +92,12 @@ export class ViewExpedienteComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getUser(this.idPaciente);
+    if(this.idPaciente){
+      this.getUser(this.idPaciente);
+    }else {
+      // Paciente externo (no registrado): no hay User que consultar
+      this.loading = false;
+    }
 
     this.userInfo = this.authService.userInfo.value
   }
@@ -135,10 +142,17 @@ export class ViewExpedienteComponent implements OnInit {
 
   getDocumentExpedientesUser(){
     this.loadingExpedientes = true
-    this.expedienteService.getDocumentExpedientesUser(this.menorSelect ? this.menorSelect._id : this.idPaciente,this.category.name, this.page,this.nameDocumment).pipe(
+
+    const idPaciente = this.menorSelect ? this.menorSelect._id : this.idPaciente;
+
+    const request$ = idPaciente
+      ? this.expedienteService.getDocumentExpedientesUser(idPaciente,this.category.name, this.page,this.nameDocumment)
+      : this.expedienteService.getDocumentExpedientesByAppointment(this.idAppointment ?? '',this.category.name, this.page,this.nameDocumment);
+
+    request$.pipe(
       finalize(()=>{
         this.loadingExpedientes = false;
-      })  
+      })
     ).subscribe({
       next: ((res:any) => {
         this.documentsExpediente = res.documents
@@ -152,10 +166,17 @@ export class ViewExpedienteComponent implements OnInit {
 
   getFichasMedicas(){
     this.loadingFichasMedicas = true
-    this.fichaMedicaService.getFichaMedicasByPatient(this.menorSelect ? this.menorSelect._id : this.idPaciente, this.page,this.nameDocumment).pipe(
+
+    const idPaciente = this.menorSelect ? this.menorSelect._id : this.idPaciente;
+
+    const request$ = idPaciente
+      ? this.fichaMedicaService.getFichaMedicasByPatient(idPaciente, this.page,this.nameDocumment)
+      : this.fichaMedicaService.getFichaMedicasByAppointment(this.idAppointment ?? '', this.page,this.nameDocumment);
+
+    request$.pipe(
       finalize(()=>{
         this.loadingFichasMedicas = false;
-      })  
+      })
     ).subscribe({
       next: ((res:any) => {
         this.fichasMedicas = res.documents
@@ -167,9 +188,11 @@ export class ViewExpedienteComponent implements OnInit {
     })
   }
 
-  openViewSummaryFichasMedicas(){   
+  openViewSummaryFichasMedicas(){
     const modalRef = this.ngbModal.open(ViewSummaryFichasMedicasComponent,{centered:true,size:'xl', scrollable:true});
-    modalRef.componentInstance.idPaciente = this.paciente._id;
+    modalRef.componentInstance.idPaciente = this.paciente?._id;
+    modalRef.componentInstance.idAppointment = this.paciente ? null : this.idAppointment;
+    modalRef.componentInstance.externalPatientInfo = this.paciente ? null : this.externalPatientInfo;
     modalRef.componentInstance.menorSelect = this.menorSelect && this.menorSelect._id ? this.menorSelect : null;
 
     const infoPatient  = {
@@ -185,7 +208,14 @@ export class ViewExpedienteComponent implements OnInit {
 
   openModalNewDocumentExpediente(document?:ExpedienteI){
     const modal = this.ngbModal.open(NewDocumentExpedienteComponent,{centered:true,size:'md',scrollable:true});
-    modal.componentInstance.user = this.menorSelect ? this.menorSelect._id : this.idPaciente
+
+    const idPaciente = this.menorSelect ? this.menorSelect._id : this.idPaciente;
+    if(idPaciente){
+      modal.componentInstance.user = idPaciente
+    }else {
+      modal.componentInstance.appointment = this.idAppointment
+      modal.componentInstance.externalPatient = this.externalPatientInfo
+    }
 
     if(document){
       modal.componentInstance.documentToEdit = document

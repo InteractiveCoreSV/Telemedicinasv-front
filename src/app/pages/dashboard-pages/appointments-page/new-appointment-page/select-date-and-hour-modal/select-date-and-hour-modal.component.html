@@ -16,6 +16,7 @@
             <owl-date-time-inline
             [startAt]="openCalendarIn"
             id="calendar-client"
+            [selectMode]="'range'"
             [(ngModel)]="dateSelected"
             (ngModelChange)="setDateSelected()"
             [ngModelOptions]="{standalone:true}"
@@ -339,7 +340,8 @@
     
           <ng-template #selectDates>
             <img style="width: 85%;" src="../assets/calendar.svg" alt="Selecciona una fecha">
-            <h6 class="mt-2">Selecciona un día para ver los horarios disponibles</h6>
+            <h6 *ngIf="!getControl('dateEnd')?.value" class="mt-2">Selecciona un día para ver los horarios disponibles</h6>
+            <h6 *ngIf="getControl('dateEnd')?.value" class="mt-2">Rango de días seleccionado, no se necesita hora específica</h6>
           </ng-template>
     
           <ng-template #loadingHoursTempla>

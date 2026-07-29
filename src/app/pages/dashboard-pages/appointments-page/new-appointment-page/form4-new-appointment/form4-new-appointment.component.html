@@ -8,7 +8,7 @@
             <div *ngIf="form1Values && form1Values.urgency" class="mb-2 d-flex" [innerHTML]="form1Values.urgency.name | parseUrgency"></div>
 
             <p class="mb-2">        
-              <span class="title mr-2">Tipo de Cita:</span> {{formValues?.typeAppoinment?.name}}
+              <span class="title mr-2">Tipo de Paciente:</span> {{formValues?.typeAppoinment?.name}}
             </p>
 
             <div class="mb-2">
@@ -33,6 +33,14 @@
                   <span class="info-user mr-2"><strong>Fecha de nacimiento:</strong></span> {{form1Values.birthdateUnderAge | date:'MMMM d, y'|titlecase}}
                 </ng-container>
               </div>
+
+              <div class="container-user-info mt-1" *ngIf="form1Values && form1Values.patientType === 'external'">
+                <span class="badge badge-paciente-externo mb-1" style="background-color:#919191;">No registrado</span>
+                <span class="info-user mr-2"><strong>Nombre:</strong></span> {{form1Values.externalPatientNames}}
+                <span class="info-user mr-2"><strong>Correo:</strong></span> {{form1Values.externalPatientEmail || 'No proporcionado'}}
+                <span class="info-user mr-2"><strong>Telefono:</strong></span> {{form1Values.externalPatientCountryCode}} {{form1Values.externalPatientPhone}}
+                <span class="info-user mr-2"><strong>Documento de identidad ({{form1Values.externalPatientTypeDocument}}):</strong></span> {{form1Values.externalPatientDocument}}
+              </div>
             </div>
 
             <div *ngIf="form1Values && form1Values.nameUnderAge">
@@ -53,12 +61,17 @@
 
 
           <div class="col-12 col-md-6 border-radius">
-            <p class="mb-2" *ngIf="form3Values && form3Values.subsidiary">        
+            <p class="mb-2" *ngIf="form3Values && form3Values.subsidiary">
               <span class="title mr-2">Sucursal:</span> {{form3Values.subsidiary.name}}
+              <span *ngIf="form3Values.subsidiary.esDomicilioPaciente" class="badge badge-domicilio-paciente ml-2"><i class="fas fa-house"></i> Domicilio</span>
+            </p>
+
+            <p class="mb-2" *ngIf="form3Values?.subsidiary?.esDomicilioPaciente">
+              <span class="title mr-2">Dirección del paciente:</span> {{form1Values.patientAddress}}
             </p>
 
             <p class="mb-2" *ngIf="formValues?.meetingTool">        
-              <span class="title mr-2">Aplicacion preferida para la cita:</span> {{formValues?.meetingTool?.name}}
+              <span class="title mr-2">Aplicacion preferida para el paciente:</span> {{formValues?.meetingTool?.name}}
             </p>
 
             <!-- <p class="mb-2">        
@@ -72,25 +85,13 @@
               <ul><li *ngFor="let service of form3Values?.service">{{service.name}} {{service.price | dollar }}</li></ul>
             </div>
 
-            <!-- <p class="mb-2">        
-              <span class="title mr-2">Médico:</span> {{form3Values?.medico?.names}} {{form3Values?.medico?.last_names}}
-            </p> -->
-
-            <div class="mb-2 d-flex">        
-              <span class="title mr-2">Médico:</span> 
-              <div class="d-flex flex-column " style="margin-top: 2.7px;">
-                <span>{{form3Values?.medico ? form3Values?.medico?.names : 'Médico no encontrado'}}  {{form3Values?.medico ? form3Values?.medico?.last_names : ''}}</span>
-                <span *ngIf="form3Values && form3Values.medico && form3Values.medico.especialidad " style="color: #4e4e4e;" >{{ form3Values.medico.especialidad.name }}</span>
-              </div>
-            </div>
-
-            <p class="mb-2">        
-              <span class="title mr-2">Fecha y Hora:</span> {{form3Values?.date | date:'EEEE, MMMM d, y'|titlecase}} de {{form3Values?.hour?.hours}}
+            <p class="mb-2">
+              <span class="title mr-2">Fecha:</span> {{getDateSummary()}}
             </p>
 
            <ng-container *ngxPermissionsOnly="['admin','sac']">
              <p class="mb-2" *ngIf="form1Values && form1Values.referencedAppointment">        
-              <span class="title mr-2">Cita referida por parte de la clinica:</span> {{form1Values.referencedSubsidiary.name}}
+              <span class="title mr-2">Paciente referido por parte de la clinica:</span> {{form1Values.referencedSubsidiary.name}}
             </p>
            </ng-container>
 
@@ -98,11 +99,44 @@
               <span class="title mr-2">Comentario:</span> <textarea [(ngModel)]="commentAppointment" class="form-control center" rows="3" placeholder="Agregar comentarios o indicaciones necesarias"></textarea>
             </p>
 
-            <p class="mb-2">        
-              <span class="title mr-2">Documento:</span> {{form3Values?.documentAppointment ? form3Values?.documentAppointment.name : 'No se agrego documento a la cita'}}
+            <p class="mb-2">
+              <span class="title mr-2">Documento:</span> {{form3Values?.documentAppointment ? form3Values?.documentAppointment.name : 'No se agrego documento al paciente'}}
             </p>
 
-            <p class="mb-2">        
+            <p class="mb-2" *ngIf="form1Values?.medico">
+              <span class="title mr-2">Médico:</span> {{form1Values.medico?.names}} {{form1Values.medico?.last_names}}
+            </p>
+
+            <p class="mb-2" *ngIf="form1Values?.isExternalMedico">
+              <span class="title mr-2">Médico externo:</span> {{form1Values.externalMedicoNames}} ({{form1Values.externalMedicoCountryCode}} {{form1Values.externalMedicoPhone}})
+              <span class="badge badge-medico-externo ml-2" style="background-color:#919191;">Externo</span>
+            </p>
+
+            <p class="mb-2" *ngIf="form1Values?.diagnostico">
+              <span class="title mr-2">Diagnóstico:</span> {{form1Values.diagnostico}}
+            </p>
+
+            <p class="mb-2" *ngIf="form1Values?.insuranceType">
+              <span class="title mr-2">Aseguradora / Particular:</span> {{form1Values.insuranceType | titlecase}}
+            </p>
+
+            <p class="mb-2 d-flex flex-column" *ngIf="form1Values?.duiImage">
+              <span class="title mr-2">Foto del DUI:</span>
+              <span class="mb-1">{{form1Values.duiImage?.name}}</span>
+              <img *ngIf="duiImagePreviewUrl" [src]="duiImagePreviewUrl" alt="Foto del DUI" style="max-width: 300px; border: 1px solid #2e4a76; border-radius: 8px;">
+            </p>
+
+            <p class="mb-2 d-flex flex-column" *ngIf="form1Values?.indicacionMedica">
+              <span class="title mr-2">Indicación médica:</span>
+              <span class="mb-1">{{form1Values.indicacionMedica?.name}}</span>
+              <img *ngIf="indicacionMedicaPreviewUrl" [src]="indicacionMedicaPreviewUrl" alt="Indicación médica" style="max-width: 300px; border: 1px solid #2e4a76; border-radius: 8px;">
+            </p>
+
+            <p class="mb-2" *ngIf="form3Values?.typePayment">
+              <span class="title mr-2">Método de pago:</span> {{form3Values?.typePayment | titlecase}}
+            </p>
+
+            <p class="mb-2">
               <span class="title mr-2">Total a pagar:</span> <span style="color: rgba(0, 144, 66, 1);"><strong>$   </strong> {{total}}</span>
             </p>
             
@@ -125,6 +159,6 @@
 <div class="row mt-3 modal-footer">
   <div class="col-12 d-flex justify-content-end">
     <ng-content select="[backButton]"></ng-content>
-    <button (click)="createAppointment()" class="btn btn-primary" style="width: auto;">Crear cita</button>
+    <button (click)="createAppointment()" class="btn btn-primary" style="width: auto;">Crear Paciente</button>
   </div>
 </div>

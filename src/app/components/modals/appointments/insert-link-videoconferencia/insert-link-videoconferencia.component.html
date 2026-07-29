@@ -12,15 +12,15 @@
         <div class="container mb-4 mt-2 " >
 
             <p class="mb-2">        
-                <span class="title mr-1" style="width: auto !important;">Tipo de Cita:</span> {{appointment.typeAppoinment?.name ?? 'Dato no encontrado'}}
+                <span class="title mr-1" style="width: auto !important;">Tipo de Paciente:</span> {{appointment.typeAppoinment.name}}
             </p>
 
             <p class="mb-2" *ngIf="appointment.meetingTool">        
-                <span class="title mr-1" style="width: auto !important;">Aplicacion preferida para la cita:</span> {{appointment.meetingTool.name}}
+                <span class="title mr-1" style="width: auto !important;">Aplicacion preferida para el paciente:</span> {{appointment.meetingTool.name}}
             </p>
 
             <p class="mb-2">        
-                <span class="title mr-1" style="width: auto !important;">Fecha y Hora:</span> {{appointment.dateAppointment | date:'EEEE, MMMM d, y'|titlecase}} de {{appointment.hour?.hours ?? 'Dato no encontrado'}}
+                <span class="title mr-1" style="width: auto !important;">Fecha y Hora:</span> {{appointment | formatAppointmentDate}}
             </p>
 
             <div class="form-gorup w-100 ">

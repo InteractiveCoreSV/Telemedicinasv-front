@@ -1,24 +1,55 @@
 
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormsNewAppointmentI, NewAppointmentFormsService } from '../new-appointment-forms.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsService } from 'src/app/services/alerts.service';
 import { Subscription } from 'rxjs';
 import { SelectSubsidiaryModalComponent } from '../select-subsidiary-modal/select-subsidiary-modal.component';
 import { SelectServiceModalComponent } from '../select-service-modal/select-service-modal.component';
-import { SelectMedicoModalComponent } from '../select-medico-modal/select-medico-modal.component';
-import { SelectDateAndHourModalComponent } from '../select-date-and-hour-modal/select-date-and-hour-modal.component';
+import { SelectDateRangeModalComponent } from '../select-date-range-modal/select-date-range-modal.component';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ServiceI } from 'src/app/interfaces/service.interface';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-form3-new-appointment',
   templateUrl: './form3-new-appointment.component.html',
-  styles: [
-  ]
+  styles: [`
+    .container-paso-3-select {
+      padding: 0 !important;
+      align-items: stretch !important;
+      overflow: hidden;
+    }
+
+    .select-paso-3 {
+      width: 100%;
+      flex: 1;
+    }
+
+    ::ng-deep .select-paso-3 .ng-select-container {
+      border: none !important;
+      background: transparent !important;
+      height: 100%;
+      min-height: 47px !important;
+      border-radius: 10px !important;
+      box-shadow: none !important;
+      padding: 0 15px;
+    }
+
+    ::ng-deep .select-paso-3 .ng-placeholder,
+    ::ng-deep .select-paso-3 .ng-value {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    ::ng-deep .select-paso-3.ng-select-disabled .ng-select-container {
+      background-color: transparent !important;
+      cursor: not-allowed;
+    }
+  `]
 })
-export class Form3NewAppointmentComponent implements OnInit, AfterViewInit, OnDestroy {
+export class Form3NewAppointmentComponent implements OnInit, OnDestroy {
 
   formSubmited:boolean = false;
 
@@ -35,13 +66,19 @@ export class Form3NewAppointmentComponent implements OnInit, AfterViewInit, OnDe
 
   category!:string
 
-  date:any
+  minDate:Date = dayjs().startOf('day').toDate();
   userID!:any
 
   selectedFile: File | null = null;
 
-  forMedicoDisponible:boolean = false
   total:number = 0
+
+  typePaymentOptions = [
+    { value:'tarjeta', label:'Tarjeta' },
+    { value:'efectivo', label:'Efectivo' },
+    { value:'cheque', label:'Cheque' },
+    { value:'transferencia', label:'Transferencia' },
+  ];
 
   private previousTypeAppoinmentId: string | null = null;
 
@@ -96,37 +133,7 @@ export class Form3NewAppointmentComponent implements OnInit, AfterViewInit, OnDe
 
           if(typeChanged){
             this.newAppointmentFormsService.resetForm3From('all');
-            this.date = null;
             this.selectedFile = null;
-
-            if(this.forMedicoDisponible){
-              const medico = this.newAppointmentFormsService.medicoDisponible$.value;
-              if(medico){
-                this.form3.get('medico')?.setValue(medico);
-                if(!this.virtual){
-                  this.form3.get('subsidiary')?.setValue(medico.subsidiary);
-                }
-              }
-            }
-          }
-        })
-      })
-    );
-
-    this.subs.add(
-      this.newAppointmentFormsService.medicoDisponible$.subscribe({
-        next:((value)=>{
-          if(value){
-            this.forMedicoDisponible = true;
-            if(!this.virtual){
-              this.form3.get('subsidiary')?.enable();
-            }
-            this.form3.get('medico')?.setValue(value);
-            this.form3.get('subsidiary')?.setValue(value.subsidiary ?? null);
-          }else {
-            this.forMedicoDisponible = false;
-            this.form3.get('medico')?.setValue(null);
-            this.form3.get('subsidiary')?.setValue(null);
           }
         })
       })
@@ -150,17 +157,6 @@ export class Form3NewAppointmentComponent implements OnInit, AfterViewInit, OnDe
 
   }
 
-  ngAfterViewInit(): void {
-    const medico = this.newAppointmentFormsService.medicoDisponible$.value;
-    if(medico){
-      this.forMedicoDisponible = true;
-      this.form3.get('subsidiary')?.enable();
-      this.form3.get('medico')?.setValue(medico);
-      this.form3.get('subsidiary')?.setValue(medico.subsidiary ?? null);
-      Promise.resolve().then(() => this.cdr.detectChanges());
-    }
-  }
-
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
@@ -170,18 +166,18 @@ export class Form3NewAppointmentComponent implements OnInit, AfterViewInit, OnDe
       subsidiary:[null,[Validators.required]],
 
       service:[null,[Validators.required]],
-      medico:[null,[Validators.required]],
       date:[null,[Validators.required]],
-      hour:[null,[Validators.required]],
+      dateEnd:[null,[]],
       disabledDate:[null],
-      dayAppointment:[null],
       documentAppointment:[null,[]],
-      commentAppointment:['',[]], 
+      commentAppointment:['',[]],
+      typePayment:[null,[Validators.required]],
     });
     this.form3.get('subsidiary')?.disable()
+    this.form3.get('typePayment')?.disable()
 
     Object.assign(this.newAppointmentFormsService.forms,{form3:this.form3})
- 
+
   }
 
   getControl(name:string){
@@ -189,26 +185,23 @@ export class Form3NewAppointmentComponent implements OnInit, AfterViewInit, OnDe
   }
 
   openModalSelectSubsidiary(){
-    if(this.forMedicoDisponible === false){
-      const modal = this.ngbModal.open(SelectSubsidiaryModalComponent,{centered:true,size:'md',scrollable:true, backdrop:'static'});
+    const modal = this.ngbModal.open(SelectSubsidiaryModalComponent,{centered:true,size:'md',scrollable:true, backdrop:'static'});
+    modal.componentInstance.patientAddress = this.form1?.get('patientAddress')?.value ?? '';
 
-      modal.result.then((result)=>{
-        if(result.subsidiary){
-          const current = this.getControl('subsidiary')?.value;
-          if(!current || current._id !== result.subsidiary._id){
-            this.newAppointmentFormsService.resetForm3From('subsidiary');
-            this.date = null;
-            this.selectedFile = null;
-          }
-          this.getControl('subsidiary')?.setValue(result.subsidiary)
+    modal.result.then((result)=>{
+      if(result.subsidiary){
+        const current = this.getControl('subsidiary')?.value;
+        if(!current || current._id !== result.subsidiary._id){
+          this.newAppointmentFormsService.resetForm3From('subsidiary');
+          this.selectedFile = null;
         }
-      }).catch(()=>{})
-    }
+        this.getControl('subsidiary')?.setValue(result.subsidiary)
+      }
+    }).catch(()=>{})
   }
 
   openModalSelectService() {
     if (
-      this.forMedicoDisponible ||
       (!this.getControl('subsidiary')?.value && this.virtual) ||
       (this.getControl('subsidiary')?.value && !this.virtual)
     ) {
@@ -238,62 +231,29 @@ export class Form3NewAppointmentComponent implements OnInit, AfterViewInit, OnDe
           this.getControl('service')?.setValue([...services]);
 
           this.newAppointmentFormsService.resetForm3From('service');
-          this.date = null;
         })
         .catch(() => {});
     }
   }
 
+  openSelectDateModal(){
+    if(!this.getControl('service')?.value) return;
 
-  openModalSelectMedico(){
+    const modal = this.ngbModal.open(SelectDateRangeModalComponent,{centered:true, size:'lg', backdrop:'static'});
+    modal.componentInstance.minDate = this.minDate;
+    modal.componentInstance.date = this.getControl('date')?.value;
+    modal.componentInstance.dateEnd = this.getControl('dateEnd')?.value;
 
-    if(this.getControl('service')?.value && this.forMedicoDisponible === false){
-     const modal = this.ngbModal.open(SelectMedicoModalComponent,{centered:true,size:'md',scrollable:true, backdrop:'static'});
+    modal.result.then((result:any)=>{
+      this.getControl('date')?.setValue(result.date);
+      this.getControl('dateEnd')?.setValue(result.dateEnd ?? null);
 
-     modal.componentInstance.medicoSelected = this.getControl('medico')?.value ?? null;
- 
-     if(this.getControl('subsidiary')?.value){
-      modal.componentInstance.subsidiary = this.getControl('subsidiary')?.value._id
-     }
- 
-     modal.result.then((result)=>{
-       if(result.medico){
-         const current = this.getControl('medico')?.value;
-         if(!current || current._id !== result.medico._id){
-           this.newAppointmentFormsService.resetForm3From('medico');
-           this.date = null;
-         }
-         this.getControl('medico')?.setValue(result.medico)
-       }
-     }).catch(()=>{})
-    }
-   }
-
-   async openModalSelectDateAndHourModal(){
-    if(this.getControl('medico')?.value){
-      const modalRef = this.ngbModal.open(SelectDateAndHourModalComponent,{centered:true,size:'lg',backdrop:'static'});
-
-    if(this.date){
-      modalRef.componentInstance.dateSelectedForm = this.date;
-    }
-
-    modalRef.componentInstance.medico = this.getControl('medico')?.value._id;
-
-    if(this.getControl('subsidiary')?.value){
-      modalRef.componentInstance.subsidiary = this.getControl('subsidiary')?.value._id
-    }
-    modalRef.componentInstance.userID = this.userID
-
-    try {
-      const {date} = await modalRef.result;
-      if(date){
-        this.date= date;
-        this.getControl('date')?.setValue(this.date.date)
-        this.getControl('hour')?.setValue(this.date.hour)
-        this.getControl('dayAppointment')?.setValue(this.date.dayAppointment)
+      if(result.date){
+        this.getControl('typePayment')?.enable();
+      }else{
+        this.getControl('typePayment')?.disable();
       }
-    } catch (error) {}
-    }
+    }).catch(()=>{});
   }
 
   onFileSelected(event: Event): void {

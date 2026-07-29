@@ -98,9 +98,9 @@ export class DailyAppointmentReportComponent  implements OnInit, OnChanges {
     })
 
     const columnWidths = [{ wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 }];
-    const forHeader = ['Fecha','Citas completadas','Monto citas completadas','Citas canceladas','Monto citas canceladas']
+    const forHeader = ['Fecha','Pacientes completados','Monto pacientes completados','Pacientes cancelados','Monto pacientes cancelados']
 
-    this.utilsService.exportAsExcel(dataExport, 'Reporte diario de citas',forHeader,columnWidths);
+    this.utilsService.exportAsExcel(dataExport, 'Reporte diario de pacientes',forHeader,columnWidths);
   }
 
   formateDate(date:any){

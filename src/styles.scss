@@ -3,6 +3,12 @@
 @import "~@fancyapps/ui/dist/fancybox/fancybox.css";
 @import url("../node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css");
 @import url('../node_modules/@ng-select/ng-select/themes/default.theme.css');
+
+// El panel de opciones de ng-select se ancla a body (appendTo="body") sin z-index propio.
+// Cuando el select vive dentro de un modal de ng-bootstrap, el modal (z-index más alto) lo tapa.
+.ng-dropdown-panel {
+  z-index: 2000 !important;
+}
 @import url('../node_modules/flatpickr/dist/flatpickr.css');
 @import url('../node_modules/swiper/swiper.min.css');
 @import url('../node_modules/swiper/modules/zoom/zoom.min.css');
@@ -175,6 +181,20 @@ body {
 
 .badge{
   color: white;
+}
+
+.badge-domicilio-paciente {
+  background-color: #2E4A76 !important;
+  color: #fff !important;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .pac-container{

@@ -1,4 +1,4 @@
-﻿<div class=" d-flex justify-content-start align-items-center p-0">
+﻿<div class=" d-flex justify-content-start align-items-center p-0" *ngIf="!simpleSearch && !searchAllFields">
   <ul class="nav nav-segment p-0" id="expensesTab" role="tablist" style="background-color: #fff !important;">
     <li class="nav-item pl-0" data-toggle="chart-bar" data-datasets="thisWeek" data-trigger="click"
       (click)="searchFor('names','Nombres')" data-action="toggle">
@@ -44,7 +44,7 @@
             (inputChanged)="changeValue($event)"
             [placeholder]="placeholder"
             [data]="users"
-            [searchKeyword]="keyboard"
+            [searchKeyword]="simpleSearch ? 'fullName' : (searchAllFields ? 'searchBlob' : keyboard)"
             [notFoundText]="'No hay usuarios'"
             [itemTemplate]="itemTemplate"
             id="inputGroupMergeSearch"

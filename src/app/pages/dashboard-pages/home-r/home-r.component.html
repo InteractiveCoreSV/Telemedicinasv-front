@@ -5,7 +5,7 @@
     <div class="d-flex mt-5 justify-content-center align-items-center flex-column flex-sm-row">
         <a class="btn btn-primary mr-0 mr-sm-3 mb-2 mb-sm-0" (click)="openModalNewAppoinment()" *ngxPermissionsExcept="'medico'">
             <img src="assets/icons/icon-add.png" class="mr-2" alt="">
-            Crear cita
+            Agendar Atención
         </a>
         <a class="btn btn-primary" routerLink="/dashboard/">
             <img src="assets/icons/icon-calendar-home.png" class="mr-2" alt="">
@@ -49,9 +49,10 @@
                         <!-- Avatar -->
                         <div class="col-auto p-2">
                             <img
-                                [src]="doctor.imageProfile || 'assets/logos/telemedicina-mini-back.png'"
+                                [src]="doctor.imageProfile || 'assets/logos/analiza-en-casa.svg'"
                                 width="80"
                                 height="80"
+                                style="object-fit: contain;"
                                 alt="Doctor"
                             />
                         </div>
@@ -63,19 +64,6 @@
                                 <h5 class="card-title mb-1">
                                 {{ doctor.names }} {{ doctor.last_names }}
                                 </h5>
-
-                                <p
-                                *ngIf="doctor.educacion && doctor.educacion.length"
-                                class="text-muted mb-1 content-card-medico "
-                                >
-                                <strong>Egresado:</strong> {{ doctor.educacion[0].institucion }}
-                                </p>
-
-                                <p class="mb-1 content-card-medico">
-                                <strong>
-                                    {{ doctor.yearStartedPracticing | calcYearsOfPracticePipe }}
-                                </strong>
-                                </p>
 
                             </div>
                         </div>
@@ -113,11 +101,10 @@
 
                             </div>
 
-                            <div class="col-12 pl-0" *ngIf="doctor.especialidad || (doctor.subespecialidades && doctor.subespecialidades.length)">
+                            <div class="col-12 pl-0" *ngIf="doctor.especialidad">
                                 <h5 class="content-card-medico">Preparación academica</h5>
                                 <ul class="pl-3">
                                     <li class="content-card-medico" *ngIf="doctor.especialidad">{{doctor.especialidad.name}} (Especialidad)</li>
-                                    <li class="content-card-medico" *ngIf="doctor.subespecialidades && doctor.subespecialidades.length > 0">{{doctor.subespecialidades[0].name}} (Subespecialidad)</li>
                                 </ul>
                             </div>
 
@@ -128,9 +115,9 @@
                     <div class="w-100 d-flex justify-content-end mb-2 pr-2">
                         <a
                             class="btn btn-primary btn-sm" style="width: 130px !important; height: 35px !important;"
-                            (click)="openModalNewAppoinment(doctor); $event.stopPropagation()" 
+                            (click)="openModalNewAppoinment(); $event.stopPropagation()" 
                         >
-                            Agenda tu cita
+                            Agenda tu atención
                         </a>
 
                     </div>

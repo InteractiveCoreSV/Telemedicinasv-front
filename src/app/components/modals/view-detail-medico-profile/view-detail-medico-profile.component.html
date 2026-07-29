@@ -11,9 +11,10 @@
             <!-- Avatar -->
             <div class="col-auto p-2">
                 <img
-                    [src]="doctor.imageProfile || 'assets/logos/telemedicina-mini-back.png'"
+                    [src]="doctor.imageProfile || 'assets/logos/analiza-en-casa.svg'"
                     width="80"
                     height="80"
+                    style="object-fit: contain;"
                     alt="Doctor"
                 />
             </div>
@@ -25,19 +26,6 @@
                     <h5 class="card-title mb-1">
                     {{ doctor.names }} {{ doctor.last_names }}
                     </h5>
-
-                    <p
-                    *ngIf="doctor.educacion && doctor.educacion.length"
-                    class="text-muted mb-1 content-card-medico "
-                    >
-                    <strong>Egresado:</strong> {{ doctor.educacion[0].institucion }} - {{doctor.educacion[0].year | date}}
-                    </p>
-
-                    <p class="mb-1 content-card-medico">
-                    <strong>
-                        {{ doctor.yearStartedPracticing | calcYearsOfPracticePipe }}
-                    </strong>
-                    </p>
 
                 </div>
             </div>
@@ -68,57 +56,16 @@
                 </div>
 
 
-                <div class="pl-0 mt-2" *ngIf="doctor.especialidad || (doctor.subespecialidades && doctor.subespecialidades.length) || doctor.diplomas || doctor.cursos">
+                <div class="pl-0 mt-2" *ngIf="doctor.especialidad">
                     <h5 class="content-card-medico">Preparación academica</h5>
 
-                    <div class="mb-2" *ngIf="doctor.especialidad">
+                    <div class="mb-2">
                         <h5 class="text-muted">Especialidad</h5>
-                        <ul class="pl-3 mb-0" *ngIf="doctor.especialidad ; else noEspecialidad">
+                        <ul class="pl-3 mb-0">
                             <li class="d-flex flex-column">
                                 <span>{{doctor.especialidad.name}}</span>
-                                <p>{{doctor.especialidadInstitucion}} - {{doctor.especialidadYear | date}}</p>
                             </li>
                         </ul>
-                        <ng-template #noEspecialidad>
-                            <p class="text-muted pl-3">No ingresado</p>
-                        </ng-template>
-                    </div>
-
-                     <div *ngIf="doctor.subespecialidades">
-                        <h5 class="text-muted">Subespecialidad</h5>
-                        <ul class="pl-3 mb-0" *ngIf="doctor.subespecialidades && doctor.subespecialidades.length ; else noSubespecialidad">
-                            <li class="d-flex flex-column">
-                                <span>{{doctor.subespecialidades[0].name}}</span>
-                                <p>{{doctor.subespecialidades[0].institucion}} - {{doctor.subespecialidades[0].year | date}}</p>
-                            </li>
-                        </ul>
-                        <ng-template #noSubespecialidad>
-                            <p class="text-muted pl-3">No ingresado</p>
-                        </ng-template>
-                    </div>
-
-                    <div class="mb-2" *ngIf="doctor.diplomas">
-                        <h5 class="text-muted">Diplomas</h5>
-       
-                        <div class="pl-3 diplomas-text" *ngIf="doctor.diplomas; else noDiplomas">
-                            {{ doctor.diplomas }}
-                        </div>      
-
-                        <ng-template #noDiplomas>
-                            <p class="text-muted pl-3">No ingresado</p>
-                        </ng-template>
-                    </div>
-
-                    <div class="mb-2 mt-3" *ngIf="doctor.cursos">
-                        <h5 class="text-muted">Cursos</h5>
-       
-                        <div class="pl-3 cursos-text" *ngIf="doctor.cursos; else noCursos">
-                        {{ doctor.cursos }}
-                        </div>         
-
-                        <ng-template #noCursos>
-                            <p class="text-muted pl-3">No ingresado</p>
-                        </ng-template>
                     </div>
                 </div>
 
@@ -129,9 +76,9 @@
         <div class="w-100 d-flex justify-content-end pb-2 pr-2" *ngIf="botonAgenda">
             <a
                 class="btn btn-primary btn-sm" style="width: 130px !important; height: 35px !important;"
-                (click)="openModalNewAppoinment(doctor)" 
+                (click)="openModalNewAppoinment()" 
             >
-                Agenda tu cita
+                Agenda tu atención
             </a>
 
         </div>

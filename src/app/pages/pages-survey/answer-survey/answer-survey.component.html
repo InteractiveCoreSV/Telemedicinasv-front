@@ -1,12 +1,12 @@
 
 <div class="general-container">
     <div class="header-survey">
-        <img  src="assets/images/encuesta/logo-company.png" alt="">
+        <img  src="assets/logos/analiza-en-casa-with.svg" alt="">
     </div>
 
     <div class="d-flex justify-content-center align-items-center mt-4 flex-column px-2" style="height: 100%;" >
         <div class="container-date mb-2 px-4" *ngIf="appointment">
-            <p class="text-date mb-0">Fecha de cita: {{appointment.dateAppointment | date:'EEEE, MMMM d, y' | titlecase}}</p>
+            <p class="text-date mb-0">Fecha de atención: {{appointment.dateAppointment | date:'EEEE, MMMM d, y' | titlecase}}</p>
         </div>
 
         <div class="card" style="background-color: rgba(255, 255, 255, 1);">
@@ -27,7 +27,7 @@
                             <img class="mx-2" src="assets/images/encuesta/icon-sad.png" alt="">
                         </div>
 
-                        <ng-container *ngIf="appointment ; else notAppointment">
+                        <ng-container *ngIf="appointment && (appointment.user || appointment.externalPatient) ; else notAppointment">
 
                             <ng-container *ngIf="!completeSurveyAppointment ; else complete">
                                 <h3 class="title-encuesta">{{survey.title}}</h3>
@@ -38,13 +38,13 @@
 
                              <ng-template #complete>
                                 <h3 class="title-encuesta">Encuesta Completada.</h3>
-                                <p class="description-encuesta mb-6">Ya has respondido la encuesta referente a esta cita.</p>
+                                <p class="description-encuesta mb-6">Ya has respondido la encuesta referente a esta atención.</p>
                             </ng-template>
                         </ng-container>
 
                         <ng-template #notAppointment>
                             <h3 class="title-encuesta">Lo sentimos, esta encuesta no puede ser completada</h3>
-                            <p class="description-encuesta mb-6">Cita no disponible</p>
+                            <p class="description-encuesta mb-6">Atención no disponible</p>
                         </ng-template>
 
                     </div>

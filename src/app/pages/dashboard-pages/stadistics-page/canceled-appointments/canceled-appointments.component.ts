@@ -106,7 +106,7 @@ export class CanceledAppointmentsComponent  implements OnInit, OnChanges {
 
         this.dataLine.push({
           data: citasCanceladas,
-          label: 'Citas canceladas', 
+          label: 'Pacientes cancelados',
           backgroundColor: "#ea4850",
           pointBackgroundColor: "#ea4850",
           pointBorderColor: "#ea4850",
@@ -118,7 +118,7 @@ export class CanceledAppointmentsComponent  implements OnInit, OnChanges {
 
         this.dataLine.push({
           data: citasCanceladasPatient,
-          label: 'Citas canceladas por pacientes', 
+          label: 'Pacientes cancelados por el paciente',
           backgroundColor: "#ffc107",
           pointBackgroundColor: "#ffc107",
           pointBorderColor: "#ffc107",
@@ -130,7 +130,7 @@ export class CanceledAppointmentsComponent  implements OnInit, OnChanges {
 
         this.dataLine.push({
           data: citasCanceladasTelemed,
-          label: 'Citas canceladas por Telemedicina', 
+          label: 'Pacientes cancelados por Telemedicina',
           backgroundColor: "#2E4A76",
           pointBackgroundColor: "#2E4A76",
           pointBorderColor: "#2E4A76",
@@ -161,18 +161,18 @@ export class CanceledAppointmentsComponent  implements OnInit, OnChanges {
    this.labelsBar.forEach((label:any, index:any) => {
       dataExport.push({
         date:label,
-        canceladas:this.dataLine.filter(d => d.label === 'Citas canceladas')[0].data[index],
-        canceladasP:this.dataLine.filter(d => d.label === "Citas canceladas por pacientes")[0].data[index],
-        canceladasT:this.dataLine.filter(d => d.label === "Citas canceladas por Telemedicina")[0].data[index],
+        canceladas:this.dataLine.filter(d => d.label === 'Pacientes cancelados')[0].data[index],
+        canceladasP:this.dataLine.filter(d => d.label === "Pacientes cancelados por el paciente")[0].data[index],
+        canceladasT:this.dataLine.filter(d => d.label === "Pacientes cancelados por Telemedicina")[0].data[index],
       })
     })
 
     const columnWidths = [{ wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 }];
-    const forHeader = ['Mes','Citas canceladas','Citas canceladas por pacientes','Citas canceladas por Telemedicina']
-    
+    const forHeader = ['Mes','Pacientes cancelados','Pacientes cancelados por el paciente','Pacientes cancelados por Telemedicina']
+
     const title = `Datos del ${this.rangeDates.from ? `${this.formateDate(this.filters.rangeDates.from)} al ${ this.formateDate(this.filters.rangeDates.to)}`: this.currentYearDate}`
 
-    this.utilsService.exportAsExcel(dataExport, 'Citas canceladas',forHeader,columnWidths,title );
+    this.utilsService.exportAsExcel(dataExport, 'Pacientes cancelados',forHeader,columnWidths,title );
   }
 
     formateDate(date:any){

@@ -153,7 +153,7 @@ export class PayAppointmentComponent implements OnInit , AfterViewInit, OnDestro
         if(res.iframe){
           this.showIframe(res.iframe);
         }else {
-          this.alertsService.appointmentSuccess('Pago Existoso','Cita pagada con exito.');
+          this.alertsService.appointmentSuccess('Pago Existoso','Paciente pagado con exito.');
         }
 
         if(res.ok){

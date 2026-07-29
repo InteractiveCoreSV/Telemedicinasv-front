@@ -40,6 +40,11 @@ export class FichaMedicaService {
     return this.httpClient.get(`${URL_FICHA_MEDICA}/getFichaMedicasByPatient`,{params:{_id,page,nameDocumment}})
   }
 
+  // Paciente externo (no registrado): no hay _id de patient, se agrupa por la cita puntual
+  getFichaMedicasByAppointment(appointment:string, page:number,nameDocumment:string){
+    return this.httpClient.get(`${URL_FICHA_MEDICA}/getFichaMedicasByPatient`,{params:{appointment,page,nameDocumment}})
+  }
+
   generatePDFTratamiento(idFichaMedica:string,tratamientoId:string){
     return this.httpClient.get(`${URL_FICHA_MEDICA}/generatePDFTratamiento`,
       { params:{idFichaMedica,tratamientoId}, responseType: 'blob', observe: 'response' }

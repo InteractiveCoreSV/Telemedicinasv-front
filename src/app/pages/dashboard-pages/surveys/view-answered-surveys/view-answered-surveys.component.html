@@ -95,11 +95,24 @@
               <tr *ngFor="let survey of answerSurveys;let i =index">
                 <td >#{{ survey.surveyNumber     }}</td>
 
-                <td>{{survey.user ? survey.user.names : 'Paciente no encontrado'}} {{survey.user ? survey.user.last_names : ''}}</td>
+                <td>
+                  <ng-container *ngIf="survey.user; else externalPatientName">{{survey.user.names}} {{survey.user.last_names}}</ng-container>
+                  <ng-template #externalPatientName>
+                    <span>{{survey.externalPatient ? survey.externalPatient.names : 'Paciente no encontrado'}}</span>
+                    <span *ngIf="survey.externalPatient" class="badge ml-1" style="background-color:#919191;">No registrado</span>
+                  </ng-template>
+                </td>
 
-                <td>{{survey.user ? survey.user.email : 'Paciente no encontrado'}}</td>
+                <td>{{survey.user ? survey.user.email : (survey.externalPatient?.email || 'No proporcionado')}}</td>
 
-                <td>{{survey.appointment?.medico ? survey.appointment?.medico?.names : 'Médico no encontrado'}} {{survey.appointment?.medico ? survey.appointment?.medico?.last_names : ''}}</td>
+                <td>
+                  <span *ngIf="survey.appointment?.medico">{{survey.appointment?.medico?.names}} {{survey.appointment?.medico?.last_names}}</span>
+                  <span *ngIf="!survey.appointment?.medico && !survey.appointment?.externalMedico">Médico no encontrado</span>
+                  <span *ngIf="survey.appointment?.externalMedico">
+                    {{survey.appointment?.externalMedico?.names}}
+                    <span class="badge ml-1" style="background-color:#919191;">Externo</span>
+                  </span>
+                </td>
 
                 <td>{{survey.appointment?.subsidiary?.name}}</td>
 

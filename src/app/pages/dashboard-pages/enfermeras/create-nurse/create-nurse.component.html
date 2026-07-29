@@ -1,0 +1,240 @@
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="card card-lg">
+      <form [formGroup]="createNurseForm" (ngSubmit)="userToEdit?editNurse():createNurse()">
+        <div class="card-body pt-2 pt-lg-5 pb-2 pb-lg-4 px-2 px-md-3 px-lg-5">
+          <div>
+            <h3 class="title text-center mb-4 w-100">Rellena los siguientes campos para {{userToEdit?'editar':'registrar'}} la enfermera/o</h3>
+          </div>
+
+          <!-- <label class="label-section mb-2">Información General</label> -->
+
+          <div class="row">
+            <!-- START ROW -->
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label class="label-section mb-0">Nombres</label>
+                <input formControlName="names" [class]="formSubmited && createNurseForm.get('names')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Nombres">
+                <div *ngIf="formSubmited && createNurseForm.get('names')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+              </div>
+            </div>
+            <!-- END ROW -->
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label class="label-section mb-0">Apellidos</label>
+                <input formControlName="last_names" [class]="formSubmited && createNurseForm.get('last_names')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Apellidos">
+                <div *ngIf="formSubmited && createNurseForm.get('last_names')?.invalid" class="invalid-feedback">{{getErrorMessageName()}}</div>
+              </div>
+            </div>
+
+            <!-- START ROW -->
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label class="label-section mb-0">Correo electrónico</label>
+                <input formControlName="email" [class]="formSubmited && createNurseForm.get('email')?.invalid?'is-invalid':''" type="text" class="form-control" placeholder="Correo electrónico">
+                <div *ngIf="formSubmited && createNurseForm.get('email')?.invalid" class="invalid-feedback">{{getErrorMessageEmail()}}</div>
+              </div>
+            </div>
+            <!-- END ROW -->
+
+            <div class="col-12 col-sm-6 mb-4">
+              <label class="label-section mb-0 d-block">Tipo y número de documento</label>
+              <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+                <div ngbDropdown class="d-inline-block custom-dropdawn" container="body">
+                  <button
+                    type="button"
+                    class="btn p-2"
+                    style="
+                      background-color: #f6f6f6;
+                      height: 100%;
+                      border:1px solid #E4E4E4 !important;
+                      border-right: none !important;
+                    "
+                    (click)="isOpenDropdown = !isOpenDropdown"
+                    id="changeCountryCode"
+                    ngbDropdownToggle
+                    [class]="
+                      formSubmited && getControl('typeDocument')?.invalid
+                        ? 'is-invalid'
+                        : ''
+                    "
+                  >
+                    {{ getControl("typeDocument")?.value }}
+                    <i
+                      class="fas ml-2"
+                      [ngClass]="{
+                        'fa-chevron-up': isOpenDropdown,
+                        'fa-chevron-down': !isOpenDropdown
+                      }"
+                    ></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <ng-container *ngFor="let item of typesDocuments">
+                      <button
+                        ngbDropdownItem
+                        [ngClass]="{
+                          selected: item === getControl('typeDocument')?.value
+                        }"
+                        (click)="updateTypeDocument(item)"
+                      >
+                        {{ item }}
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+                <input
+                  *ngIf="getControl('typeDocument')?.value === 'DUI'"
+                  formControlName="identityNumber"
+                  [class]="createNurseForm.get('identityNumber')?.invalid && formSubmited ? 'is-invalid' : ''"
+                  mask="00000000-0"
+                  type="text"
+                  name="identityNumber"
+                  aria-label="RNP"
+                  placeholder="Número de identidad"
+                  class="form-control form-input-auth"
+                />
+
+                <input
+                  *ngIf="getControl('typeDocument')?.value === 'Pasaporte'"
+                  formControlName="passport"
+                  [class]="createNurseForm.get('passport')?.invalid && formSubmited ? 'is-invalid' : ''"
+                  type="text"
+                  name="passport"
+                  [placeholder]="'Pasaporte'"
+                  class="form-control"
+                />
+
+                <input
+                  *ngIf="getControl('typeDocument')?.value === 'ID internacional'"
+                  formControlName="idInternacional"
+                  [class]="createNurseForm.get('idInternacional')?.invalid && formSubmited ? 'is-invalid' : ''"
+                  type="text"
+                  name="idInternacional"
+                  [placeholder]="'ID Internacional'"
+                  class="form-control"
+                />
+              </div>
+              <span
+                *ngIf="createNurseForm.get('identityNumber')?.invalid && formSubmited"
+                class="invalid-feedback d-block"
+                >{{ getErroridentityNumberMessage() }}</span
+              >
+              <span
+                *ngIf="createNurseForm.get('passport')?.invalid && formSubmited"
+                class="invalid-feedback d-block"
+                >El pasaporte es requerido</span
+              >
+              <span
+                *ngIf="createNurseForm.get('idInternacional')?.invalid && formSubmited"
+                class="invalid-feedback d-block"
+                >El ID internacional es requerido</span
+              >
+            </div>
+            <!-- END ROW -->
+
+            <div class="col-12 col-sm-8 col-md-6 mb-4">
+              <label class="label-section mb-0 d-block">Teléfono</label>
+              <div class="input-group d-flex justify-content-center justify-content-md-start">
+
+                <div ngbDropdown class="d-inline-block" container="body">
+                  <button
+                    type="button"
+                    class="btn pr-0"
+                    style="
+                      background-color: #f6f6f6;
+                      height: 100%;
+                      border:1px solid #E4E4E4 !important;
+                      border-right: none !important;
+                    "
+                    (click)="isOpenDropdown = !isOpenDropdown"
+                    id="changeCountryCodePhone"
+                    ngbDropdownToggle
+                    [class]="
+                      formSubmited && getControl('countryCode')?.invalid
+                        ? 'is-invalid'
+                        : ''
+                    "
+                  >
+                    {{ getControl("COICode")?.value }}
+                    <i
+                      class="fas ml-2"
+                      [ngClass]="{
+                        'fa-chevron-up': isOpenDropdown,
+                        'fa-chevron-down': !isOpenDropdown
+                      }"
+                    ></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <ng-container *ngFor="let item of countries">
+                      <button
+                        ngbDropdownItem
+                        [ngClass]="{
+                          selected: item.name === getControl('country')?.value
+                        }"
+                        (click)="
+                          getControl('countryCode')?.setValue(item.countryCode);
+                          getControl('country')?.setValue(item.name);
+                          getControl('COICode')?.setValue(item.COICode);
+                          getControl('mask')?.setValue(item.mask)
+                        "
+                      >
+                        {{ item.name }}
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  id="phone"
+                  placeholder="9587-6543"
+                  class="form-control input-phone pl-1"
+                  formControlName="phone"
+                  [class]="
+                    formSubmited && getControl('phone')?.invalid
+                      ? 'is-invalid d-block'
+                      : ''
+                  "
+                  [allowNegativeNumbers]="false"
+                  [mask]="getControl('mask')?.value"
+                  [prefix]="getControl('countryCode')?.value + ' '"
+                  style=" padding-left: 1rem !important;"
+                />
+                <span
+                  *ngIf="createNurseForm.get('phone')?.invalid && formSubmited"
+                  class="invalid-feedback d-block"
+                  >{{ getErrorMessagePhone() }}
+                </span>
+              </div>
+            </div>
+
+            <!-- START ROW -->
+            <div class="col-12 col-sm-8 col-md-6">
+              <div class="form-group">
+                <label class="label-section mb-0">{{userToEdit?'Nueva contraseña':'Contraseña'}}</label>
+                <div class="input-group">
+                  <input formControlName="password" [class]="formSubmited && createNurseForm.get('password')?.invalid?'is-invalid':''" [type]="showPassword?'text':'password'" class="form-control" [placeholder]="userToEdit?'Nueva contraseña':'Contraseña'" autocomplete="new-password">
+                  <button (click)="showPassword = !showPassword" class="btn btn-white border btn-icon" style="height: 48px !important;" type="button">
+                    <i [class]="showPassword?'fas fa-eye':'fas fa-eye-slash'"></i>
+                  </button>
+                </div>
+                <app-password-strength
+                    [passwordToCheck]="createNurseForm.get('password')?.value"
+                    (passwordStrength)="onPasswordStrengthChanged($event)"
+                ></app-password-strength>
+
+                <div *ngIf="formSubmited && createNurseForm.get('password')?.invalid" class="invalid-feedback d-block">{{getErrorMessagePassword()}}</div>
+              </div>
+            </div>
+            <!-- END ROW -->
+
+          </div>
+        </div>
+
+        <div class="card-footer w-100 text-end pt-0" style="border: none;">
+          <button type="submit" class="btn btn-primary btn-200 " style="height: 45px !important;">{{userToEdit?'Guardar':'Agregar'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

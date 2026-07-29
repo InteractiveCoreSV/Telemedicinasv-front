@@ -19,9 +19,6 @@ export interface UserI{
   dateBirthday:any,
   sexo:string,
 
-  cursos:string,
-  diplomas:string,
-
   nameEmergency:string,
   phoneEmergency:string,
   COICodeEmergency:string,
@@ -45,22 +42,9 @@ export interface UserI{
   firma:FileAWSI | null,
 
   numberColegio?: number,
-  numberRegistro?: number,
-  arancerPerHour?: number,
-  clinicaMedica: boolean,
-  clinicaName?: string,
-  clinicaAddress?: string,
-  clinicaPhone?: string,
   especialidad:EspecialidadI,
-  especialidadInstitucion: string,
-  especialidadYear: Date,
-  yearStartedPracticing: Date,
   medicoScore:number
   ratings:number
-
-  educacion:NameDateI[],
-  subespecialidades:NameDateI[],
-
 
   createdAt:Date,
 
@@ -85,13 +69,6 @@ export interface DavoriteDoctorsI{
   doctorId:string,
   addedAt:Date,
 }
-
-export interface NameDateI{
-  institucion:string,
-  name:string,
-  year:Date
-}
-
 
 export interface MenorEdadI{
   _id:string,

@@ -184,7 +184,7 @@ export class ReportMotivoCancelacionAppointmentComponent  implements OnInit,Afte
     const dates = `del ${this.formateDate(this.filters.rangeDates.from)} al ${ this.formateDate(this.filters.rangeDates.to)}`
     const title = `Datos ${this.filters.rangeDates.from != null ? dates : ''}`
 
-    this.utilsService.exportAsExcel(dataExport, 'R-Motivo de cancelación de cita',forHeader,columnWidths,title );
+    this.utilsService.exportAsExcel(dataExport, 'R-Motivo de cancelación de paciente',forHeader,columnWidths,title );
   }
 
   formateDate(date:any){

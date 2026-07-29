@@ -10,7 +10,6 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 import { AppointmentsService } from 'src/app/services/appointments.service';
 import { AppointmentI } from 'src/app/interfaces/appointment.interface';
 import { Hours2I } from 'src/app/interfaces/hours.interface';
-import { AppointmentRemisionComponent } from '../modals/appointments/appointment-remision/appointment-remision.component';
 import { ServiceService } from 'src/app/services/service.service';
 import { CategoryServiceI } from 'src/app/interfaces/service.interface';
 
@@ -147,21 +146,7 @@ export class MedicosInLineLateralComponent implements OnInit {
     this.getMedicos();
   }
 
-  agendaInmediata(medico: UserConHour){
-    this.appointmeRemision.medico = medico
-    this.appointmeRemision.hour = medico.newHourDisponible
-    this.appointmeRemision.subsidiary = medico.subsidiary ?? this.appointmeRemision.subsidiary
-    this.appointmeRemision.dateAppointment = new Date().toISOString()
-    this.appointmeRemision.status = 'pending_payment'
-    this.appointmeRemision.remitida = true
-    this.appointmeRemision.typePayment = 'pending_payment'
-
-    const modalRefConfirm = this.ngbModal.open(AppointmentRemisionComponent,{centered:true,size:'lg',backdrop:'static'});
-    modalRefConfirm.componentInstance.appointment = this.appointmeRemision
-    modalRefConfirm.componentInstance.newVirtual = this.newVirtual
-  }
-
-async openModalNewAppoinment(medico: UserI | null) {
+async openModalNewAppoinment() {
 
   // Seleccionamos el Offcanvas abierto
   const offcanvasEl = document.querySelector('.offcanvas.show');
@@ -178,9 +163,6 @@ async openModalNewAppoinment(medico: UserI | null) {
         scrollable: true,
         backdrop: 'static'
       });
-
-      // Pasamos el médico disponible al servicio
-      this.newAppointmentFormsService.medicoDisponible$.next(medico);
 
       if(this.appointmeRemision){
         this.newAppointmentFormsService.remitida$.next(true);

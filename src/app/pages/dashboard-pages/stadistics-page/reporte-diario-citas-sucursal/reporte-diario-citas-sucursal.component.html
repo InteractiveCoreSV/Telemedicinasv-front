@@ -7,7 +7,7 @@
       </div>
       
     <div style="justify-content: center;" class="card-header">
-        <h5 class="card-header-title fw-custom custom-title-statistics">Reporte citas diarias por sucursal</h5>
+        <h5 class="card-header-title fw-custom custom-title-statistics">Reporte pacientes diarios por sucursal</h5>
     </div>
       
     <!-- Body -->
@@ -76,12 +76,12 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col" (click)="sortTable('_id.subsidiaryName')">Sucursal <i class="fas fa-sort cursor-pointer"></i></th>
-                <th scope="col" (click)="sortTable('totalAppointments')">Total de citas <i class="fas fa-sort cursor-pointer"></i></th>
-                <th scope="col" (click)="sortTable('totalAppointmentsRefuse')">Citas canceladas <i class="fas fa-sort cursor-pointer"></i></th>
-                <th scope="col" (click)="sortTable('totalAppointmentsCompleted')">Citas atendidas <i class="fas fa-sort cursor-pointer"></i></th>
-                <th scope="col" (click)="sortTable('totalAppointmentsPending')">Citas Pendientes <i class="fas fa-sort cursor-pointer"></i></th>
-                <th scope="col" (click)="sortTable('totalSalesCompleted')">Total citas atendidas <i class="fas fa-sort cursor-pointer"></i></th>
-                <th scope="col" (click)="sortTable('totalSalesRefuse')">Total citas canceladas <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointments')">Total de pacientes <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointmentsRefuse')">Pacientes cancelados <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointmentsCompleted')">Pacientes atendidos <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalAppointmentsPending')">Pacientes Pendientes <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalSalesCompleted')">Total pacientes atendidos <i class="fas fa-sort cursor-pointer"></i></th>
+                <th scope="col" (click)="sortTable('totalSalesRefuse')">Total pacientes cancelados <i class="fas fa-sort cursor-pointer"></i></th>
               </tr>
             </thead>
             <tbody>

@@ -10,6 +10,7 @@ export interface SubsidiaryI {
   photos: FileAWSI[];
   status:boolean;
   consultorioMedico:boolean;
+  esDomicilioPaciente?:boolean;
 }
 
 export interface SubsidiaryAddressI {

@@ -9,6 +9,7 @@ import { RegisterUserComponent } from 'src/app/components/modals/register-user/r
 import { UsersService } from 'src/app/services/user.service';
 import { AlertsService } from 'src/app/services/alerts.service';
 import { NewMenorEdadComponent } from 'src/app/components/modals/new-menor-edad/new-menor-edad.component';
+import { RegisterMedicoComponent } from 'src/app/components/modals/register-medico/register-medico.component';
 import { SubsidiaryI } from 'src/app/interfaces/subsidiary.interface';
 
 @Component({
@@ -48,7 +49,28 @@ export class Form1NewAppointmentComponent implements OnInit,OnDestroy {
   ];
 
   paciente!:UserI | null
+  medicoSelected!:UserI | null
   loading:boolean = false
+
+  insuranceTypeOptions = [
+    { value:'aseguradora', label:'Aseguradora' },
+    { value:'particular', label:'Particular' },
+  ];
+
+  countries = [
+    { countryCode: '+502', name: 'GUATEMALA', COICode: 'GUA', mask: '0000 0000' },
+    { countryCode: '+503', name: 'EL SALVADOR', COICode: 'ESA', mask: '0000 0000' },
+    { countryCode: '+507', name: 'PANAMÁ', COICode: 'PAN', mask: '0000 0000' },
+    { countryCode: '+504', name: 'HONDURAS', COICode: 'HON', mask: '0000 0000' },
+    { countryCode: '+505', name: 'NICARAGUA', COICode: 'NCA', mask: '0000 0000' },
+    { countryCode: '+506', name: 'COSTA RICA', COICode: 'CRC', mask: '0000 0000' },
+  ];
+
+  typesDocuments: string[] = ['DUI','ID internacional','Pasaporte']
+
+  isOpenDropdownPatientDoc:boolean = false;
+  isOpenDropdownPatientPhone:boolean = false;
+  isOpenDropdownMedicoPhone:boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -89,11 +111,30 @@ export class Form1NewAppointmentComponent implements OnInit,OnDestroy {
     this.form1.get(name)?.setValue(value);
   }
 
+  setDuiImage(files:File[]){
+    this.setValue('duiImage', files?.[0] ?? null);
+  }
+
+  setIndicacionMedica(files:File[]){
+    this.setValue('indicacionMedica', files?.[0] ?? null);
+  }
+
+  setMedico(medico:UserI | null){
+    this.medicoSelected = medico;
+    this.setValue('medico', medico);
+  }
+
+  deleteMedico(){
+    this.setMedico(null);
+  }
+
   createForm(){
     this.form1 = this.formBuilder.group({
+      patientType:['registered',[Validators.required]],
       user:['',[Validators.required]],
       urgency:['',[Validators.required]],
-      
+      patientAddress:['',[Validators.required]],
+
       referencedAppointment:[false,[Validators.required]],
       referencedSubsidiary:['',[Validators.required]],
 
@@ -101,6 +142,28 @@ export class Form1NewAppointmentComponent implements OnInit,OnDestroy {
       idUnderAge:['',[]],
       nameUnderAge:['',[]],
       birthdateUnderAge:[,[]],
+
+      insuranceType:[null,[]],
+      duiImage:[null,[]],
+      indicacionMedica:[null,[]],
+      diagnostico:['',[]],
+      medico:[null,[]],
+
+      externalPatientNames:['',[]],
+      externalPatientPhone:['',[]],
+      externalPatientCountryCode:['+503',[]],
+      externalPatientCOICode:['ESA',[]],
+      externalPatientMask:['0000 0000',[]],
+      externalPatientTypeDocument:['DUI',[]],
+      externalPatientDocument:['',[]],
+      externalPatientEmail:['',[Validators.email]],
+
+      isExternalMedico:[false,[]],
+      externalMedicoNames:['',[]],
+      externalMedicoPhone:['',[]],
+      externalMedicoCountryCode:['+503',[]],
+      externalMedicoCOICode:['ESA',[]],
+      externalMedicoMask:['0000 0000',[]],
     });
 
     Object.assign(this.newAppointmentFormsService.forms,{form1:this.form1})
@@ -116,6 +179,74 @@ export class Form1NewAppointmentComponent implements OnInit,OnDestroy {
         }
       })
     );
+
+    this.subs.add(
+      this.getControl('patientType')?.valueChanges.subscribe((value:'registered'|'external') => {
+        this.onChangePatientType(value);
+      })
+    );
+
+    this.subs.add(
+      this.getControl('isExternalMedico')?.valueChanges.subscribe((value:boolean) => {
+        this.onChangeExternalMedico(value);
+      })
+    );
+  }
+
+  onChangePatientType(patientType:'registered'|'external'){
+    const user = this.getControl('user');
+    const externalPatientNames = this.getControl('externalPatientNames');
+    const externalPatientPhone = this.getControl('externalPatientPhone');
+    const externalPatientDocument = this.getControl('externalPatientDocument');
+
+    if(patientType === 'external'){
+      this.deleteUser();
+
+      user?.clearValidators();
+      user?.updateValueAndValidity();
+
+      externalPatientNames?.setValidators([Validators.required]);
+      externalPatientPhone?.setValidators([Validators.required]);
+      externalPatientDocument?.setValidators([Validators.required]);
+    }else {
+      this.setValue('externalPatientNames', '');
+      this.setValue('externalPatientPhone', '');
+      this.setValue('externalPatientDocument', '');
+      this.setValue('externalPatientEmail', '');
+
+      externalPatientNames?.clearValidators();
+      externalPatientPhone?.clearValidators();
+      externalPatientDocument?.clearValidators();
+
+      user?.setValidators([Validators.required]);
+    }
+
+    externalPatientNames?.updateValueAndValidity();
+    externalPatientPhone?.updateValueAndValidity();
+    externalPatientDocument?.updateValueAndValidity();
+
+    this.newAppointmentFormsService.resetForm3From('all');
+  }
+
+  onChangeExternalMedico(isExternalMedico:boolean){
+    const externalMedicoNames = this.getControl('externalMedicoNames');
+    const externalMedicoPhone = this.getControl('externalMedicoPhone');
+
+    // El médico externo es información adicional: no reemplaza al médico
+    // registrado, así que no se limpia la selección del buscador.
+    if(isExternalMedico){
+      externalMedicoNames?.setValidators([Validators.required]);
+      externalMedicoPhone?.setValidators([Validators.required]);
+    }else {
+      this.setValue('externalMedicoNames', '');
+      this.setValue('externalMedicoPhone', '');
+
+      externalMedicoNames?.clearValidators();
+      externalMedicoPhone?.clearValidators();
+    }
+
+    externalMedicoNames?.updateValueAndValidity();
+    externalMedicoPhone?.updateValueAndValidity();
   }
 
   createNewUser(){
@@ -227,7 +358,16 @@ export class Form1NewAppointmentComponent implements OnInit,OnDestroy {
         this.getMenoresDeEdad()
       }
     }).catch(()=>{})
-    
+
+  }
+
+  updateExternalPatientTypeDocument(item:string){
+    this.setValue('externalPatientTypeDocument', item);
+    this.setValue('externalPatientDocument', '');
+  }
+
+  openRegisterMedico(){
+    this.ngbModal.open(RegisterMedicoComponent,{centered:true, size:'lg', scrollable:true, backdrop:'static'});
   }
 
   setSubsidiaryReferenced(subsidiary:SubsidiaryI | undefined){

@@ -126,6 +126,17 @@ const routes: Routes = [
         loadChildren:()=>import('./users/users.module').then(m=>m.UsersModule)
       },
       {
+        path:'enfermeras',
+        data:{
+          permissions:{
+            only:['admin'],
+            redirectTo:'/dashboard/calendar'
+          }
+        },
+        canActivate:[NgxPermissionsGuard],
+        loadChildren:()=>import('./enfermeras/enfermeras.module').then(m=>m.EnfermerasModule)
+      },
+      {
         path:'transacciones',
         data:{
           permissions:{

@@ -114,14 +114,6 @@ export class CalendarAppointmentsPageComponent implements OnInit,AfterViewInit,O
     )
 
     this.subs.add(
-      this.newAppointmentFormsService.appointmentRegistered$.subscribe(newAppointment => {
-        if(newAppointment){
-          this.getAllAppointmentsByMonth(true)
-        }
-      })
-    )
-
-    this.subs.add(
       this.appointmentsService.updateAppointmets$.subscribe(update => {
         if(update){
           this.getAllAppointmentsByMonth(true)
@@ -151,44 +143,22 @@ export class CalendarAppointmentsPageComponent implements OnInit,AfterViewInit,O
       this.calendarOptions.events = [];
     }
 
-    if(this.datesRequested.includes(dayjs(this.currentMonthDate).format('YYYY-MM-DD'))){
+    const monthKey = dayjs(this.currentMonthDate).format('YYYY-MM-DD');
+    if(this.datesRequested.includes(monthKey)){
       return;
     }
+    // Se marca como pedido de una vez (no al recibir la respuesta) para que una segunda llamada
+    // disparada casi al mismo tiempo (ej. el datesSet inicial de FullCalendar) no vuelva a pedir
+    // el mismo mes y termine agregando cada cita duplicada en el calendario.
+    this.datesRequested.push(monthKey);
 
     this.appointmentsService.getAllAppointmentsByMonth(this.currentMonthDate.toString(),this.filters).subscribe({
       next:((res:any)=>{
-        
+
         let currentEvents = this.calendarOptions.events as any[] || [];
         let serverAppointments = this.orderAppointmentsByHourPipe.transform(res.appointments);
 
-        this.calendarOptions.events = [...currentEvents,...serverAppointments.map((v:AppointmentI)=>{
-          return {
-            id:v._id,
-            title:`${v.service && v.service.length > 0 ? v.service[0].name : 'Servicio no diponible'} `,
-            start:v.dateAppointment,
-            allDay:!0,
-            classNames:[
-              v.status=='Pending' ? 'dot-pending-event' :
-              v.status=='Reserved'?'dot-reserved-event' : 
-              v.status == "Confirmed" ?'dot-confirmed-event':
-              v.status == "InProgress" ?'dot-inProgress-event':
-              v.status == "pending_payment" ?'dot-pending_payment':
-              v.status == "Completed" ?'dot-completed-event': 'dot-refuse-event'],
-            extendedProps:{
-              hour:v.hour,
-              status:v.status,
-              commentCancel:v.commentCancel,
-              typeCancel:v.typeCancel,
-              motivoCancel:v.motivoCancel,
-              meetingTool:v.meetingTool,
-              link:v.link,
-              total: v.total,
-              virtual: v.typeAppoinment?.online
-            }
-          }
-        })];
-
-        this.datesRequested.push(dayjs(this.currentMonthDate).format('YYYY-MM-DD'));
+        this.calendarOptions.events = [...currentEvents,...serverAppointments.flatMap((v:AppointmentI)=> this.buildCalendarEvents(v))];
 
         this.changeDetectorRef.detectChanges()
       })
@@ -197,6 +167,48 @@ export class CalendarAppointmentsPageComponent implements OnInit,AfterViewInit,O
 
   ngAfterViewInit(): void {
     this.calendarApi = this.calendarComponent.getApi();
+  }
+
+  // Arma el/los evento(s) de FullCalendar para una cita. Si tiene rango de fechas, genera un evento
+  // independiente por cada día que cubre (mismo id/extendedProps en todos) en vez de una sola barra,
+  // para que se muestre como punto (bullet) en cada día, igual que una cita de un solo día.
+  buildCalendarEvents(v:AppointmentI):any[]{
+    const baseEvent = {
+      id:v._id,
+      title:`${v.service && v.service.length > 0 ? v.service[0].name : 'Servicio no diponible'} `,
+      display:'list-item',
+      allDay:!0,
+      classNames:[
+        v.status=='Pending' ? 'dot-pending-event' :
+        v.status=='Reserved'?'dot-reserved-event' :
+        v.status == "Confirmed" ?'dot-confirmed-event':
+        v.status == "InProgress" ?'dot-inProgress-event':
+        v.status == "pending_payment" ?'dot-pending_payment':
+        v.status == "Completed" ?'dot-completed-event': 'dot-refuse-event'],
+      extendedProps:{
+        hour:v.hour,
+        status:v.status,
+        commentCancel:v.commentCancel,
+        typeCancel:v.typeCancel,
+        motivoCancel:v.motivoCancel,
+        meetingTool:v.meetingTool,
+        link:v.link,
+        total: v.total,
+        virtual: v.typeAppoinment?.online
+      }
+    };
+
+    if(!v.dateAppointmentEnd){
+      return [{...baseEvent, start: dayjs(v.dateAppointment).format('YYYY-MM-DD')}];
+    }
+
+    const start = dayjs(v.dateAppointment).startOf('day');
+    const totalDays = dayjs(v.dateAppointmentEnd).startOf('day').diff(start,'day') + 1;
+
+    return Array.from({length: totalDays}, (_, i) => ({
+      ...baseEvent,
+      start: start.add(i,'day').format('YYYY-MM-DD')
+    }));
   }
 
   prevMonthBtn(){

@@ -9,6 +9,11 @@ import { AlertsService } from 'src/app/services/alerts.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { FichaMedicaService } from 'src/app/services/ficha-medica.service';
 
+// Llave fija para la sección femenina: solo puede existir una, así que se empareja
+// por esta bandera en vez de por nombre (el nombre puede cambiar o, en fichas
+// antiguas, nunca haber quedado bien guardado).
+const ONLY_WOMAN_KEY = '__onlyWoman__';
+
 @Component({
   selector: 'app-view-summary-fichas-medicas',
   templateUrl: './view-summary-fichas-medicas.component.html',
@@ -17,14 +22,14 @@ import { FichaMedicaService } from 'src/app/services/ficha-medica.service';
 export class ViewSummaryFichasMedicasComponent implements OnInit {
 
   @Input() idPaciente!:string;
+  @Input() idAppointment?:string | null;
+  @Input() externalPatientInfo?:any | null;
   @Input() menorSelect!:MenorEdadI;
   @Input() infoPatient!:any;
 
   age:number = 0
 
   fichaMedicaSections:SectionFichaMedicaI[] = []
-  seccionWoman!:SectionFichaMedicaI
-  isWomam:boolean = false;
 
   loading:boolean = true;
   // appointments:any[] = [];
@@ -37,8 +42,7 @@ export class ViewSummaryFichasMedicasComponent implements OnInit {
 
   filters:any = {};
   private summaryValueCache = new WeakMap<any, {
-    sections: Map<string, Map<string, any>>,
-    woman: Map<string, any>
+    sections: Map<string, Map<string, any>>
   }>();
 
   constructor(
@@ -61,7 +65,15 @@ export class ViewSummaryFichasMedicasComponent implements OnInit {
 
   getSummaryFichaMedica(){
     this.loading = true;
-    this.filters.idPaciente = this.menorSelect ? this.menorSelect._id : this.idPaciente;
+
+    if(this.menorSelect){
+      this.filters.idPaciente = this.menorSelect._id;
+    }else if(this.idPaciente){
+      this.filters.idPaciente = this.idPaciente;
+    }else {
+      // Paciente externo (no registrado): se agrupa por la cita puntual
+      this.filters.appointment = this.idAppointment;
+    }
     this.filters.underAge = this.menorSelect ? true: false;
 
     this.fichaMedicaService.getSummaryFichaMedicasByPatient(this.page,this.filters).pipe(
@@ -71,12 +83,10 @@ export class ViewSummaryFichasMedicasComponent implements OnInit {
     ).subscribe({
       next:((res:any)=>{
         this.fichaMedicaSections = res.fichaMedicaSections.sections
-        this.seccionWoman = res.fichaMedicaSections.seccionWoman
         this.summaryFichaMedica = res.fichasMedicas;
         this.summaryValueCache = new WeakMap();
 
         if(this.summaryFichaMedica.length > 0){
-          this.isWomam = this.menorSelect ? false : this.summaryFichaMedica[0].isWoman
           this.age =  this.summaryFichaMedica[0].infoGeneral.age
         }
 
@@ -94,14 +104,23 @@ export class ViewSummaryFichasMedicasComponent implements OnInit {
         camposMap.set(campo?.name, campo?.value ?? '');
       }
       sections.set(section?.name, camposMap);
+      if (section?.onlyWoman) {
+        sections.set(ONLY_WOMAN_KEY, camposMap);
+      }
     }
 
-    const woman = new Map<string, any>();
-    for (const campo of summary?.seccionWoman?.campos ?? []) {
-      woman.set(campo?.name, campo?.value ?? '');
+    // Compatibilidad con fichas antiguas donde la sección femenina se guardó aparte (seccionWoman).
+    // Se empareja por la llave fija (no por nombre) porque en fichas viejas el nombre
+    // de esa sección puede no coincidir con el que tiene ahora la sección unificada.
+    if (summary?.seccionWoman?.campos && !sections.has(ONLY_WOMAN_KEY)) {
+      const camposMap = new Map<string, any>();
+      for (const campo of summary.seccionWoman.campos) {
+        camposMap.set(campo?.name, campo?.value ?? '');
+      }
+      sections.set(ONLY_WOMAN_KEY, camposMap);
     }
 
-    const cache = { sections, woman };
+    const cache = { sections };
     this.summaryValueCache.set(summary, cache);
     return cache;
   }
@@ -114,12 +133,9 @@ export class ViewSummaryFichasMedicasComponent implements OnInit {
     return cache;
   }
 
-  getCampoValue(summary: any, sectionName: string, campoName: string) {
-    return this.getSummaryCache(summary).sections.get(sectionName)?.get(campoName) ?? '';
-  }
-
-  getCampoWomanValue(summary: any, campoName: string) {
-    return this.getSummaryCache(summary).woman.get(campoName) ?? '';
+  getCampoValue(summary: any, section: any, campoName: string) {
+    const key = section?.onlyWoman ? ONLY_WOMAN_KEY : section?.name;
+    return this.getSummaryCache(summary).sections.get(key)?.get(campoName) ?? '';
   }
 
   trackBySummary(_index: number, summary: any) {

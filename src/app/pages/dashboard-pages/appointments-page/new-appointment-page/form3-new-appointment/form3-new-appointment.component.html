@@ -12,6 +12,7 @@
       </div>      
       <div class="col-12 col-sm-8 text-center text-sm-start">
         <span>{{this.getControl('subsidiary')?.value ? this.getControl('subsidiary')?.value.name : 'Selecciona la sucursal'}}.</span>
+        <span *ngIf="getControl('subsidiary')?.value?.esDomicilioPaciente" class="badge badge-domicilio-paciente ml-2"><i class="fas fa-house"></i> Domicilio</span>
       </div>
 
       <img *ngIf="getControl('subsidiary')?.value" class="icon-verify" src="assets/icons/icon-verify.png" alt="">
@@ -26,7 +27,7 @@
       </label>
     </div>
 
-    <div class="col-12 col-md-auto container-paso-3  row" [ngClass]="{'select': forMedicoDisponible || (!getControl('subsidiary')?.value && virtual) || (getControl('subsidiary')?.value && !virtual)}">
+    <div class="col-12 col-md-auto container-paso-3  row" [ngClass]="{'select': (!getControl('subsidiary')?.value && virtual) || (getControl('subsidiary')?.value && !virtual)}">
       <div class="col-12 col-sm-4 text-center text-sm-end">
         <img src="assets/icons/new-appointment/icon-service.png" alt="icon-service">
       </div>      
@@ -42,41 +43,47 @@
     </div>
   </div>
   
-  <div class="row mb-8 justify-content-center" (click)="openModalSelectMedico()">
+  <div class="row mb-8 justify-content-center">
     <div class="col-12 col-md-3 center-flex p-0">
       <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-0 pb-0">
-        <span>{{virtual ? '2' : '3'}}</span>.Selecciona médico
+        <span>{{virtual ? '2' : '3'}}</span>.Selecciona la fecha
       </label>
     </div>
-    <div class="col-12 col-md-auto container-paso-3 disabled-paso-3 row" [ngClass]="{'select': getControl('service')?.value}">
+    <div class="col-12 col-md-auto container-paso-3 disabled-paso-3 row" [ngClass]="{'select': getControl('service')?.value}" (click)="openSelectDateModal()">
       <div class="col-12 col-sm-4 text-center text-sm-end">
         <img src="assets/icons/new-appointment/icon-service.png" alt="icon-service">
-      </div>      
+      </div>
       <div class="col-12 col-sm-8 text-center text-sm-start">
-        <span>{{this.getControl('medico')?.value ? this.getControl('medico')?.value.names+' '+ this.getControl('medico')?.value.last_names : 'Selecciona el médico'}}. </span>
+        <span *ngIf="!getControl('date')?.value">Selecciona la fecha</span>
+        <span *ngIf="getControl('date')?.value && !getControl('dateEnd')?.value">{{getControl('date')?.value | date:'EEEE, MMMM d, y'|titlecase}}</span>
+        <span *ngIf="getControl('date')?.value && getControl('dateEnd')?.value">Del {{getControl('date')?.value | date:'MMMM d, y'|titlecase}} al {{getControl('dateEnd')?.value | date:'MMMM d, y'|titlecase}}</span>
       </div>
 
-      <img *ngIf="getControl('medico')?.value" class="icon-verify" src="assets/icons/icon-verify.png" alt="">
-
+      <img *ngIf="getControl('date')?.value" class="icon-verify" src="assets/icons/icon-verify.png" alt="">
     </div>
   </div>
 
-  <div class="row mb-8 justify-content-center" (click)="openModalSelectDateAndHourModal()">
+  <div class="row mb-8 justify-content-center" [formGroup]="form3">
     <div class="col-12 col-md-3 center-flex p-0">
       <label class="form-label text-primary fw-600 w-100 label-new-appointmet mb-0 pb-0">
-        <span>{{virtual ? '3' : '4'}}</span>.Selecciona fecha y Hora
+        <span>{{virtual ? '3' : '4'}}</span>.Método de pago
       </label>
     </div>
-    <div class="col-12 col-md-auto container-paso-3 disabled-paso-3 row" [ngClass]="{'select': getControl('medico')?.value}">
-      <div class="col-12 col-sm-4 text-center text-sm-end">
-        <img src="assets/icons/new-appointment/icon-service.png" alt="icon-service">
-      </div>      
-      <div class="col-12 col-sm-8 text-center text-sm-start">
-        <span>{{this.getControl('date')?.value && this.getControl('hour')?.value ? (this.getControl('date')?.value | date:'EEEE, MMMM d, y'|titlecase) +' de '+this.getControl('hour')?.value.hours : 'Selecciona la fecha y hora'}} </span>
-      </div>
 
-      <img *ngIf="getControl('date')?.value && getControl('hour')?.value" class="icon-verify" src="assets/icons/icon-verify.png" alt="">
+    <div class="col-12 col-md-auto container-paso-3 container-paso-3-select" [ngClass]="{'select': getControl('date')?.value}">
+      <ng-select
+        class="select-paso-3"
+        [items]="typePaymentOptions"
+        bindLabel="label"
+        bindValue="value"
+        formControlName="typePayment"
+        [clearable]="false"
+        [searchable]="false"
+        [placeholder]="'Selecciona método de pago'"
+        appendTo="body"
+      ></ng-select>
 
+      <img *ngIf="getControl('typePayment')?.value" class="icon-verify" src="assets/icons/icon-verify.png" alt="">
     </div>
   </div>
 
@@ -84,7 +91,7 @@
 
     <form #fileUploadForm="ngForm">
       <div class="upload-btn-wrapper">
-        <button class="btn btn-add-document">{{ selectedFile ? 'Cambiar documento' : 'Agregar archivo a mi cita'}}</button>
+        <button class="btn btn-add-document">{{ selectedFile ? 'Cambiar documento' : 'Agregar archivo a mi paciente'}}</button>
         <input  type="file" (change)="onFileSelected($event)" accept=".pdf"/>
       </div>
     </form>

@@ -187,7 +187,7 @@ export class ReporteDiarioCitasSucursalComponent implements OnInit,AfterViewInit
     }
 
     const columnWidths = [{ wch: 30 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 25 }, { wch: 25 }];
-    const forHeader = ['Sucursal','Total de citas','Citas canceladas','Citas atendidas','Citas Pendientes','Total citas atendidas','Total citas canceladas']
+    const forHeader = ['Sucursal','Total de pacientes','Pacientes cancelados','Pacientes atendidos','Pacientes Pendientes','Total pacientes atendidos','Total pacientes cancelados']
     
     const title = `Datos del ${this.formateDate(this.filters.rangeDates.from)} al ${ this.formateDate(this.filters.rangeDates.to)}`
 

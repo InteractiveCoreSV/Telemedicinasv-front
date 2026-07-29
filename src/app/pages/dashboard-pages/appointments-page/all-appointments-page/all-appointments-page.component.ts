@@ -64,7 +64,8 @@ export class AllAppointmentsPageComponent implements OnInit, OnDestroy, AfterVie
     private appointmentsService: AppointmentsService,
     public router: Router,
     private authService: AuthService,
-    private newAppointmentFormsService: NewAppointmentFormsService
+    private newAppointmentFormsService: NewAppointmentFormsService,
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit(): void {
@@ -211,6 +212,39 @@ export class AllAppointmentsPageComponent implements OnInit, OnDestroy, AfterVie
         this.paginationDetails = res.paginationDetails;
       })
     })
+  }
+
+  exportToExcel(){
+    // page=0 le pide al backend todos los registros que cumplen el filtro actual, sin paginar
+    // (mismo truco ya usado en el resto de reportes del proyecto).
+    this.appointmentsService.getAppointments(0, this.filters).subscribe({
+      next:(res:any)=>{
+        const dataExport = (res.appointments || []).map((a:any)=>({
+          numero: a.appointmentNumber,
+          fecha: this.utilsService.formatAppointmentDate(a.dateAppointment, a.dateAppointmentEnd, a.hour?.hours),
+          paciente: a.underAge ? a.nameUnderAge : `${a.user?.names ?? ''} ${a.user?.last_names ?? ''}`.trim(),
+          correo: a.user?.email ?? '',
+          documento: this.getDocumentNumber(a.user),
+          servicio: (a.service || []).map((s:any)=>s.name).join(', '),
+          valorCotizado: '$ ' + (a.service || []).reduce((sum:number,s:any)=>sum + (s.price || 0), 0).toFixed(2),
+          valorPagado: '',
+          medico: a.medico ? `${a.medico.names} ${a.medico.last_names}` : (a.externalMedico ? `${a.externalMedico.names} (externo)` : ''),
+        }));
+
+        const forHeader = ['Número','Fecha','Paciente','Correo','Documento de identidad','Servicio','Valor de los servicios cotizados','Valor de los servicios pagado','Nombre del médico tratante'];
+        const columnWidths = [{wch:12},{wch:28},{wch:28},{wch:34},{wch:20},{wch:38},{wch:26},{wch:26},{wch:28}];
+
+        this.utilsService.exportAsExcel(dataExport, 'Reporte de citas', forHeader, columnWidths);
+      }
+    });
+  }
+
+  // El documento varía según typeDocument: DUI usa identityNumber, Pasaporte/ID internacional usan su propio campo.
+  getDocumentNumber(user:any):string{
+    if(!user) return '';
+    if(user.typeDocument === 'Pasaporte') return user.passport ?? '';
+    if(user.typeDocument === 'ID internacional') return user.idInternacional ?? '';
+    return user.identityNumber ?? '';
   }
 
   viewDetailAppointment(appointment:AppointmentI){

@@ -110,32 +110,12 @@ export class NewMedicoSolicitudComponent implements OnInit {
       typeDocument:['',[Validators.required]],
       identityNumber: [null, [Validators.required,Validators.pattern(/^[0-9]+$/)]],
       passport:[null,[Validators.required]],
-      idInternacional:[null,[Validators.required]],      
+      idInternacional:[null,[Validators.required]],
       numberColegio:[null,[Validators.required]],
       especialidad:['',[]],
-
-      clinicaMedica:[false,[Validators.required]],
-      clinicaName:['',[Validators.required]],
-      clinicaAddress:['',[Validators.required]],
     });
 
     this.createMedicoForm.get('_id')?.disable();
-
-    this.createMedicoForm.get('clinicaName')?.disable();
-    this.createMedicoForm.get('clinicaAddress')?.disable();
-    this.createMedicoForm.get('clinicaPhone')?.disable();
-
-    this.createMedicoForm.get('clinicaMedica')?.valueChanges.subscribe(valor => {
-      if(valor === true){
-        this.createMedicoForm.get('clinicaName')?.enable();
-        this.createMedicoForm.get('clinicaAddress')?.enable();
-        this.createMedicoForm.get('clinicaPhone')?.enable();
-      }else {
-        this.createMedicoForm.get('clinicaName')?.disable();
-        this.createMedicoForm.get('clinicaAddress')?.disable();
-        this.createMedicoForm.get('clinicaPhone')?.disable();
-      }
-    });
 
      this.createMedicoForm.get('typeDocument')?.valueChanges.subscribe(value => {
       if(value === 'Pasaporte'){
@@ -221,7 +201,6 @@ export class NewMedicoSolicitudComponent implements OnInit {
 
   reset(){
     this.createMedicoForm.reset();
-    this.getControl('clinicaMedica')?.patchValue(false)
     this.getControl('typeDocument')?.patchValue('DUI')
     this.getControl('COICode')?.patchValue('ESA')
     this.getControl('countryCode')?.patchValue('+503')
@@ -234,7 +213,6 @@ export class NewMedicoSolicitudComponent implements OnInit {
   setEditMedico(){
     this.createMedicoForm.get('_id')?.enable();
     this.createMedicoForm.patchValue(this.medicoToEdit);
-    this.createMedicoForm.get('clinicaMedica')?.setValue(this.medicoToEdit.clinicaMedica ? this.medicoToEdit.clinicaMedica : false)
     this.especialidad = this.medicoToEdit.especialidad._id ?? null
   }
 

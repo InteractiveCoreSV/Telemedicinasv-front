@@ -39,9 +39,9 @@ export class ChangeStatusAppointmentModalComponent implements OnInit {
 
   motivos:string[] = [
     'Fallos en el internet',
-    'Paciente no confirmo la cita',
+    'Paciente no confirmó',
     'Paciente no contestó la llamada',
-    'Cita fue reprogramada',
+    'Paciente fue reprogramado',
     'Otros motivos',
   ]
 
@@ -77,12 +77,12 @@ export class ChangeStatusAppointmentModalComponent implements OnInit {
     }
 
     if(this.formSubmited && !this.motivoCancel && this.typeCancel === 'interno' && this.optionSelected == 'Refuse'){
-      this.alertsService.toastMixin('El comentario es requerido para poder cancelar la cita','warning',4000)
+      this.alertsService.toastMixin('El comentario es requerido para poder cancelar al paciente','warning',4000)
       return
     }
 
     if(this.formSubmited && !this.commentCancel && this.motivoCancel === 'Otros motivos' && this.optionSelected == 'Refuse'){
-      this.alertsService.toastMixin('El comentario es requerido para poder cancelar la cita','warning',4000)
+      this.alertsService.toastMixin('El comentario es requerido para poder cancelar al paciente','warning',4000)
       return
     }
     
